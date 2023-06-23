@@ -1,0 +1,273 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Authentication_CaptchaRequired" xml:space="preserve">
+    <value>O valor informado para o Captcha não é válido. Tente novamente.</value>
+  </data>
+  <data name="Authentication_UserNotFound" xml:space="preserve">
+    <value>Login não encontrado para os dados informados.</value>
+  </data>
+  <data name="Configuration_MailServiceNotDefined" xml:space="preserve">
+    <value>As configurações para envio de e-mails não foram definidas.</value>
+  </data>
+  <data name="Data_SuccessfullySaved" xml:space="preserve">
+    <value>Dados gravados com sucesso!</value>
+  </data>
+  <data name="Field_TextWithSameNameAlreadyExist" xml:space="preserve">
+    <value>Um texto com o mesmo nome informado já existe.</value>
+  </data>
+  <data name="Import_AllFilesImported" xml:space="preserve">
+    <value>Arquivos importados com sucesso.</value>
+  </data>
+  <data name="Library_ExtensionNotAllowed" xml:space="preserve">
+    <value>Os arquivos não foram enviados pois são de extensões não autorizadas.</value>
+  </data>
+  <data name="Library_FileWithSameNameAlreadyExists" xml:space="preserve">
+    <value>Um arquivo com o mesmo nome informado já existe. Por favor, informe outro valor.</value>
+  </data>
+  <data name="MailService_ActivateEmailSubject" xml:space="preserve">
+    <value>Ativação da Conta</value>
+  </data>
+  <data name="MailService_ResetPasswordSubject" xml:space="preserve">
+    <value>Redefinição de Senha</value>
+  </data>
+  <data name="MailService_TargetMailNotAllowed" xml:space="preserve">
+    <value>Um ou mais destinatários não estão autorizados a receber notificações.</value>
+  </data>
+  <data name="MailService_TargetMailNotDefined" xml:space="preserve">
+    <value>E-mail do destinatário não está definido.</value>
+  </data>
+  <data name="MailService_TemplateNotFound" xml:space="preserve">
+    <value>O modelo de e-mail solicitado não foi localizado. Modelo: {0}.</value>
+  </data>
+  <data name="MailService_TemplateNotificationNotDefined" xml:space="preserve">
+    <value>O template de notificações não foi especificado.</value>
+  </data>
+  <data name="Membership_ArgumentNullException" xml:space="preserve">
+    <value>Todos os campos devem ser preenchidos.</value>
+  </data>
+  <data name="Membership_EmailNotValidated" xml:space="preserve">
+    <value>O e-mail do usuário ainda não foi validado. Verifique novamente antes de prosseguir.</value>
+  </data>
+  <data name="Membership_InvalidCredentials" xml:space="preserve">
+    <value>Os dados de acesso informados são inválidos.</value>
+  </data>
+  <data name="Membership_InvalidLoginUser" xml:space="preserve">
+    <value>O usuário informado não está cadastrado no sistema.</value>
+  </data>
+  <data name="Membership_InvalidOperation" xml:space="preserve">
+    <value>A operação solicitada é inválida.</value>
+  </data>
+  <data name="Membership_InvalidToken" xml:space="preserve">
+    <value>O token informado para ativação não é válido.</value>
+  </data>
+  <data name="Membership_InvalidUsername" xml:space="preserve">
+    <value>Não é possível recuperar a senha do usuário informado, pois esta bloqueado, não existe ou não possui e-mail cadastrado.</value>
+  </data>
+  <data name="Membership_PasswordNotMatch" xml:space="preserve">
+    <value>As senhas informadas não coincidem.</value>
+  </data>
+  <data name="Membership_UserNotLogged" xml:space="preserve">
+    <value>Usuário não logado para executar esta ação.</value>
+  </data>
+  <data name="Plugins_AlreadyExists" xml:space="preserve">
+    <value>O plugin informado já existe. Se deseja atualizar, remova a versão atual e faça o upload novamente.</value>
+  </data>
+  <data name="Plugins_NotAllowed" xml:space="preserve">
+    <value>O plugin não implementa a interface IPlugin para ser carregado.</value>
+  </data>
+  <data name="Plugin_SuccessfullyUploaded" xml:space="preserve">
+    <value>Plugin enviado com sucesso.</value>
+  </data>
+  <data name="Template_AllFilesPublished" xml:space="preserve">
+    <value>Arquivos publicados com sucesso!</value>
+  </data>
+  <data name="Template_ExtensionNotAllowed" xml:space="preserve">
+    <value>Um ou mais arquivos enviados possuem extensões não permitidas.</value>
+  </data>
+  <data name="Template_FileTypeNotAllowed" xml:space="preserve">
+    <value>Tipo de arquivo não habilitado para gerenciamento dentro da Plataforma.</value>
+  </data>
+  <data name="Template_MustSendFile" xml:space="preserve">
+    <value>Um arquivo válido deve ser enviado.</value>
+  </data>
+  <data name="Plugins_UninstallError" xml:space="preserve">
+    <value>Erro ao desinstalar plugin. Operação cancelada.</value>
+  </data>
+  <data name="Plugins_NotFound" xml:space="preserve">
+    <value>Plugin não encontrado para processar a requisição.</value>
+  </data>
+  <data name="Cache_Exclude" xml:space="preserve">
+    <value>Cache excluído com sucesso.</value>
+  </data>
+  <data name="Import_FilesDeleted" xml:space="preserve">
+    <value>Usuários deletados com sucesso.</value>
+  </data>
+  <data name="Import_FilesDisabled" xml:space="preserve">
+    <value>Usuários inativados com sucesso.</value>
+  </data>
+  <data name="Membership_UserAlreadyExists" xml:space="preserve">
+    <value>Nome de usuário já existe cadastrado na plataforma.</value>
+  </data>
+  <data name="Membership_SocialInformationMismatch" xml:space="preserve">
+    <value>Informações de Login social divergentes.</value>
+  </data>
+  <data name="Membership_SocialProviderNotFound" xml:space="preserve">
+    <value>O provedor de login social informado não existe.</value>
+  </data>
+  <data name="Membership_PasswordUpdated" xml:space="preserve">
+    <value>Senha alterada com sucesso</value>
+  </data>
+  <data name="Membership_SamePasswordCannotBeUpdated" xml:space="preserve">
+    <value>A senha informada é igual a senha atual do seu perfil. Informe uma senha diferente.</value>
+  </data>
+  <data name="Membership_EmailUpdateNotAllowed" xml:space="preserve">
+    <value>Atualização do e-mail não permitida pois este e-mail informado já existe cadastrado.</value>
+  </data>
+  <data name="Membership_ActionNotAllowed" xml:space="preserve">
+    <value>Ação não permitida. Verifique as suas permissões.</value>
+  </data>
+  <data name="Authentication_DefaultRoleNotProvided" xml:space="preserve">
+    <value>Perfil do usuário padrão não cadastrado no sistema.</value>
+  </data>
+  <data name="Membership_MustBeEnabledToUseApi" xml:space="preserve">
+    <value>O Recurso de Membership precisa estar habilitado para utilização da API.</value>
+  </data>
+  <data name="Membership_UserNameAndPasswordMustBeProvided" xml:space="preserve">
+    <value>O nome do usuário e senha devem ser informados.</value>
+  </data>
+  <data name="Membership_ValidationEmailSent" xml:space="preserve">
+    <value>E-mail de confirmação do cadastro enviado.</value>
+  </data>
+  <data name="Membership_EmailAlreadyValidated" xml:space="preserve">
+    <value>O e-mail do usuário informado já está validado.</value>
+  </data>
+  <data name="Membership_UserBlocked" xml:space="preserve">
+    <value>Este usuário não pode acessar o sistema, pois está bloqueado.</value>
+  </data>
+  <data name="Membership_PasswordMustBeChanged" xml:space="preserve">
+    <value>A senha do usuário deve ser alterada.</value>
+  </data>
+  <data name="Template_NotFound" xml:space="preserve">
+    <value>Template solicitado não encontrado na plataforma.</value>
+  </data>
+  <data name="Plugin_DebugLoadError" xml:space="preserve">
+    <value>O plugin que você esta subindo está no modo DEBUG. Ative a configuração de DEBUG ou então suba a versão de Release.</value>
+  </data>
+</root>

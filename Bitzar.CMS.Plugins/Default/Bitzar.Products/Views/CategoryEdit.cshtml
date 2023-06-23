@@ -1,0 +1,374 @@
+﻿@inherits System.Web.Mvc.WebViewPage
+@using Bitzar.CMS.Core.Functions;
+
+@{
+    var PLUGIN_NAME = "Bitzar.Products.dll";
+    var Plugin = CMS.Plugins.Get(PLUGIN_NAME).Plugin;
+
+    var Parameters = (Dictionary<string, string>)ViewBag.Parameters;
+    var id = Parameters.ContainsKey("Id") ? Convert.ToInt32(Parameters["Id"]) : 0;
+
+    var Model = (id == 0 ? (dynamic)null : Plugin.Execute("GetCategory", null, Parameters, null));
+
+    ViewBag.Title = (id == 0 ? "Cadastrar" : "Editar") + " Categoria";
+
+    var DefaultImage = "/Areas/admin/Content/basic/imgs/img-placeholder.png";
+    var lang = Parameters.ContainsKey("Lang") ? Convert.ToInt32(Parameters["Lang"]) : CMS.I18N.DefaultLanguage.Id;
+
+    var Parents = (IEnumerable<dynamic>)Plugin.Execute("ListCategory", null, Parameters, null);
+    if (Model != null)
+    {
+        Parents = Parents.Where(p => p.Id != Model.Id);
+    }
+
+    @* Error Handling *@
+    var Result = ((int?)TempData["ExecuteModel"] ?? 0);
+    var Exception = (Exception)TempData["ExecuteException"];
+}
+
+@if (Exception != null)
+{
+    <div class="alert alert-danger alert-dismissable">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <strong>Erro!</strong> @Exception.Message
+    </div>
+}
+
+@if (CMS.Configuration.Get("ClearCache", PLUGIN_NAME).Contains("false"))
+{
+    <div class="alert alert-info alert-dismissable">
+        <form class="form-inline">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>Atenção!</strong> Após salvar todas categorias necessárias faça a limpeza do cache.
+            <a href="/admin/cache">Gerenciador de Cache</a>
+        </form>
+    </div>
+}
+
+@section PageHeaderActions {
+    <div class="page-header-actions">
+        <div class="btn-group" data-toggle="buttons">
+            @foreach (var language in CMS.I18N.AvailableLanguages)
+            {
+                <label class="btn btn-primary btn-outline @(lang == language.Id ? "active" : "")">
+                    <input type="radio" name="options" id="option1" autocomplete="off"
+                           onchange="window.location.href='@Url.Action("Action", "Plugin", new { area = "admin", source = PLUGIN_NAME, function = "CategoryEdit", Lang = language.Id, Id = (Model?.Id ?? 0) })';"
+                           @(lang == language.Id ? "checked" : "")> @language.Culture
+                    </label>
+                }
+        </div>
+    </div>
+}
+
+@helper RenderChild(IEnumerable<dynamic> categories, int? ignore, int? idParent)
+{
+    foreach (var item in categories)
+    {
+        if (item.Id == ignore || item.Disabled)
+        {
+            continue;
+        }
+
+        var space = "";
+        var index = 0;
+        while (index < item.Level)
+        {
+            space += "&nbsp;&nbsp;";
+            index++;
+        }
+
+        <option value="@item.Id" @(idParent == item.Id ? "selected" : "")>@Html.Raw(space) @(item.Description)</option>
+
+        if (item.Children != null && item.Children.Count > 0)
+        {
+            @RenderChild(item.Children, ignore, idParent)
+        }
+    }
+}
+
+<form autocomplete="off" method="post" name="Categoria">
+
+    <input type="hidden" name="source" value="@PLUGIN_NAME" />
+    <input type="hidden" name="function" value="SaveCategory" />
+    <input type="hidden" name="output" value="JSON" />
+
+    <input type="hidden" name="parameters[0]" value="Id" />
+    <input type="hidden" name="values[0]" value="@id" />
+
+    <input type="hidden" name="parameters[6]" value="Lang" />
+    <input type="hidden" name="values[6]" value="@lang" />
+
+    <div class="panel panel-bordered">
+        <header class="panel-heading">
+            <h3 class="panel-title">
+                Formulário de Cadastro
+            </h3>
+        </header>
+        <div class="panel-body container-fluid">
+            <div class="row">
+                <div class="col-md-6 col-sm-8 col-xs-12">
+                    <div class="row">
+
+                        <div class="col-sm-12" id="category-parent-id">
+                            <div class="form-group ">
+                                <input type="hidden" name="parameters[1]" value="IdParent" />
+                                <label class="control-label" for="IdParent">Nível Superior</label>
+                                <select class="form-control" id="IdParent" name="values[1]">
+                                    <option value="">- Selecione -</option>
+                                    @RenderChild(Parents, Model?.Id, Model?.IdParent)
+                                </select>
+                                <span class="help-block">
+                                    Nível superior da Categoria selecionada
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12" id="category-nome-id">
+                            <div class="form-group ">
+                                <input type="hidden" name="parameters[2]" value="Name" />
+                                <label class="control-label" for="Name">Nome</label>
+                                <input type="text" class="form-control" id="Name" name="values[2]" value="@(Model?.Description)" required />
+                                <span class="help-block">
+                                    Nome da Categoria
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12" id="category-sku-id">
+                            <div class="form-group ">
+                                <input type="hidden" name="parameters[8]" value="SKU" />
+                                <label class="control-label" for="SKU">SKU</label>
+                                <input type="text" class="form-control" id="SKU" name="values[8]" value="@(Model?.SKU)" />
+                                <span class="help-block">
+                                    SKU da Categoria
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12" id="category-sort-id">
+                            <div class="form-group ">
+                                <input type="hidden" name="parameters[9]" value="Sort" />
+                                <label class="control-label" for="Sort">Sort</label>
+                                <input type="text" class="form-control" id="Sort" name="values[9]" value="@(Model?.Sort)" />
+                                <span class="help-block">
+                                    Sort
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12" id="category-description-id">
+                            <div class="form-group ">
+                                <input type="hidden" name="parameters[7]" value="Description" />
+                                <label class="control-label" for="Description">Descrição</label>
+                                <textarea class="form-control" id="Description" name="values[7]" value="@(Model?.Info)">@(Model?.Info)</textarea>
+                                <span class="help-block">
+                                    Descrição para exibição da Categoria
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-12" id="category-image-id">
+                            <input type="hidden" name="parameters[5]" value="Image" />
+                            <div class="image-wrapper">
+                                <input type="hidden" name="values[5]" value="@(Model?.Image)" />
+                                <label class="control-label">Imagem</label>
+                                <img src="@(!string.IsNullOrWhiteSpace((Model?.Image ?? "")) ? Model?.Image : DefaultImage)" class="block img-content"
+                                     onclick="showImagePicker($(this),$(this).parent('.image-wrapper').find('input'), 'Image');" />
+                                <span class="help-block">
+                                    Imagem de exibição para associar à categoria.
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12" id="category-url-id">
+                            <div class="form-group ">
+                                <input type="hidden" name="parameters[3]" value="Url" />
+                                <label class="control-label" for="Url">URL</label>
+                                <input type="text" class="form-control" id="Url" name="values[3]" value="@(Model?.Url)" required
+                                       pattern="^[a-zA-Z0-9\-_+]+" title="Não é permitido caracteres especiais na URL. Apenas: 'a-z 0-9 - + _'." />
+                                <span class="help-block">
+                                    Url para criação de rotas de navegação pelas categorias. Não utilizar espaços e caracteres especiais.
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12" id="category-em-destaque">
+                            <div class="form-group">
+                                <input type="hidden" name="parameters[10]" value="Highlighted" />
+                                <div class="checkbox-custom checkbox-primary">
+                                    <input type="checkbox" value="true" id="Highlighted" name="values[10]" @((Model?.Highlighted ?? false) ? "checked" : "") />
+                                    <label class="control-label" for="Highlighted">Em destaque</label>
+                                </div>
+                                <span class="help-block">
+                                    Se marcado, a categoria sera marcada como destaque
+                                </span>
+                                <input type="hidden" name="values[10]" value="false" />
+                            </div>
+                        </div>
+
+                        @if (Model != null)
+                        {
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <input type="hidden" name="parameters[4]" value="Disabled" />
+                                    <div class="checkbox-custom checkbox-primary">
+                                        <input type="checkbox" value="true" id="Disabled" name="values[4]"
+                                               @((Model?.Disabled ?? false) ? "checked" : "") />
+                                        <label class="control-label" for="Disabled">Desativada</label>
+                                    </div>
+                                    <span class="help-block">
+                                        Se marcado, a categoria não poderá ser acessada.
+                                    </span>
+                                    <input type="hidden" name="values[4]" value="false" />
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <input type="hidden" name="parameters[4]" value="Disabled" />
+                            <input type="hidden" name="values[4]" value="false" />
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-footer">
+            <button type="button" class="btn btn-pure" data-hotkey="ctrl+left" data-toggle="tooltip"
+                    data-title="Ctrl+Seta Esquerda" data-placement="top" data-container="body"
+                    onclick="redirectHome();">
+                <i class="icon fa-arrow-left"></i> Voltar
+            </button>
+
+            <button type="button" class="btn btn-primary" data-hotkey="ctrl+s" data-toggle="tooltip"
+                    data-title="Ctrl+S" data-placement="top" data-container="body" onclick="saveCategory();">
+                <i class="icon fa-floppy-o"></i> Salvar
+            </button>
+
+            <a class="btn btn-outline btn-primary" href="@Url.Action("Action", "Plugin", new { area = "admin", source = PLUGIN_NAME, function = "CategoryEdit", Lang = lang })"
+               data-hotkey="ctrl+i" data-toggle="tooltip" data-title="Ctrl+I" data-placement="top" data-container="body">
+                <i class="icon fa-plus"></i> Novo
+            </a>
+
+            @if (id > 0)
+            {
+                <button type="button" class="btn btn-danger pull-right" onclick="deleteCategory(@id);">
+                    <i class="icon fa-trash"></i> Excluir
+                </button>
+            }
+        </div>
+    </div>
+
+</form>
+
+<div class="modal fade modal-3d-flip-vertical" id="modal-image-picker" aria-hidden="false"
+     aria-labelledby="modal-image-picker-label" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-center modal-xlg">
+        <div class="modal-body" id="image-picker-holder">
+        </div>
+    </div>
+</div>
+
+@section FooterScript {
+    @if (Result > 0)
+    {
+        <script>
+            swal('Tudo certo!!!', 'Categoria salva com sucesso', 'success').then(function () {
+                window.location.href = '@Url.Action("Action", "Plugin", new { area = "admin" })?source=@PLUGIN_NAME&function=CategoryEdit&Lang=@lang&Id=@Result';
+            })
+        </script>
+    }
+
+    <script>
+        var $pickerSource = null;
+        var $pickerInput = null;
+        var $pickerType = null;
+
+        showImagePicker = function ($source, $input, $type) {
+            $pickerSource = $source;
+            $pickerInput = $input;
+            $pickerType = $type
+
+            var url = '@Url.Action("List", "Library", new { area = "admin", source = "picker", tipo = "Image" })';
+            $.get(url, function (data) {
+                $('#image-picker-holder').html(data);
+                $("#modal-image-picker").modal('show');
+            });
+        }
+
+        saveCategory = function () {
+            var $form = $('[name="Categoria"]');
+            var formData = new FormData($form[0]);
+            var url = '@CMS.Functions.ExecuteUrl';
+            $.ajax({
+                url: url,
+                data: formData,
+                type: 'POST',
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    if (response.hasOwnProperty('error')) {
+                        toastr.error(response.error, 'Erro');
+                    } else if (response.hasOwnProperty('warning')) {
+                        toastr.warning(response.warning, 'Atenção');
+                    }
+                    else {
+                        toastr.success("Categoria salva com sucesso!", "Sucesso");
+                        window.location.href = '@Url.Action("Action", "Plugin", new { area = "admin" })?source=@PLUGIN_NAME&function=Category&Lang=@lang';
+                    }
+                }
+            });     
+        }
+
+        selectImage = function ($this) {
+            var id = $this.data("item-id");
+            var url = $this.data("item-url");
+
+            // Set image and input
+            $pickerSource.attr('src', url);
+            $pickerInput.val(url);
+
+            $("#modal-image-picker").modal('hide');
+        }
+
+        $('#Name').on('keyup', function () {
+            var url = makeUrl($(this).val().toLowerCase());
+            $('#Url').val(url);
+        });
+
+        redirectHome = function () {
+            window.location.href = '@Url.Action("Action", "Plugin", new { area = "admin" })?source=@PLUGIN_NAME&function=Category&Lang=@lang';
+        }
+
+        deleteCategory = function (id) {
+
+            var data = {
+                "source": "@PLUGIN_NAME",
+                "function": "DeleteCategory",
+                "output": "JSON",
+                "Lang":1,
+                "Id": id
+            };
+
+            swal({
+                type: 'question',
+                title: 'Excluir categoria?',
+                html: "Deseja excluir a categoria selecionada?",
+                buttonsStyling: false,
+                showCancelButton: true,
+                confirmButtonClass: 'btn btn-success',
+                cancelButtonClass: 'btn btn-default margin-right-20',
+                reverseButtons: true
+            }).then(function () {
+                $.post('@(CMS.Functions.ExecuteUrl)', data, function (response) {
+                    if (response.hasOwnProperty('error'))
+                        swal('Ops!!!', response.error, 'error');
+                    else
+                        swal('Tudo certo!', 'A categoria foi removida com sucesso.', 'success').then(function () {
+                            redirectHome();
+                        });
+                });
+            });
+        }
+    </script>
+}

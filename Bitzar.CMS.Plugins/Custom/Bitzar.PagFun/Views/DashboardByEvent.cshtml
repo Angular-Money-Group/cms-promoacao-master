@@ -1,0 +1,41 @@
+﻿@inherits System.Web.Mvc.WebViewPage
+
+@using Bitzar.CMS.Core.Functions;
+
+@{
+    var PLUGIN_NAME = "Bitzar.PagFun.dll";
+    ViewBag.Title = "Dashboard por Evento";
+}
+
+
+<div id="dashboard" class="row">
+    <div class="text-center">
+        <img src="/areas/admin/content/basic/imgs/loader.gif" />
+    </div>
+</div>
+
+<script>
+    loadDashboard = function (IdEvent, Inativos, DataInicio, DataFim) {
+        var url = '@CMS.Functions.ExecuteUrl';
+        var param = {
+            "source": "@(PLUGIN_NAME)",
+            "function": "RetrieveDashboardData",
+            "output": "_DashboardPorEvento",
+            "IdEvent": IdEvent,
+            "Inativos": Inativos,
+            "DataInicio": DataInicio,
+            "DataFim": DataFim,
+            "token": "@CMS.Security.RequestToken"
+        } 
+
+        $.post(url, param, function (response) {
+            if (response.hasOwnProperty('error'))
+                toastr.error(response.error);
+            else {
+                $('#dashboard').html(response);
+            }
+        });
+    }
+
+    loadDashboard(1);
+</script>

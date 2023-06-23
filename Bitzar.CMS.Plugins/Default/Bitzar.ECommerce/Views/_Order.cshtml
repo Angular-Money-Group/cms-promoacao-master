@@ -1,0 +1,453 @@
+﻿@inherits System.Web.Mvc.WebViewPage
+@using Bitzar.CMS.Core.Functions;
+@using Newtonsoft.Json;
+@using System.Linq;
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+@{
+    var PLUGIN_NAME = "Bitzar.ECommerce.dll";
+    var Model = (dynamic)TempData["ExecuteModel"];
+    var Parameters = (Dictionary<string, string>)TempData["ExecuteParameters"];
+    var FinalDate = Parameters.ContainsKey("FinalDate") ? Parameters["FinalDate"].Replace("T23:59", "") : "";
+    var Records = ((IEnumerable<dynamic>)Model.Records);
+    var Fields = GetFields(Records);
+    var FieldsItems = GetFields(Records.SelectMany(r => (IEnumerable<dynamic>)r.Items));
+    var searchValue = Parameters.ContainsKey("Search") ? Parameters["Search"] : null;
+    var statusValue = Parameters.ContainsKey("Status") ? Parameters["Status"] : null;
+
+    var dashBoardStatus = CMS.Configuration.Get("HiddenDashbordOrder", PLUGIN_NAME);
+}
+
+@functions {
+    string[] GetFields(IEnumerable<dynamic> model)
+    {
+        if (model == null || model.Count() == 0)
+            return new string[] { };
+
+        var fields = (IEnumerable<dynamic>)model.SelectMany(m => ((IEnumerable<dynamic>)m.Fields).Where(f => !f.Hidden).Select(f => f));
+        if (fields == null || fields.Count() == 0)
+            return new string[] { };
+
+        return fields.OrderBy(f => f.Id).ThenBy(f => f.Field).Select(f => (string)f.Field).Distinct().ToArray();
+    }
+
+    string TranslateStatus(string status)
+    {
+        if (string.IsNullOrWhiteSpace(status))
+            return "sem status";
+
+        switch (status.ToString())
+        {
+
+            case "Cart":
+                return "Carrinho";
+            case "Order":
+                return "Pedido";
+            case "Abandoned":
+                return "Abandonado";
+            case "Approved":
+                return "Aprovado";
+            case "AwaitingApproval":
+                return "Ag. Aprovação";
+            case "Completed":
+                return "Concluído";
+            case "Deleted":
+                return "C. Manualmente";
+            case "InTransfer":
+                return "Em Transferência";
+            case "Sended":
+                return "Enviado";
+            case "Canceled":
+                return "Cancelado";
+            case "Archived":
+                return "Arquivado";
+            default:
+                return "Sem Status";
+        }
+    }
+}
+
+@functions {
+    string TranslateLabel(string status)
+    {
+        if (string.IsNullOrWhiteSpace(status))
+            return "default";
+
+        switch (status.ToString())
+        {
+            case "Cart":
+                return "warning";
+            case "Order":
+                return "info";
+            case "Abandoned":
+                return "danger";
+            case "Approved":
+                return "primary";
+            case "AwaitingApproval":
+                return "primary";
+            case "Completed":
+                return "success";
+            case "Deleted":
+                return "danger";
+            case "InTransfer":
+                return "primary";
+            case "Sended":
+                return "success";
+            case "Canceled":
+                return "danger";
+            case "Archived":
+                return "warning";
+            default:
+                return "default";
+        }
+    }
+}
+
+@if (!bool.Parse(dashBoardStatus))
+{
+    <div class="row text-center" id="statistics">
+        <div class="loader loader-default"></div>
+    </div>
+}
+<div class="panel panel-bordered">
+    <footer class="panel-footer">
+        <a class="btn btn-outline btn-default" href="javascript:history.go(-1)">Voltar</a>
+
+        <div class="text-left" style="display: inline-block;">
+            <form method="post" action="@CMS.Functions.ExecuteUrl" class="inline-block">
+                <input type="hidden" name="source" value="@PLUGIN_NAME" />
+                <input type="hidden" name="function" value="DownloadExcel" />
+                <input type="hidden" name="output" value="DOWNLOAD" />
+                <input type="hidden" name="token" value="@CMS.Security.RequestToken" />
+                <input type="hidden" name="Status" value="@statusValue" />
+                <input type="hidden" name="Search" value="@searchValue" />
+                <input type="hidden" name="StartDate" value="@(Parameters.ContainsKey("StartDate") ? Parameters["StartDate"] : "")" />
+                <input type="hidden" name="FinalDate" value="@(Parameters.ContainsKey("FinalDate") ? Parameters["FinalDate"] : "")" />
+                <button type="submit" class="btn btn-primary" data-hotkey="ctrl+e" data-toggle="tooltip" style="background-color:#213871; color:#ffffff;"
+                        data-title="Ctrl+E" data-placement="top" data-container="body">
+                    <i class="icon fa-file-excel-o"></i> Exportar
+                </button>
+            </form>
+        </div>
+
+        <div class="pagination margin-0" style="float:right;">
+            <input type="hidden" id="CurrencyPage" value="@(Model.Page)" />
+            <button type="button" class="btn btn-pager btn-primary" value="1" onclick="loadCart(1, 25, '@statusValue', null, '@searchValue')"><span aria-hidden="true">Primeira</span></button>
+            @if (Model.Page >= 2)
+            {
+                <button type="button" class="btn btn-pager btn-primary" onclick="loadCart(@Model.Page - 1, 25, '@statusValue', null, '@searchValue')"><span aria-hidden="true">@(Model.Page - 1)</span></button>
+            }
+            <button type="button" class="btn btn-pager btn-primary" style="background-color:#a7a2a2;border:1px solid #a7a2a2" onclick="loadCart(@Model.Page, 25, '@statusValue', null, '@searchValue')"><span aria-hidden="true">@(Model.Page)</span></button>
+            @if (Model.Page < Model.CountPage)
+            {
+                <button type="button" class="btn btn-pager btn-primary" onclick="loadCart(@Model.Page + 1, 25, '@statusValue', null, '@searchValue')"><span aria-hidden="true">@(Model.Page + 1)</span></button>
+            }
+            <button type="button" class="btn btn-pager btn-primary" onclick="loadCart(@Model.CountPage, 25, '@statusValue', null, '@searchValue')"><span aria-hidden="true">Última</span></button>
+        </div>
+
+    </footer>
+    <header class="panel-heading">
+        <div class="panel-body container-fluid" style="padding: 15px !important">
+            <div class="row">
+                <div class="col-md-3 col-sm-5">
+                    <h3 class="panel-title">
+                        Pedidos disponíveis
+                    </h3>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4 col-md-4">
+                    <div class="form-group">
+                        <label class="control-label" for="searchStatus">Filtrar por status</label>
+                        <select class="form-control" id="idSearchStatus" name="searchStatus" style="width: 95% !important">
+                            <option value="-1" selected>Todos</option>
+                            <option value="Cart">Carrinho</option>
+                            <option value="Order">Pedido</option>
+                            <option value="AwaitingApproval">Aguardando Aprovação</option>
+                            <option value="Canceled">Cancelado</option>
+                            <option value="Deleted">Cancelado Manualmente</option>
+                            <option value="Approved">Aprovado</option>
+                            <option value="Completed">Completo</option>
+                            <option value="InTransfer">Em Transferencia</option>
+                            <option value="Sended">Enviado</option>
+                            <option value="Abandoned">Abandonado</option>
+                            <option value="Archived">Arquivado</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-3">
+                    <label class="control-label" for="searchStatus">Pesquisar</label>
+                    <div class="form-group">
+                        <input id="SearchInput" type="text" class="form-control" value="@(Parameters.ContainsKey("Search") ? Parameters["Search"] : "")" placeholder="Pesquisar">
+                    </div>
+                </div>
+                <div class="col-md-2 col-sm-2">
+                    <label class="control-label" for="searchStatus">Data Inicio</label>
+                    <div class="form-group">
+                        <input id="StartDateInput" type="date" class="form-control" value="@(Parameters.ContainsKey("StartDate") ? Parameters["StartDate"] : "")" placeholder="Data Inicio">
+                    </div>
+                </div>
+                <div class="col-md-2 col-sm-2">
+                    <label class="control-label" for="searchStatus">Data Final</label>
+                    <div class="form-group">
+                        <input id="FinalDateInput" type="date" class="form-control" value="@FinalDate" placeholder="Data Final">
+                    </div>
+                </div>
+                <div class="col-md-1 col-sm-1">
+                    <label class="control-label" for="searchStatus">Buscar</label>
+                    <button type="submit" class="btn btn-primary" id="SearchInputBtn" onclick="loadSearch();">Buscar</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="table-responsive">
+        <table class="table table-strip margin-0">
+            <thead>
+                <tr>
+                    <th class="column-action"></th>
+                    <th>ID</th>
+                    <th>Cliente</th>
+                    <th>ID Referência</th>
+                    <th>Criado Em</th>
+                    @foreach (var field in Fields)
+                    {
+                        <th>@field</th>
+                    }
+                    <th>Total</th>
+                    <th>Status</th>
+                    <th class="column-action"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model == null || Model.Records.Count == 0)
+                {
+                    <tr>
+                        <td colspan="@(7 + Fields.Count())" class="text-center">
+                            <i>Não há pedidos para exibição</i>
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    foreach (var entity in Model.Records)
+                    {
+                        <tr class="linha" id="@entity.Id">
+                            <th class="column-action">
+                                <a href="javascript:void(0);" onclick="toggleDetail(@entity.Id)">
+                                    <i class="icon fa-plus"></i>
+                                </a>
+                            </th>
+                            <td>@entity.Id</td>
+                            <td>@(entity.Customer ?? "Visitante")</td>
+                            <td id="ReferenceId">@entity.Uuid</td>
+                            <td>@entity.CreatedAt.ToString("g")</td>
+                            @foreach (var field in Fields)
+                            {
+                                <td name="@field">@entity[field]</td>
+                            }
+                            <td><b>@entity.TotalOrder.ToString("c2")</b></td>
+                            <td><span class="label label-@(TranslateLabel(entity.Status.ToString()))">@TranslateStatus(entity.Status.ToString())</span></td>
+                            <td>
+                                <div class="btn-group">
+                                    <a class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="icon fa-cogs"></i>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-right">
+                                        <li><a class="dropdown-item Cart" style="font-size:15px;" href="javascript:void(0);" onclick="setStatus('@entity.Uuid', 'Cart');"><i class="icon fa-shopping-cart text-warning" style="margin-left:10px;"></i>Carrinho</a></li>
+                                        <li><a class="dropdown-item Order" style="font-size:15px;" href="javascript:void(0);" onclick="setStatus('@entity.Uuid', 'Order');"><i class="icon fa-shopping-basket text-info" style="margin-left:10px;"></i>Pedido</a></li>
+                                        <li><a class="dropdown-item AwaitingApproval" style="font-size:15px;" href="javascript:void(0);" onclick="setStatus('@entity.Uuid', 'AwaitingApproval');"><i class="icon fa-clock-o text-primary" style="margin-left:10px;"></i>Aguardando Aprovação</a></li>
+                                        <li><a class="dropdown-item Canceled" style="font-size:15px;" href="javascript:void(0);" onclick="setStatus('@entity.Uuid', 'Canceled');"><i class="icon fa-times text-danger" style="margin-left:10px;"></i>Cancelado</a></li>
+                                        <li><a class="dropdown-item Deleted" style="font-size:15px;" href="javascript:void(0);" onclick="setStatus('@entity.Uuid', 'Deleted');"><i class="icon fa-user-times text-danger" style="margin-left:10px;"></i>Cancelado Manualmente</a></li>
+                                        <li><a class="dropdown-item Approved" style="font-size:15px;" href="javascript:void(0);" onclick="setStatus('@entity.Uuid', 'Approved');"><i class="icon fa-check text-primary" style="margin-left:10px;"></i>Aprovado</a></li>
+                                        <li><a class="dropdown-item Completed" style="font-size:15px;" href="javascript:void(0);" onclick="setStatus('@entity.Uuid', 'Completed');"><i class="icon fa-calendar-check-o text-success" style="margin-left:10px;"></i>Completo</a></li>
+                                        <li><a class="dropdown-item InTransfer" style="font-size:15px;" href="javascript:void(0);" onclick="setStatus('@entity.Uuid', 'InTransfer');"><i class="icon fa-truck text-primary" style="margin-left:10px;"></i>Em Transferencia</a></li>
+                                        <li><a class="dropdown-item Sended" style="font-size:15px;" href="javascript:void(0);" onclick="setStatus('@entity.Uuid', 'Sended');"><i class="icon fa-flag-checkered text-success" style="margin-left:10px;"></i>Enviado</a></li>
+                                        <li><a class="dropdown-item Abandoned" style="font-size:15px;" href="javascript:void(0);" onclick="setStatus('@entity.Uuid', 'Abandoned');"><i class="icon fa-home text-danger" style="margin-left:10px;"></i>Abandonado</a></li>
+                                        <li><a class="dropdown-item Archived" style="font-size:15px;" href="javascript:void(0);" onclick="setStatus('@entity.Uuid', 'Archived');"><i class="icon fa-archive text-warning" style="margin-left:10px;"></i>Arquivado</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="detail" data-id="@entity.Id" style="background-color: rgb(245, 245, 245);">
+                            <td colspan="@(7 + Fields.Count())">
+                                <div class="table-responsive">
+                                    <table class="table table-condensed margin-0">
+                                        <thead>
+                                            <tr>
+                                                <th>Id Produto</th>
+                                                @if (FieldsItems.Count() > 0 && ((IEnumerable<dynamic>)entity.Items).Count() > 0)
+                                                {
+                                                    foreach (var field in FieldsItems)
+                                                    {
+                                                        if (!string.IsNullOrEmpty(entity.Items[0][field]))
+                                                        {
+                                                            <th>@field</th>
+                                                        }
+                                                    }
+                                                }
+                                                <th>Quantidade</th>
+                                                <th>Preço</th>
+                                                <th>Total</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if (entity.Items.Count == 0)
+                                            {
+                                                <tr>
+                                                    <td colspan="@(4+FieldsItems.Count())" class="text-center"><i>Não há itens para o carrinho selecionado</i></td>
+                                                </tr>
+                                            }
+                                            else
+                                            {
+                                                foreach (var item in entity.Items)
+                                                {
+                                                    <tr>
+                                                        <td>@item.IdProduct</td>
+                                                        @if (FieldsItems.Count() > 0)
+                                                        {
+                                                            foreach (var field in FieldsItems)
+                                                            {
+                                                                if (!string.IsNullOrEmpty(item[field]))
+                                                                {
+                                                                    <td>@item[field]</td>
+                                                                }
+                                                            }
+                                                        }
+                                                        <td>@item.Quantity.ToString("N0")</td>
+                                                        <td>@item.Price.ToString("C2")</td>
+                                                        <td><b>@item.Total.ToString("C2")</b></td>
+                                                    </tr>
+                                                }
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <footer class="panel-footer">
+        <a class="btn btn-outline btn-default" href="javascript:history.go(-1)">Voltar</a>
+
+        <div class="text-left" style="display: inline-block;">
+            <form method="post" action="@CMS.Functions.ExecuteUrl" class="inline-block">
+                <input type="hidden" name="source" value="@PLUGIN_NAME" />
+                <input type="hidden" name="function" value="DownloadExcel" />
+                <input type="hidden" name="output" value="DOWNLOAD" />
+                <input type="hidden" name="token" value="@CMS.Security.RequestToken" />
+                <input type="hidden" name="Status" value="@statusValue" />
+                <input type="hidden" name="Search" value="@searchValue" />
+                <input type="hidden" name="StartDate" value="@(Parameters.ContainsKey("StartDate") ? Parameters["StartDate"] : "")" />
+                <input type="hidden" name="FinalDate" value="@(Parameters.ContainsKey("FinalDate") ? Parameters["FinalDate"] : "")" />
+                <button type="submit" class="btn btn-primary" data-hotkey="ctrl+e" data-toggle="tooltip" style="background-color:#213871; color:#ffffff;"
+                        data-title="Ctrl+E" data-placement="top" data-container="body">
+                    <i class="icon fa-file-excel-o"></i> Exportar
+                </button>
+            </form>
+        </div>
+
+        <div class="pagination margin-0" style="float:right;">
+            <input type="hidden" id="CurrencyPage" value="@(Model.Page)" />
+            <button type="button" class="btn btn-pager btn-primary" value="1" onclick="loadCart(1, 25, '@statusValue', null, '@searchValue')"><span aria-hidden="true">Primeira</span></button>
+            @if (Model.Page >= 2)
+            {
+                <button type="button" class="btn btn-pager btn-primary" onclick="loadCart(@Model.Page - 1, 25, '@statusValue', null, '@searchValue')"><span aria-hidden="true">@(Model.Page - 1)</span></button>
+            }
+            <button type="button" class="btn btn-pager btn-primary" style="background-color:#a7a2a2;border:1px solid #a7a2a2" onclick="loadCart(@Model.Page, 25, '@statusValue', null, '@searchValue')"><span aria-hidden="true">@(Model.Page)</span></button>
+            @if (Model.Page < Model.CountPage)
+            {
+                <button type="button" class="btn btn-pager btn-primary" onclick="loadCart(@Model.Page + 1, 25, '@statusValue', null, '@searchValue')"><span aria-hidden="true">@(Model.Page + 1)</span></button>
+            }
+            <button type="button" class="btn btn-pager btn-primary" onclick="loadCart(@Model.CountPage, 25, '@statusValue', null, '@searchValue')"><span aria-hidden="true">Última</span></button>
+        </div>
+
+    </footer>
+
+</div>
+
+<style>
+    tr.detail {
+        display: none;
+    }
+</style>
+
+<script>
+        //Function to load statistics in top page
+        loadStatistics = function () {
+            var statusDashboard = '@(!bool.Parse(dashBoardStatus))';
+            var url = '@CMS.Functions.ExecuteUrl';
+            var data = {
+                "source": "@(PLUGIN_NAME)",
+                "function": "LoadStatistics",
+                "output": "_Statistics",
+                "token": "@CMS.Security.RequestToken"
+            }
+
+            $.post(url, data, function (response) {
+                if (response.hasOwnProperty('error'))
+                    toastr.error(response.error);
+                else {
+                    if (statusDashboard == 'True')
+                        $('#statistics').html(response);
+                }
+            });
+        }
+
+        var input = document.getElementById("SearchInput");
+        input.addEventListener("keyup", function (event) {
+            if (event.keyCode === 13) {
+                event.preventDefault();
+                document.getElementById("SearchInputBtn").click();
+            }
+        });
+
+        toggleDetail = function (id) {
+            $('tr[data-id=' + id + ']').toggle();
+        }
+
+        loadSearch = function () {
+            let search = $('#SearchInput').val();
+            let searchStatus = $('#idSearchStatus').val() == '-1' ? null : $('#idSearchStatus').val();
+            let startDate = $('#StartDateInput').val() == "" ? null : $('#StartDateInput').val();
+            let finalDate = $('#FinalDateInput').val() == "" ? null : $('#FinalDateInput').val();
+            finalDate = finalDate ? finalDate + 'T23:59' : null;
+
+            loadCart(1, 25, searchStatus, null, search, startDate, finalDate);
+        }
+
+        reloadCart = function(){
+            let currency = $('#CurrencyPage').val();
+            let search = "@searchValue";
+            let status = "@statusValue";
+            loadCart(currency, 25, status, null, search);
+        }
+
+        $("#idSearchStatus").change(function () {
+            var status = $('#idSearchStatus').val();
+            $("form [name='Status']").val(status);
+        });
+
+        $("#SearchInput").on('input', function () {
+            var search = $('#SearchInput').val();
+            $("form [name='Search']").val(search);
+        });
+
+        $("#StartDateInput").change(function () {
+            var startDate = $('#StartDateInput').val();
+            $("form [name='StartDate']").val(startDate);
+        });
+
+        $("#FinalDateInput").change(function () {
+            var finalDate = $('#FinalDateInput').val();
+            finalDate = finalDate ? finalDate + 'T23:59' : "";
+            $("form [name='FinalDate']").val(finalDate);
+        });
+
+        loadStatistics();
+</script>

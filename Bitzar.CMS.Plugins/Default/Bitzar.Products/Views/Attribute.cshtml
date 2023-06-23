@@ -1,0 +1,106 @@
+﻿@inherits System.Web.Mvc.WebViewPage
+@using Bitzar.CMS.Core.Functions;
+
+@{
+    ViewBag.Title = "Cadastro de Atributos";
+    var PLUGIN_NAME = "Bitzar.Products.dll";
+    var Plugin = CMS.Plugins.Get(PLUGIN_NAME).Plugin;
+    var Parameters = (Dictionary<string, string>)ViewBag.Parameters;
+    var lang = Parameters.ContainsKey("Lang") ? Convert.ToInt32(Parameters["Lang"]) : CMS.I18N.DefaultLanguage.Id;
+
+    if (Parameters == null || Parameters.Count == 0 || !Parameters.ContainsKey("Lang"))
+    {
+        Parameters.Add("Lang", lang.ToString());
+    }
+
+    var Model = Plugin?.Execute("ListAttribute", null, Parameters, null);
+    var Culture = CMS.I18N.AvailableLanguages.FirstOrDefault(f => f.Id == lang);
+}
+
+@section PageHeaderActions {
+    <div class="page-header-actions">
+        <div class="btn-group" data-toggle="buttons">
+            @foreach (var language in CMS.I18N.AvailableLanguages)
+            {
+                <label class="btn btn-primary btn-outline @(lang == language.Id ? "active" : "")">
+                    <input type="radio" name="options" id="option1" autocomplete="off"
+                           onchange="window.location.href='@Url.Action("Action", "Plugin", new { area = "admin", source = PLUGIN_NAME, function = "Attribute", Lang = language.Id })';"
+                           @(lang == language.Id ? "checked" : "")> @language.Culture
+                    </label>
+                }
+        </div>
+    </div>
+}
+
+@helper RenderChild(dynamic entity, string plugin, int lang, string culture)
+{
+    <tr>
+        <td>
+            <span style="padding-left: @(entity.Level * 20)px;">
+                @(string.IsNullOrWhiteSpace(entity.Description) ? $"Sem descrição para o Idioma: {culture}" : entity.Description)
+            </span>
+        </td>
+        <td>
+            <span>
+                @entity.Type
+            </span>
+        </td>
+
+        <td class="text-center">
+            <a href="@Url.Action("Action", "Plugin", new { area = "admin", source = plugin, function = "AttributeValue", Lang = lang, Id = entity.Id })">
+                <i class="icon wb-edit"></i>
+            </a>
+        </td>
+    </tr>
+
+    if (entity.Children.Count > 0)
+    {
+        foreach (var child in entity.Children)
+        {
+            @RenderChild(child, plugin, lang, culture)
+        }
+    }
+}
+
+<div class="panel panel-bordered">
+    <header class="panel-heading">
+        <h3 class="panel-title">
+            Atributos
+        </h3>
+    </header>
+
+    <table class="table table-hover table-strip">
+        <thead>
+            <tr>
+                <th>Descrição</th>
+                <th>Tipo de Atributo</th>
+                <th class="text-center">Editar</th>
+            </tr>
+        </thead>
+        <tbody id="products">
+            @if (Model == null || Model.Count == 0)
+            {
+                <tr>
+                    <td class="text-center" colspan="5">
+                        Não há Atributos cadastrados
+                    </td>
+                </tr>
+            }
+            else
+            {
+                foreach (var entity in Model)
+                {
+                    @RenderChild(entity, PLUGIN_NAME, lang, Culture.Culture)
+                }
+            }
+        </tbody>
+    </table>
+
+    <div class="panel-footer">
+        <a class="btn btn-primary" href="@Url.Action("Action", "Plugin", new { area = "admin", source = PLUGIN_NAME, function = "AttributeValue", Lang = lang })"
+           data-hotkey="ctrl+i" data-toggle="tooltip" data-title="Ctrl+I" data-placement="top" data-container="body">
+            <i class="icon fa-plus"></i> Novo
+        </a>
+    </div>
+
+</div>

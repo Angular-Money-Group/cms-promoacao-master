@@ -1,0 +1,409 @@
+﻿@inherits System.Web.Mvc.WebViewPage
+@using Bitzar.CMS.Core.Functions;
+
+@{
+    var PLUGIN_NAME = "Bitzar.ECommerce.dll";
+    var Plugin = CMS.Plugins.Get(PLUGIN_NAME).Plugin;
+
+    var Parameters = (Dictionary<string, string>)ViewBag.Parameters;
+    var id = Parameters.ContainsKey("Id") ? Convert.ToInt32(Parameters["Id"]) : 0;
+
+    var Model = Plugin.Execute("GetCoupon", null, Parameters, null);
+
+
+    ViewBag.Title = (id == 0 ? "Cadastrar" : "Editar") + " Coupon";
+
+    var DefaultImage = "/Areas/admin/Content/basic/imgs/img-placeholder.png";
+
+    @* Error Handling *@
+    var Result = ((int?)TempData["ExecuteModel"] ?? 0);
+    var Exception = (Exception)TempData["ExecuteException"];
+    
+}
+
+@if (Exception != null)
+{
+    <div class="alert alert-danger alert-dismissable">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <strong>Erro!</strong> @Exception.Message
+    </div>
+}
+
+<form autocomplete="off" method="post" name="Cupom">
+
+    <input type="hidden" name="source" value="@PLUGIN_NAME" />
+    <input type="hidden" name="function" value="SaveCoupon" />
+    <input type="hidden" name="output" value="JSON" />
+    <input type="hidden" name="token" value="@CMS.Security.RequestToken" />
+
+    <input type="hidden" name="parameters[0]" value="Id" />
+    <input type="hidden" name="values[0]" value="@id" />
+
+
+    <div class="panel panel-bordered">
+        <header class="panel-heading">
+            <h3 class="panel-title">
+                Formulário de Cadastro
+            </h3>
+        </header>
+        <div class="panel-body container-fluid">
+            <div class="row">
+                <div class="col-md-6 col-sm-8 col-xs-12">
+                    <div class="row">
+
+                        <div class="col-sm-12" id="cupom-nome-id">
+                            <div class="form-group ">
+                                <input type="hidden" name="parameters[1]" value="Code" />
+                                <label class="control-label" for="Codigo">Código do Cupom</label>
+                                <input type="text" class="form-control" id="Codigo" name="values[1]" value="@(Model?.Code)" required />
+                                <span class="help-block">
+                                    Código do Cupom
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12" id="cupom-nome-id">
+                            <div class="form-group ">
+                                <input type="hidden" name="parameters[2]" value="Description" />
+                                <label class="control-label" for="Name">Nome do Cupom</label>
+                                <input type="text" class="form-control" id="Name" name="values[2]" value="@(Model?.Description)" required />
+                                <span class="help-block">
+                                    Nome da Cupom
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12" id="cupom-nome-event">
+                            <div class="form-group ">
+                                <input type="hidden" name="parameters[10]" value="Event" />
+                                <label class="control-label" for="Name">Evento</label>
+                                <select class="form-control" id="Event" name="values[10]" onchange="loadCabin()">
+                                    <option value="0">- Selecione -</option>
+                                    @foreach (KeyValuePair<int, string> item in Model.IdEvent)
+                                    {
+                                        <option value="@item.Key" @((Model != null && (int)Model.IdEventSelected == item.Key) ? "selected" : "")>@item.Value</option>
+                                    }
+                                </select>
+                                <span class="help-block">
+                                    Evento
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12" id="cupom-cabine-event">
+                            <div class="form-group ">
+                                <input type="hidden" name="parameters[11]" value="Cabin" />
+                                <label class="control-label" for="Name">Cabine</label>
+                                <select class="form-control" id="Cabin" name="values[11]" onchange="loadOcuppacity()">
+                                    <option value="0">- Selecione -</option>
+                                </select>
+                                <span class="help-block">
+                                    Cabine
+                                </span>                                
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12" id="cupom-ocupacao-event">
+                            <div class="form-group ">
+                                <input type="hidden" name="parameters[12]" value="Occupacity" />
+                                <label class="control-label" for="Name">Ocupação</label>
+                                <select class="form-control" id="Occupacity" name="values[12]">
+                                    <option value="0">- Selecione -</option>
+                                </select>
+                                <span class="help-block">
+                                    Ocupação
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12" id="cupom-limite-utilizacao-id">
+                            <div class="form-group ">
+                                <input type="hidden" name="parameters[3]" value="UsageLimit" />
+                                <label class="control-label" for="LimiteUtilizacao">Limite de Utilização</label>
+                                <input type="text" class="form-control" id="LimiteUtilizacao" name="values[3]" value="@(Model?.UsageLimit)" />
+                                <span class="help-block">
+                                    Limite de Utilização do Cupom
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12" id="cupom-start-date-id">
+                            <div class="form-group ">
+                                <input type="hidden" name="parameters[4]" value="StartDate" />
+                                <label class="control-label" for="StartDate">Data de Inicio</label>
+                                <input type="datetime" class="form-control" id="StartDate" name="values[4]" value="@(Model?.StartDate)" />
+                                <span class="help-block">
+                                    Data de Inicio (de uso) do Cupom
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12" id="cupom-end-date-id">
+                            <div class="form-group ">
+                                <input type="hidden" name="parameters[5]" value="EndDate" />
+                                <label class="control-label" for="EndDate">Data de Término</label>
+                                <input type="datetime" class="form-control" id="EndDate" name="values[5]" value="@(Model?.EndDate)" />
+                                <span class="help-block">
+                                    Data de Término (de uso) do Cupom
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-12" id="cupom-coupon-type-id">
+                            <div class="form-group ">
+                                <input type="hidden" name="parameters[6]" value="CouponType" />
+                                <label class="control-label" for="CouponType">Tipo do Cupom</label>
+                                <select class="form-control" id="CouponType" name="values[6]">
+                                    <option value="">- Selecione -</option>
+                                    <option value="0" @((Model != null && (int)Model.CouponType == 0) ? "selected" : "")>Produto</option>
+                                    <option value="1" @((Model != null && (int)Model.CouponType == 1) ? "selected" : "")>Produto e Taxas</option>
+                                </select>
+                                <span class="help-block">
+                                    Selecione o tipo de Cupom (em que se aplica)
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-12" id="cupom-discount-type-id">
+                            <div class="form-group ">
+                                <input type="hidden" name="parameters[7]" value="DiscountType" />
+                                <label class="control-label" for="DiscountType">Tipo do Cupom</label>
+                                <select class="form-control" id="DiscountType" name="values[7]">
+                                    <option value="">- Selecione -</option>
+                                    <option value="0" @((Model != null && (int)Model.DiscountType == 0) ? "selected" : "")>Porcentagem</option>
+                                    <option value="1" @((Model != null && (int)Model.DiscountType == 1) ? "selected" : "")>Valor Fixo</option>
+                                </select>
+                                <span class="help-block">
+                                    Selecione o tipo de desconto (Porcentagem ou Valor Fixo)
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12" id="cupom-url-id">
+                            <div class="form-group ">
+                                <input type="hidden" name="parameters[8]" value="DiscountAmount" />
+                                <label class="control-label" for="Url">Valor do Desconto</label>
+                                <input type="text" class="form-control" id="DiscountAmount" name="values[8]" value="@(Model?.DiscountAmount)" required />
+                                <span class="help-block">
+                                    Valor do Cupom
+                                </span>
+                            </div>
+                        </div>
+
+                        @if (Model != null)
+                        {
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <input type="hidden" name="parameters[9]" value="Disabled" />
+                                    <div class="checkbox-custom checkbox-primary">
+                                        <input type="checkbox" value="true" id="Disabled" name="values[9]"
+                                               @((Model?.Disabled ?? false) ? "checked" : "") />
+                                        <label class="control-label" for="Disabled">Desativada</label>
+                                    </div>
+                                    <span class="help-block">
+                                        Se marcado, a cupom não poderá ser utilizado.
+                                    </span>
+                                    <input type="hidden" name="values[9]" value="false" />
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <input type="hidden" name="parameters[9]" value="Disabled" />
+                            <input type="hidden" name="values[9]" value="false" />
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-footer">
+            <button type="button" class="btn btn-pure" data-hotkey="ctrl+left" data-toggle="tooltip"
+                    data-title="Ctrl+Seta Esquerda" data-placement="top" data-container="body"
+                    onclick="redirectHome();">
+                <i class="icon fa-arrow-left"></i> Voltar
+            </button>
+
+            <button type="button" class="btn btn-primary" data-hotkey="ctrl+s" data-toggle="tooltip"
+                    data-title="Ctrl+S" data-placement="top" data-container="body" onclick="saveCoupon();">
+                <i class="icon fa-floppy-o"></i> Salvar
+            </button>
+
+            @if (id > 0)
+            {
+                <button type="button" class="btn btn-danger pull-right" onclick="deleteCoupon(@id);">
+                    <i class="icon fa-trash"></i> Excluir
+                </button>
+            }
+        </div>
+    </div>
+
+</form>
+
+<div class="modal fade modal-3d-flip-vertical" id="modal-image-picker" aria-hidden="false"
+     aria-labelledby="modal-image-picker-label" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-center modal-xlg">
+        <div class="modal-body" id="image-picker-holder">
+        </div>
+    </div>
+</div>
+
+@section FooterScript {
+    @if (Result > 0)
+    {
+        <script>
+            swal('Tudo certo!!!', 'Coupon salvo com sucesso', 'success').then(function () {
+                window.location.href = '@Url.Action("Action", "Plugin", new { area = "admin" })?source=@PLUGIN_NAME&function=CouponEdit&Id=@Result';
+            })
+        </script>
+    }
+
+<script>
+
+        $(document).ready(function () {
+            if (document.getElementById("Event").value != "0") {
+                loadCabin();
+                loadOcuppacity();
+            }
+            
+        });
+
+        saveCoupon = function () {
+            var $form = $('[name="Cupom"]');
+            var formData = new FormData($form[0]);
+            var url = '@CMS.Functions.ExecuteUrl';
+            $.ajax({
+                url: url,
+                data: formData,
+                type: 'POST',
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    if (response.hasOwnProperty('error')) {
+                        toastr.error(response.error, 'Erro');
+                    } else if (response.hasOwnProperty('warning')) {
+                        toastr.warning(response.warning, 'Atenção');
+                    }
+                    else {
+                        toastr.success("Cupom salvo com sucesso!", "Sucesso");
+                        window.location.href = '@Url.Action("Action", "Plugin", new { area = "admin" })?source=@PLUGIN_NAME&function=Coupons';
+                    }
+                }
+            });
+        }
+
+        redirectHome = function () {
+            window.location.href = '@Url.Action("Action", "Plugin", new { area = "admin" })?source=@PLUGIN_NAME&function=Coupons';
+        }
+
+        deleteCoupon = function (id) {
+
+            var data = {
+                "source": "@PLUGIN_NAME",
+                "function": "DeleteCoupon",
+                "output": "JSON",
+                "token": "@CMS.Security.RequestToken",
+                "Id": id
+            };
+
+            swal({
+                type: 'question',
+                title: 'Excluir cupom?',
+                html: "Deseja excluir a cupom selecionada?",
+                buttonsStyling: false,
+                showCancelButton: true,
+                confirmButtonClass: 'btn btn-success',
+                cancelButtonClass: 'btn btn-default margin-right-20',
+                reverseButtons: true
+            }).then(function () {
+                $.post('@(CMS.Functions.ExecuteUrl)', data, function (response) {
+                    if (response.hasOwnProperty('error'))
+                        swal('Ops!!!', response.error, 'error');
+                    else
+                        swal('Tudo certo!', 'A cupom foi removida com sucesso.', 'success').then(function () {
+                            redirectHome();
+
+                        });
+                });
+            });
+        }
+
+        loadCabin = function () {
+
+            var data = {
+                "source": "@PLUGIN_NAME",
+                "function": "GETCABIN",
+                "output": "JSON",
+                "token": "@CMS.Security.RequestToken",
+                "Id": document.getElementById("Event").value,
+                "cabinSelected": "@Model.IdCabinSelected"
+            };
+
+            $.post('@(CMS.Functions.ExecuteUrl)', data, function (response) {
+                if (response.hasOwnProperty('error'))
+                    swal('Ops!!!', response.error, 'error');
+                else
+                    var selectCabin = document.getElementById("Cabin");
+                    $("#Cabin").empty();
+                    loadOptionSelect(selectCabin);
+
+                    response.forEach(function (item) {
+                        var option = document.createElement("option");
+                        option.value = item.IdCabin;
+                        option.text = item.NameCabin;
+                        option.selected = item.Selected;
+                        selectCabin.appendChild(option);
+                    });
+            });
+
+        }
+
+        loadOptionSelect = function (idElement) {
+            var option = document.createElement("option");
+            option.value = "0";
+            option.text = "- Selecione -";
+            option.selected = true;
+            idElement.appendChild(option);
+        }
+
+        loadOcuppacity = function () {
+            var cabinSelectedPageReady;
+            if (document.getElementById("Cabin").value == "0") {
+                cabinSelectedPageReady = "@Model.IdCabinSelected";
+
+            } else {
+                cabinSelectedPageReady = document.getElementById("Cabin").value;
+
+            }
+
+            var data = {
+                "source": "@PLUGIN_NAME",
+                "function": "GETOCCUPANCY",
+                "output": "JSON",
+                "token": "@CMS.Security.RequestToken",
+                "Id": cabinSelectedPageReady,
+                "OccupancySelected": "@Model.IdOccupancySelected"
+            };
+
+            $.post('@(CMS.Functions.ExecuteUrl)', data, function (response) {
+                if (response.hasOwnProperty('error'))
+                    swal('Ops!!!', response.error, 'error');
+                else
+                    var selectOccupancy = document.getElementById("Occupacity");
+                    $("#Occupacity").empty();
+                    loadOptionSelect(selectOccupancy);
+
+                    response.forEach(function (item) {
+                        var option = document.createElement("option");
+                        option.value = item.IdOccupancy;
+                        option.text = item.NameOccupancy;
+                        option.selected = item.Selected
+                        selectOccupancy.appendChild(option);
+                    });
+            });
+        }
+
+
+
+</script>
+}

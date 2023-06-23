@@ -1,0 +1,18 @@
+﻿[
+  {
+    "outputFile": "Areas/admin/Content/basic/css/custom.css",
+    "inputFile": "Areas/admin/Content/basic/css/custom.less"
+  },
+  {
+    "outputFile": "Areas/admin/Content/theme/css/theme.css",
+    "inputFile": "Areas/admin/Content/theme/css/theme.less"
+  },
+  {
+    "outputFile": "Areas/admin/Content/basic/css/install.css",
+    "inputFile": "Areas/admin/Content/basic/css/install.less"
+  },
+  {
+    "outputFile": "node_modules/he/he.es5.js",
+    "inputFile": "node_modules/he/he.js"
+  }
+]

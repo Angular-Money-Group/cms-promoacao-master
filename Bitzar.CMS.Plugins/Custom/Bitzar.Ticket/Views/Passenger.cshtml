@@ -1,0 +1,409 @@
+﻿@{
+
+    var PLUGIN_NAME = "Bitzar.Tickets.dll";
+    var Model = (dynamic)TempData["ExecuteModel"];
+
+    var BirthDate = Model.BirthDate != null ? Model.BirthDate.ToString("yyyy-MM-dd") : "";
+}
+
+<div id="section-passageiros" class="d-flex align-items-center flex-column justify-content-center" style="margin-top: 46px;">
+    <h1 style="color: #2e3d4f;font-size: 2rem;font-weight: bold;text-transform: uppercase; margin-bottom: 32px;">Cadastrar primeiro passageiro</h1>
+
+    <form class="d-flex flex-column align-items-center justify-content-center" id="form-passenger" onsubmit="return false" method="POST" style="gap: 6px;">
+        <!-- Nome e Sobrenome -->
+        <div style="display: flex;align-items: center;justify-content: left;flex-wrap: wrap; gap: 6px;">
+
+            <div class="d-flex justify-content-center flex-column">
+                <label style="font-weight: 500; font-size: 15px; color: #121214;">Nome</label>
+                <input id="FirstName" name="entity[FirstName]" value="@(Model != null ? Model.Name : "")" type="text" placeholder="Nome" style="outline: none; border-radius: .25rem; height: 40px; width: 300px; border: 1px solid #1A2168; margin-bottom: 12px; padding-left: 15px;" />
+            </div>
+
+            <div class="d-flex justify-content-center flex-column">
+                <label style="font-weight: 500; font-size: 15px; color: #121214;">Sobrenome</label>
+                <input id="LastName" name="entity[LastName]" value="@(Model != null ? Model.LastName : "")" type="text" placeholder="Sobrenome" style="outline: none; border-radius: .25rem; height: 40px; width: 300px; border: 1px solid #1A2168; margin-bottom: 12px; padding-left: 15px;" />
+            </div>
+
+        </div>
+        <!-- Documentos e nacionalidade -->
+        <div style="display: flex;align-items: center;justify-content: center;flex-wrap: wrap; gap: 6px;">
+
+            <div class="d-flex justify-content-center flex-column">
+                <label style="font-weight: 500; font-size: 15px; color: #121214;">Nacionalidade</label>
+                <input id="Nation" name="entity[Nation]" value="@(Model != null ? Model.Nationality : "")" type="text" placeholder="Nacionalidade" style="outline: none; border-radius: .25rem; height: 40px; width: 300px; border: 1px solid #1A2168; margin-bottom: 12px; padding-left: 15px;" />
+            </div>
+
+            <div class="d-flex justify-content-center flex-column">
+                <label style="font-weight: 500; font-size: 15px; color: #121214;">CPF</label>
+                <input id="idCPF" name="entity[idCPF]" value="@(Model != null ? Model.PersonalId : "")" type="text" placeholder="CPF" style="outline: none; border-radius: .25rem; height: 40px; width: 300px; border: 1px solid #1A2168; margin-bottom: 12px; padding-left: 15px;" />
+            </div>
+
+        </div>
+        <!-- Data de nascimento e Sexo -->
+        <div style="display: flex;align-items: center;justify-content: center;flex-wrap: wrap; gap: 6px;">
+            <div class="d-flex justify-content-center flex-column">
+                <label style="font-weight: 500; font-size: 15px; color: #121214;">Data de nascimento</label>
+                <input id="Date1" name="entity[Date1]" value="@(Model != null ? BirthDate : "")" type="date" style="outline: none; border-radius: .25rem; height: 40px; width: 300px; border: 1px solid #1A2168; margin-bottom: 12px; padding-left: 15px;" />
+            </div>
+
+            <div class="d-flex justify-content-center flex-column">
+                <label style="font-weight: 500; font-size: 15px; color: #121214;">Genero</label>
+                <select id="Gender" name="entity[Gender]" value="@(Model != null ? Model.Gender : "")" style="outline: none; border-radius: .25rem; height: 40px; width: 300px; border: 1px solid #1A2168; margin-bottom: 12px; padding-left: 15px;">
+                    <option value="valor1" selected="@(Model.Gender == "" ? true : false)">Selecionar</option>
+                    <option value="Masculino" selected="@(Model.Gender == "Masculino" ? true : false)">Masculino</option>
+                    <option value="Feminino" selected="@(Model.Gender == "Feminino" ? true : false)">Feminino</option>
+                </select>
+            </div>
+        </div>
+        <!-- CEP e Cidade de nascimento -->
+        <div style="display: flex;align-items: center;justify-content: center;flex-wrap: wrap; gap: 6px;">
+
+            <div class="d-flex justify-content-center flex-column">
+                <label style="font-weight: 500; font-size: 15px; color: #121214;">CEP</label>
+                <input id="ZipCode" name="entity[ZipCode]" value="@(Model != null ? Model.ZipCode : "")" type="text" placeholder="CEP" style="outline: none; border-radius: .25rem; height: 40px; width: 300px; border: 1px solid #1A2168; margin-bottom: 12px; padding-left: 15px;" />
+            </div>
+
+            <div class="d-flex justify-content-center flex-column">
+                <label style="font-weight: 500; font-size: 15px; color: #121214;">Cidade de nascimento</label>
+                <input id="BornCity" name="entity[BornCity]" value="@(Model != null ? Model.CityBorn : "")" placeholder="Cidade onde nasceu" style="outline: none; border-radius: .25rem; height: 40px; width: 300px; border: 1px solid #1A2168; margin-bottom: 12px; padding-left: 15px;" />
+            </div>
+        </div>
+        <!-- Endereço e País -->
+        <div style="display: flex;align-items: center;justify-content: center;flex-wrap: wrap; gap: 6px;">
+
+            <div class="d-flex justify-content-center flex-column">
+                <label style="font-weight: 500; font-size: 15px; color: #121214;">Endereço</label>
+                <input id="Address" name="entity[Address]" value="@(Model != null ? Model.Address : "")" type="text" placeholder="Endereço" style="outline: none; border-radius: .25rem; height: 40px; width: 300px; border: 1px solid #1A2168; margin-bottom: 12px; padding-left: 15px;" />
+            </div>
+
+            <div class="d-flex justify-content-center flex-column">
+                <label style="font-weight: 500; font-size: 15px; color: #121214;">País</label>
+                <input id="Country" name="entity[Country]" value="@(Model != null ? Model.Country : "")" type="text" placeholder="País" style="outline: none; border-radius: .25rem; height: 40px; width: 300px; border: 1px solid #1A2168; margin-bottom: 12px; padding-left: 15px;" />
+            </div>
+        </div>
+        <!-- Estado e Cidade -->
+        <div style="display: flex;align-items: center;justify-content: center;flex-wrap: wrap; gap: 6px;">
+            <div class="d-flex justify-content-center flex-column">
+                <label style="font-weight: 500; font-size: 15px; color: #121214;">Estado</label>
+                <input id="State" name="entity[State]" value="@(Model != null ? Model.State : "")" type="text" placeholder="Estado" style="outline: none; border-radius: .25rem; height: 40px; width: 300px; border: 1px solid #1A2168; margin-bottom: 12px; padding-left: 15px;" />
+            </div>
+            <div class="d-flex justify-content-center flex-column">
+                <label style="font-weight: 500; font-size: 15px; color: #121214;">Cidade</label>
+                <input id="City" name="entity[City]" value="@(Model != null ? Model.City : "")" type="text" placeholder="Cidade" style="outline: none; border-radius: .25rem; height: 40px; width: 300px; border: 1px solid #1A2168; margin-bottom: 12px; padding-left: 15px;" />
+            </div>
+        </div>
+        <!-- Telefone -->
+        <div style="display: flex;align-items: center;justify-content: center;flex-wrap: wrap; gap: 6px;">
+            <div class="d-flex justify-content-center flex-column">
+                <label style="font-weight: 500; font-size: 15px; color: #121214;">DDD + Telefone principal</label>
+                <input id="Telephone" name="entity[Telephone]" value="@(Model != null ? Model.Telephone : "")" type="tel" placeholder="DDD + Telefone principal" style="outline: none; border-radius: .25rem; height: 40px; width: 300px; border: 1px solid #1A2168; margin-bottom: 12px; padding-left: 15px;" />
+            </div>
+            <div class="d-flex justify-content-center flex-column">
+                <label>DDD + Telefone adicional</label>
+                <input id="AdditionalTelephone" name="entity[AdditionalTelephone]" value="@(Model != null ? Model.AdditionalTelephone : "")" type="tel" placeholder="DDD + Telefone adicional" style="outline: none; border-radius: .25rem; height: 40px; width: 300px; border: 1px solid #1A2168; margin-bottom: 12px; padding-left: 15px;" />
+            </div>
+        </div>
+        <!-- E-mail -->
+        <div class="d-flex justify-content-center flex-column">
+            <label style="font-weight: 500; font-size: 15px; color: #121214;">E-mail</label>
+            <input id="email" name="entity[email]" value="@(Model != null ? Model.Email : "")" class="email-input" type="text" placeholder="E-mail" />
+        </div>
+        <!-- Emergencia -->
+        <h1 style="color: #2e3d4f;font-size: 2rem;font-weight: bold;text-transform: uppercase; margin-bottom: 32px;">Em caso de emergência</h1>
+        <div style="display: flex;align-items: center;justify-content: center;flex-wrap: wrap; gap: 6px;">
+            <div class="d-flex justify-content-center flex-column">
+                <label style="font-weight: 500; font-size: 15px; color: #121214;">Nome de um contato p/ emergência</label>
+                <input id="EmergencyName" name="entity[EmergencyName]" value="@(Model != null ? Model.EmergencyName : "")" type="text" placeholder="Nome de um contato p/ emergência" style="outline: none; border-radius: .25rem; height: 40px; width: 300px; border: 1px solid #1A2168; margin-bottom: 12px; padding-left: 15px;" />
+            </div>
+            <div class="d-flex justify-content-center flex-column">
+                <label style="font-weight: 500; font-size: 15px; color: #121214;">DDD + Telefone emergência</label>
+                <input id="EmergencyNumber" name="entity[EmergencyNumber]" value="@(Model != null ? Model.EmergencyNumber : "")" type="tel" placeholder="DDD + Telefone emergência" style="outline: none; border-radius: .25rem; height: 40px; width: 300px; border: 1px solid #1A2168; margin-bottom: 12px; padding-left: 15px;" />
+            </div>
+        </div>
+        <button onclick="savePassenger()" type="submit" id="id-btn-finalizar-Passageiro" style="margin-left: auto; border-radius: 0.5rem; border: none; outline: none; background: #ff3a6b; padding: 7px 12px; margin-bottom: 20px; text-transform: uppercase; font-weight: bold; color: #FFF;">Confirmar passageiros</button>
+        <button type="button" class="btn btn-finalizar-pagamento" id="id-btn-finalizar-pagamento-load">@CMS.Page.Field("Categoria", "Texto Botão Pagar Load")</button>
+    </form>
+
+
+
+</div>
+
+<script type="text/javascript">
+
+    $(document).ready(function(){
+        //Mascaras
+        $("#idCPF").mask("999.999.999-00");
+
+        //Masck Tel
+        var SPMaskBehavior = function (val) {
+            return val.replace(/\D/g, '').length === 11 ? '(00) 00000-0000' : '(00) 0000-00000';
+        },
+        spOptions = {
+        onKeyPress: function(val, e, field, options) {
+                field.mask(SPMaskBehavior.apply({}, arguments), options);
+            }
+        };
+
+        $('#Telephone').mask(SPMaskBehavior, spOptions);
+        $('#AdditionalTelephone').mask(SPMaskBehavior, spOptions);
+        $('#EmergencyNumber').mask(SPMaskBehavior, spOptions);
+
+
+        //Method validade CPF for input
+        jQuery.validator.addMethod("docvalid", function(value, element){
+            var result = false;
+            let numdoc = element.value;
+            if(numdoc.length == 14){
+                result = TestaCPF(element.value);
+            }
+            return result;
+        }, "CPF inválido");
+
+        //Validador do form
+        var txtCampoRequerido = '@CMS.Global.Field("Alerta de campo requerido cadastrar")';
+        var txtCpfInvalido = '@CMS.Global.Field("Alerta CPF inválido cadastrar")';
+        var txtTelefoneInvalido = '@CMS.Global.Field("Alerta telefone inválido ou incompleto cadastrar")';
+        var emailInvalido = '@CMS.Global.Field("Alerta de e-mail inválido cadastrar")';
+        $('#form-passenger').validate({
+            rules:{
+                "entity[FirstName]":{
+                    required: true
+                },
+                "entity[LastName]":{
+                    required: true
+                },
+                "entity[idCPF]":{
+                    required: true,
+                    docvalid: true
+                },
+                "entity[Nation]":{
+                    required: true
+                },
+                "entity[Gender]": {
+                    required: true
+                },
+                "entity[ZipCode]": {
+                    required: true
+                },
+                "entity[BornCity]": {
+                    required: true
+                },
+                "entity[Address]": {
+                    required: true
+                },
+                "entity[Country]": {
+                    required: true
+                },
+                "entity[State]": {
+                    required: true
+                },
+                "entity[City]": {
+                    required: true
+                },
+                "entity[Telephone]": {
+                    required: true
+                },
+                "entity[email]": {
+                    required: true
+                },
+                "entity[EmergencyName]": {
+                    required: true
+                },
+                "entity[EmergencyNumber]": {
+                    required: true
+                }
+            },
+            messages: {
+                "entity[FirstName]":{
+                    required: txtCampoRequerido
+                },
+                "entity[LastName]": {
+                    required: txtCampoRequerido
+                },
+                "entity[idCPF]": {
+                    required: txtCampoRequerido,
+                    docvalid: txtCpfInvalido
+                },
+                "entity[Nation]": {
+                    required: txtCampoRequerido
+                },
+                "entity[Gender]": {
+                    required: txtCampoRequerido
+                },
+                "entity[ZipCode]": {
+                    required: txtCampoRequerido
+                },
+                "entity[BornCity]": {
+                    required: txtCampoRequerido
+                },
+                "entity[Address]": {
+                    required: txtCampoRequerido
+                },
+                "entity[Country]": {
+                    required: txtCampoRequerido
+                },
+                "entity[State]": {
+                    required: txtCampoRequerido
+                },
+                "entity[City]": {
+                    required: txtCampoRequerido
+                },
+                "entity[Telephone]":{
+                    required: txtCampoRequerido,
+                    minlength: txtTelefoneInvalido
+                },
+                "entity[email]": {
+                    required: txtCampoRequerido
+                },
+                "entity[EmergencyName]": {
+                    required: txtCampoRequerido
+                },
+                "entity[EmergencyNumber]": {
+                    required: txtCampoRequerido,
+                    minlength: txtTelefoneInvalido
+                }
+            },
+            onfocusout: function (element) {
+                this.element(element);
+                if (this.element(element)) {
+                    element.classList.remove("is-invalid");
+                    element.classList.add("is-valid");
+                } else {
+                    element.classList.remove("is-valid");
+                    element.classList.add("is-invalid");
+                }
+            },
+            submitHandler: function (form) {
+                $('#id-btn-finalizar-Passageiro').css("display", "none");
+                $('#id-btn-finalizar-Passageiro').fadeIn(300);
+                $('#id-btn-finalizar-pagamento-load').modal('show');
+            },
+            errorPlacement: function (error, element) {
+                if (element.parent().hasClass('input-group')) {
+                    error.insertAfter(element.parent());
+                } else {
+                    error.insertAfter(element);
+                }
+            }
+
+        });
+    });
+
+    function savePassenger() {
+
+        if (!$('#form-passenger').valid())
+            return;
+
+        let firstName = $("#FirstName").val();
+        let lastName = $("#LastName").val();
+        let nation = $("#Nation").val();
+        let idCPF = $("#idCPF").val();
+        let date1 = $("#Date1").val();
+        let gender = $("#Gender").val();
+        let zipCode = $("#ZipCode").val();
+        let bornCity = $("#BornCity").val();
+        let address = $("#Address").val();
+        let country = $("#Country").val();
+        let state = $("#State").val();
+        let city = $("#City").val();
+        let telephone = $("#Telephone").val();
+        let additionalTelephone = $("#AdditionalTelephone").val();
+        let email = $("#email").val();
+        let emergencyName = $("#EmergencyName").val();
+        let emergencyNumber = $("#EmergencyNumber").val();
+
+        var url = '@CMS.Functions.ExecuteUrl';
+        var data = {
+            "source" : "Bitzar.Tickets.dll",
+            "function": "SAVEPASSENGER",
+            "token" : "@CMS.Security.RequestToken",
+            "output" : "JSON",
+            "origin": 1,
+            "UuidTicket": "@Model.TicketId",
+            "PassengerUuid": "@Model.Uuid",
+            "firstName": firstName,
+            "lastName": lastName,
+            "nation": nation,
+            "idCPF": idCPF,
+            "date1": date1,
+            "gender": gender,
+            "zipCode": zipCode,
+            "bornCity": bornCity,
+            "address": address,
+            "country": country,
+            "state": state,
+            "city": city,
+            "telephone": telephone,
+            "additionalTelephone": additionalTelephone,
+            "email": email,
+            "emergencyName": emergencyName,
+            "emergencyNumber": emergencyNumber
+        }
+        $.post(url, data, function (response) {
+            var statusReq = response.Result.status;
+
+            if (statusReq != 200) {
+                swal({
+                    title: "@CMS.Page.Field("Categoria", "Titulo alerta de erro no pagamento")",
+                    text: "@CMS.Page.Field("Categoria", "Texto alerta de erro no pagamento com cartão")",
+                    icon: "error",
+                    closeOnClickOutside: false,
+                    closeOnEsc: false,
+                    dangerMode: true
+                }).then(function(confirm){
+                    if(confirm){
+                        $('#id-btn-finalizar-Passageiro').css('display','none');
+                        $('#id-btn-finalizar-Passageiro').fadeIn(300);
+                    }
+                });
+            } else {
+                 swal({
+                    title: "Registro efetuado com sucesso!!",
+                    text: "Registro efetuado com sucesso!!",
+                    icon: "success"
+                }).then(function(confirm){
+                    if(confirm){
+                        $('#id-btn-finalizar-Passageiro').css('display','none');
+                        $('#id-btn-finalizar-Passageiro').fadeIn(300);
+                    }
+                });
+            };
+        });
+    }
+
+    //Função que valida do CPF se é consistente
+    function TestaCPF(value) {
+        var strCPF = value;
+        strCPF = value.replace(".", "").replace(".", "").replace("-", "");
+        var Soma;
+        var Resto;
+        Soma = 0;
+        if (strCPF == "00000000000" ||
+            strCPF == "11111111111" ||
+            strCPF == "22222222222" ||
+            strCPF == "33333333333" ||
+            strCPF == "44444444444" ||
+            strCPF == "55555555555" ||
+            strCPF == "66666666666" ||
+            strCPF == "77777777777" ||
+            strCPF == "88888888888" ||
+            strCPF == "99999999999") {
+            return false;
+        }
+
+        for (i = 1; i <= 9; i++) Soma = Soma + parseInt(strCPF.substring(i - 1, i)) * (11 - i);
+        Resto = (Soma * 10) % 11;
+
+        if ((Resto == 10) || (Resto == 11)) Resto = 0;
+        if (Resto != parseInt(strCPF.substring(9, 10))) return false;
+
+        Soma = 0;
+        for (i = 1; i <= 10; i++) Soma = Soma + parseInt(strCPF.substring(i - 1, i)) * (12 - i);
+        Resto = (Soma * 10) % 11;
+
+        if ((Resto == 10) || (Resto == 11)) Resto = 0;
+        if (Resto != parseInt(strCPF.substring(10, 11))) return false;
+        return true;
+    }
+    
+
+</script>

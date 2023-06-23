@@ -1,0 +1,48 @@
+﻿@inherits System.Web.Mvc.WebViewPage
+
+@using Bitzar.CMS.Core.Functions;
+
+@{
+    var PLUGIN_NAME = "Bitzar.ECommerce.dll";
+    ViewBag.Title = "Cupons";
+}
+
+
+<div id="coupons"></div>
+
+<script>
+    //Function to load coupons page
+    loadCupons = function (page, size, search) {
+        var url = '@CMS.Functions.ExecuteUrl';
+        var param = {
+            "source": "@(PLUGIN_NAME)",
+            "function": "LoadCoupons",
+            "output": "_Coupon",
+            "token": "@CMS.Security.RequestToken"
+        }
+
+        // Add filter properties
+        if (page == null || page == 0 || page == '')
+            page = 1;
+
+        if (size == null || size == 0 || size == '')
+            size = 25;
+
+        param["Page"] = page;
+        param["Size"] = size;
+
+        if (search != null && search != undefined)
+            param["Search"] = search;
+
+        $.post(url, param, function (response) {
+            debugger;
+            if (response.hasOwnProperty('error'))
+                toastr.error(response.error);
+            else {
+                $('#coupons').html(response);
+            }
+        });
+    }
+
+    loadCupons();
+</script>

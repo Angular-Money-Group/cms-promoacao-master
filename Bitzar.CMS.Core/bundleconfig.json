@@ -1,0 +1,50 @@
+[
+  {
+    "outputFileName": "Areas/admin/Content/theme/js/core.min.js",
+    "inputFiles": [
+      "Areas/admin/Content/theme/js/core.js"
+    ]
+  },
+  {
+    "outputFileName": "Areas/admin/Content/theme/css/login.min.css",
+    "inputFiles": [
+      "Areas/admin/Content/theme/css/login.css"
+    ]
+  },
+  {
+    "outputFileName": "Areas/admin/Content/theme/css/site.min.css",
+    "inputFiles": [
+      "Areas/admin/Content/theme/css/site.css"
+    ]
+  },
+  {
+    "outputFileName": "Areas/admin/Content/theme/js/system.min.js",
+    "inputFiles": [
+      "Areas/admin/Content/theme/js/system.js"
+    ]
+  },
+  {
+    "outputFileName": "Areas/admin/Content/theme/vendor/toastr/toastr.min.css",
+    "inputFiles": [
+      "Areas/admin/Content/theme/vendor/toastr/toastr.css"
+    ]
+  },
+  {
+    "outputFileName": "node_modules/he/he.min.js",
+    "inputFiles": [
+      "node_modules/he/he.js"
+    ]
+  },
+  {
+    "outputFileName": "Areas/admin/Content/theme/vendor/hotkey/jquery.hotkey.min.js",
+    "inputFiles": [
+      "Areas/admin/Content/theme/vendor/hotkey/jquery.hotkey.js"
+    ]
+  },
+  {
+    "outputFileName": "Areas/admin/Content/theme/components/animsition.min.js",
+    "inputFiles": [
+      "Areas/admin/Content/theme/components/animsition.js"
+    ]
+  }
+]

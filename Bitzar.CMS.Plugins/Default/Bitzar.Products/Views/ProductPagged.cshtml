@@ -1,0 +1,446 @@
+﻿@inherits System.Web.Mvc.WebViewPage
+@using Bitzar.CMS.Core.Functions;
+
+@{
+    var PLUGIN_NAME = "Bitzar.Products.dll";
+    var NameProduct = CMS.Configuration.Get("NameProduct", PLUGIN_NAME);
+    ViewBag.Title = "Cadastro de " + NameProduct;
+
+    var isUserOwned = CMS.Configuration.Get("IsUserOwned", PLUGIN_NAME).Contains("true");
+
+    var Plugin = CMS.Plugins.Get(PLUGIN_NAME).Plugin;
+
+    var Parameters = (Dictionary<string, string>)ViewBag.Parameters;
+    var lang = Parameters.ContainsKey("Lang") ? Convert.ToInt32(Parameters["Lang"]) : CMS.I18N.DefaultLanguage.Id;
+
+    if (Parameters == null || Parameters.Count == 0 || !Parameters.ContainsKey("Lang"))
+    {
+        Parameters.Add("Lang", lang.ToString());
+    }
+
+    var FilteredResult = Plugin.Execute("ListProductsPagged", null, Parameters, null);
+    var Model = FilteredResult.Pagged.Records;
+    var Pagged = FilteredResult.Pagged;
+    var Culture = CMS.I18N.AvailableLanguages.FirstOrDefault(f => f.Id == lang);
+    var Owners = (IEnumerable<dynamic>)Plugin?.Execute("LISTUSERS", null, Parameters, null);
+    var filters = (IEnumerable<dynamic>)FilteredResult.Filters;
+    var user = CMS.Membership.AdminUser;
+
+    if (user.Role.Name != "Administrador")
+    {
+        Owners = Owners.Where(x => x.FirstName == user.FirstName).ToList();
+    }
+}
+
+@if (CMS.Configuration.Get("ClearCache", PLUGIN_NAME).Contains("true"))
+{
+    <div class="alert alert-info alert-dismissable">
+        <form class="form-inline">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>Atenção!</strong> Após salvar todos produtos necessários faça a limpeza do cache.
+            <a href="/admin/cache">Gerenciador de Cache</a>
+        </form>
+    </div>
+}
+
+@section PageHeaderActions {
+    <div class="page-header-actions">
+        <div class="btn-group" data-toggle="buttons">
+            @foreach (var language in CMS.I18N.AvailableLanguages)
+            {
+                <label class="btn btn-primary btn-outline @(lang == language.Id ? "active" : "")">
+                    <input type="radio" name="options" id="option1" autocomplete="off"
+                           onchange="window.location.href='@Url.Action("Action", "Plugin", new { area = "admin", source = PLUGIN_NAME, function = "ProductPagged", Lang = language.Id })';"
+                           @(lang == language.Id ? "checked" : "")> @language.Culture
+                    </label>
+                }
+        </div>
+    </div>
+}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<style>
+    .sortable tr {
+        cursor: grab;
+    }
+
+    
+    /*LOADER*/
+    #loading-bar-spinner.spinner {
+        left: 50%;
+        margin-left: -20px;
+        top: 50%;
+        position: absolute;
+        z-index: 19 !important;
+        animation: loading-bar-spinner 400ms linear infinite;
+    }
+
+        #loading-bar-spinner.spinner .spinner-icon {
+            width: 40px;
+            height: 40px;
+            border: solid 4px transparent;
+            border-top-color: #00C8B1 !important;
+            border-left-color: #00C8B1 !important;
+            border-radius: 50%;
+        }
+
+    @@keyframes loading-bar-spinner {
+        0% {
+            transform: rotate(0deg);
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+            transform: rotate(360deg);
+        }
+    }
+</style>
+
+<div class="panel panel-bordered">
+    <header class="panel-heading">
+        <h3 class="panel-title">
+            @NameProduct
+        </h3>
+        @{
+            if (isUserOwned && user.Role.Name == "Administrador")
+            {
+                <div class="panel-actions">
+                    <form class="form-inline">
+                        <div class="form-group">
+                            <select class="form-control" name="owner">
+                                @{
+                                    var selectOwner = CMS.Configuration.Get("SelectOwnerText", PLUGIN_NAME);
+                                }
+                                <option value="0">@selectOwner</option>
+                                @foreach (var owner in Owners)
+                                {
+                                    <option value="@owner.Id" @(filters.FirstOrDefault(x => x.Name == "Owner").Value == owner.FirstName ? "selected" : "")>@owner.FirstName</option>
+                                }
+                            </select>
+
+                            <input type="text" class="form-control" id="user-filter" placeholder="Busca" value="@filters.FirstOrDefault(x => x.Name=="Search").Value"
+                                   data-url="">
+                            <button type="button" class="btn btn-primary pull" onclick="performSearch();">
+                                Pesquisar<i class="icon wb-search" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            }
+        }
+    </header>
+
+
+
+    <table class="table table-hover table-strip">
+        <thead>
+            <tr>
+                @if (isUserOwned)
+                {
+                    var ownerType = CMS.Configuration.Get("OwnerType", PLUGIN_NAME);
+                    <th>@ownerType</th>
+                }
+                <th>SKU</th>
+                <th>Descrição</th>
+                <th>Url</th>
+                <th class="column-action">Oculto?</th>
+                <th class="column-action">Inativo?</th>
+                <th class="column-action"></th>
+            </tr>
+        </thead>
+        <tbody id="products" class="sortable">
+            @if (Model == null || Model.Count == 0)
+            {
+                <tr>
+                    <td class="text-center" colspan="5">
+                        Não há produtos cadastrados
+                    </td>
+                </tr>
+            }
+            else
+            {
+                foreach (var entity in Model)
+                {
+                    var owners = (IEnumerable<dynamic>)entity.Owners;
+
+                    <tr data-id="@entity.Id">
+                        @if (isUserOwned)
+                        {
+                            if (owners != null)
+                            {
+                                <td>@String.Join("/", owners.Select(x => x.Name))</td>
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                        }
+                        <td>@entity.SKU</td>
+                        <td>@entity.Description</td>
+                        <td><a href="/@entity.RouteUrl" target="_blank">/@entity.Url</a></td>
+                        <td class="text-center"><i class="icon wb-@(entity.Hide ? "check" : "close")"></i></td>
+                        <td class="text-center"><i class="icon wb-@(entity.Disabled ? "check" : "close")"></i></td>
+                        <td>
+                            <a href="@Url.Action("Action", "Plugin", new { area = "admin", source = PLUGIN_NAME, function = "ProductEdit", Lang = lang, Id = entity.Id, IdType = entity.IdType, IdUser = String.Join("/", owners.Select(x => x.IdUser)) })">
+                                <i class="icon wb-edit"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+    <div class="panel-footer">
+        <a class="btn btn-primary" href="@Url.Action("Action", "Plugin", new { area = "admin", source = PLUGIN_NAME, function = "ProductEdit", Lang = lang, IdType = 1 })"
+           data-hotkey="ctrl+i" data-toggle="tooltip" data-title="Ctrl+I" data-placement="top" data-container="body">
+            <i class="icon fa-plus"></i> Novo
+        </a>
+
+        <form style="display: inline;" action="@Url.Action("Execute", "Main", new { area = "" })" method="post" id="form-export">
+            <input type="hidden" name="source" value="@PLUGIN_NAME" />
+            <input type="hidden" name="function" value="ExportProducts" />
+            <input type="hidden" name="Lang" value="@lang" />
+            <input type="hidden" name="output" value="DOWNLOAD" />
+            <input type="hidden" name="filename" value="Produtos.xlsx" />
+            <input type="hidden" name="IdType" value="1" />
+
+            <button class="btn btn-primary" type="submit">
+                <i class="icon fa-download"></i> Exportar
+            </button>
+        </form>
+
+        <form style="display: inline;" action="@Url.Action("Execute", "Main", new { area = "" })" method="post" id="form-upload" enctype="multipart/form-data">
+            <input type="hidden" name="source" value="@PLUGIN_NAME" />
+            <input type="hidden" name="function" value="ImportProducts" />
+            <input type="hidden" name="Lang" value="@lang" />
+            <input type="hidden" name="output" value="@Url.Action("Action", "Plugin", new { area = "admin", source = PLUGIN_NAME, function = "ProductPagged", Lang = lang, IdType = 1 })" />
+            <input type="hidden" name="IdType" value="1" />
+            <input type="hidden" name="userName" value="@user.FirstName" />
+            <input type="file" id="upload-produtos" style="display: none;" name="file" />
+
+            <button class="btn btn-primary" type="button" id="btn-upload">
+                <i class="icon fa-upload"></i> Importar
+            </button>
+        </form>
+
+        @if (Model.Count > 0)
+        {
+            <div class="text-right" style="display: inline-block;float: right;">
+                <div class="select-quantities form-group" style="display:inline-block;">
+                    <select name="Quantidade" class="quantity form-control" style="padding-top:2px;height:37px" onchange="loadData(1, this.value)">
+
+                        <option value="20" @(Pagged.Size == 20 ? "selected" : "")>20</option>
+                        <option value="30" @(Pagged.Size == 30 ? "selected" : "")>30</option>
+                        <option value="40" @(Pagged.Size == 40 ? "selected" : "")>40</option>
+                        <option value="50" @(Pagged.Size == 50 ? "selected" : "")>50</option>
+                        <option value="100" @(Pagged.Size == 100 ? "selected" : "")>100</option>
+                        <option value="500" @(Pagged.Size == 500 ? "selected" : "")>500</option>
+                        <option value="@Pagged.Count" @(Pagged.Size == Pagged.Count ? "selected" : "")>Todos</option>
+                    </select>
+                </div>
+
+                <div class="pagination margin-0">
+                    <button type="button" class="btn btn-pager" value="1" onclick="loadData(1, $('.quantity :selected').val());" style="background-color:#337ab7; color:#ffffff;"><span aria-hidden="true">Primeira</span></button>
+                    @if (Pagged.Page >= 3)
+                    {
+                        <button type="button" class="btn btn-pager" value="@(Pagged.Page - 2)" onclick="loadData(@Pagged.Page - 2, $('.quantity :selected').val());" style="background-color:#337ab7; color:#ffffff;"><span aria-hidden="true">@(Pagged.Page - 2)</span></button>
+                    }
+                    @if (Pagged.Page >= 2)
+                    {
+                        <button type="button" class="btn btn-pager" value="@(Pagged.Page - 1)" onclick="loadData(@Pagged.Page - 1, $('.quantity :selected').val());" style="background-color:#337ab7; color:#ffffff;"><span aria-hidden="true">@(Pagged.Page - 1)</span></button>
+                    }
+                    <button type="button" class="btn btn-pager" value="@Pagged.Page" style="background-color:#a7a2a2" onclick="loadData(@Pagged.Page, $('.quantity :selected').val());" style="background-color:#337ab7; color:#ffffff;"><span aria-hidden="true">@(Pagged.Page)</span></button>
+                    @if (Pagged.Page < Pagged.CountPage)
+                    {
+                        <button type="button" class="btn btn-pager" value="@(Pagged.Page + 1)" onclick="loadData(@Pagged.Page + 1, $('.quantity :selected').val());" style="background-color:#337ab7; color:#ffffff;"><span aria-hidden="true">@(Pagged.Page + 1)</span></button>
+                    }
+                    @if (Pagged.Page < Pagged.CountPage - 1)
+                    {
+
+                        <button type="button" class="btn btn-pager" value="@(Pagged.Page + 2)" onclick="loadData(@Pagged.Page + 2, $('.quantity :selected').val());" style="background-color:#337ab7; color:#ffffff;"><span aria-hidden="true">@(Pagged.Page + 2)</span></button>
+                    }
+                    <button type="button" class="btn btn-pager" value="@Pagged.CountPage" onclick="loadData(@Pagged.CountPage, $('.quantity :selected').val());" style="background-color:#337ab7; color:#ffffff;"><span aria-hidden="true">Última</span></button>
+                </div>
+            </div>
+        }
+    </div>
+
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="modal-import">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Importação de Produtos</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Selecione o usuário</label>
+                    <select class="form-control" id="select-user">
+                        <option value="">Selecione um usuário</option>
+                        @foreach (var item in Owners)
+                        {
+                            <option value="@item">@item</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label id="label-file"></label>
+                </div>
+                <button type="button" class="btn btn-primary" id="btn-modal-upload">Selecionar Arquivo</button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-primary" id="btn-enviar">Enviar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="loading-import" style="display: none;">
+    <div id="loading-bar-spinner" class="spinner">
+        <div class="spinner-icon"></div>
+    </div>
+    <div class="modal-backdrop fade in"></div>
+</div>
+
+@section FooterScript {
+    @if (TempData["ExecuteModel"] != null && TempData["ExecuteModel"].ToString() == "IMPORTPRODUCTS_OK")
+    {
+        <script type="text/javascript">
+            swal('Tudo certo!!!', 'Importação executada com sucesso', 'success');
+        </script>
+    }
+    else if (TempData["ExecuteException"] != null)
+    {
+        var exception = (Exception)TempData["ExecuteException"];
+
+        <script type="text/javascript">
+            swal('erro!!!', 'Ocorreu um erro com a ação executada. Erro: @exception.Message', 'error');
+            console.log('@exception.Message');
+        </script>
+    }
+
+
+    @if (isUserOwned && user.Role.Name == "Administrador")
+    {
+        <script type="text/javascript">
+            $("#btn-upload").click(function () {
+                $("#modal-import").modal("show");
+            });
+
+            $("#select-user").on("change", function () {
+                $("input[name=userName]").val($(this).val());
+            });
+
+            $("#btn-modal-upload").click(function () {
+                $("#upload-produtos").click();
+            });
+
+            $("#upload-produtos").on("change", function () {
+                $("#label-file").text($("#upload-produtos")[0].files[0].name);
+            });
+
+            $("#btn-enviar").click(function () {
+                $("#form-upload").submit();
+                $("#loading-import").show();
+                $("#modal-import").modal("hide");
+            });
+        </script>
+    }
+    else
+    {
+        <script type="text/javascript">
+            $("#btn-upload").click(function () {
+                $("#upload-produtos").click();
+            });
+
+            $("#upload-produtos").on("change", function () {
+                $("#form-upload").submit();
+                $("#loading-import").show();
+                $("#modal-import").modal("hide");
+            });
+        </script>
+    }
+}
+<script>
+    // Helper to keep the width of the table row
+    var fixHelper = function (e, ui) {
+        ui.children().each(function () {
+            $(this).width($(this).width());
+        });
+        return ui;
+    };
+
+    $(document).on("keydown", function (e) {
+        if (e.keyCode === 13) {
+            e.preventDefault();
+            performSearch();
+        }
+    });
+
+    execute = function (e) {
+        if (e.keyCode === 13) {
+            performSearch();
+        }
+    };
+
+    // Ajax call to update the order in the database and persist status
+    sortProducts = function (e, ui) {
+        // Get all the objects in the current order list
+        var order = [];
+        $("#products tr[data-id]").each(function () { order.push($(this).data('id')); });
+
+        // Make the call
+        var url = "@(CMS.Functions.ExecuteUrl)";
+        var data = {
+            "source": "@PLUGIN_NAME",
+            "function": "SortProducts",
+            "output": "JSON",
+            "Sort": order.toString()
+        }
+        $.post(url, data, function (response) {
+            if (response.hasOwnProperty('error'))
+                swal('Ops!!!', response.error, 'error');
+        });
+    }
+
+    // Activate the rows sorter
+    $("#products").sortable({ helper: fixHelper, stop: sortProducts }).disableSelection();
+
+    loadData = function (page, size) {
+        var search = $("#user-filter").val();
+        var owner = $("select[name='owner']").val();
+
+        if (search == undefined)
+            search = "";
+        if (owner == undefined)
+            owner = "";
+        source = '@PLUGIN_NAME';
+        var url = '@Url.Action("Action", "Plugin")?area=admin&source=' + source + '&function=ProductPagged&output=JSON&page=' + page + '&size=' + size + '&Search=' + search + '&Owner=' + owner;
+        window.location.replace(url);
+    };
+
+    performSearch = function () {
+        var search = $("#user-filter").val();
+        var owner = $("select[name='owner']").val();
+
+        if (search == undefined)
+            search = "";
+        if (owner == undefined)
+            owner = "";
+
+         source = '@PLUGIN_NAME';
+        var url = '@Url.Action("Action", "Plugin")?area=admin&source='+ source +'&function=ProductPagged&output=JSON&Search='+search+'&Owner='+owner;
+        window.location.replace(url);
+    }
+
+    $(document).on('change', 'select[name="owner"]', function () {
+        performSearch();
+    });
+
+    
+</script>

@@ -1,0 +1,30 @@
+CREATE TABLE `btz_orderpayment` (
+	`Id` INT(11) NOT NULL AUTO_INCREMENT,
+	`IdOrder` INT(11) NOT NULL,
+	`RequestId` VARCHAR(50) NULL DEFAULT NULL,
+	`RequestStatus` INT(11) NOT NULL,
+	`Gateway` INT(11) NOT NULL,
+	`CustomerFirstName` VARCHAR(255) NULL DEFAULT NULL,
+	`CustomerLastName` VARCHAR(255) NULL DEFAULT NULL,
+	`CustomerEmail` VARCHAR(255) NULL DEFAULT NULL,
+	`OrderAmount` DECIMAL(18,2) NOT NULL,
+	`OrderOperationType` VARCHAR(30) NULL DEFAULT NULL,
+	`PaymentCardHolder` VARCHAR(50) NULL DEFAULT NULL,
+	`PaymentPaymentId` VARCHAR(50) NULL DEFAULT NULL,
+	`PaymentInstallments` INT(11) NOT NULL,
+	`PaymentAuthCode` VARCHAR(80) NULL DEFAULT NULL,
+	`PaymentNsu` VARCHAR(80) NULL DEFAULT NULL,
+	`PaymentDescription` VARCHAR(255) NULL DEFAULT NULL,
+	`PaymentCardBrand` VARCHAR(40) NULL DEFAULT NULL,
+	`PaymentLastFourDigits` VARCHAR(20) NULL DEFAULT NULL,
+	`PaymentUrl` VARCHAR(255) NULL DEFAULT NULL,
+	`PaymentQrCode` LONGTEXT NULL DEFAULT NULL,
+	`PaymentBarCode` VARCHAR(80) NULL DEFAULT NULL,
+	`CreatedAt` DATETIME NOT NULL,
+	PRIMARY KEY (`Id`),
+	INDEX `IX_IdOrder` (`IdOrder`),
+	CONSTRAINT `FK_btz_orderpayment_btz_order_IdOrder` FOREIGN KEY (`IdOrder`) REFERENCES `btz_order` (`Id`) ON UPDATE CASCADE ON DELETE CASCADE
+)
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB
+;

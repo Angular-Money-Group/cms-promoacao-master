@@ -1,0 +1,348 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CssShorthands" xml:space="preserve">
+    <value>.margin-0{margin:0!important}.margin-3{margin:3px!important}.margin-5{margin:5px!important}.margin-10{margin:10px!important}.margin-15{margin:15px!important}.margin-20{margin:20px!important}.margin-25{margin:25px!important}.margin-30{margin:30px!important}.margin-35{margin:35px!important}.margin-40{margin:40px!important}.margin-45{margin:45px!important}.margin-50{margin:50px!important}.margin-60{margin:60px!important}.margin-70{margin:70px!important}.margin-80{margin:80px!important}.margin-vertical-0{margin-top:0!important;margin-bottom:0!important}.margin-vertical-3{margin-top:3px!important;margin-bottom:3px!important}.margin-vertical-5{margin-top:5px!important;margin-bottom:5px!important}.margin-vertical-10{margin-top:10px!important;margin-bottom:10px!important}.margin-vertical-15{margin-top:15px!important;margin-bottom:15px!important}.margin-vertical-20{margin-top:20px!important;margin-bottom:20px!important}.margin-vertical-25{margin-top:25px!important;margin-bottom:25px!important}.margin-vertical-30{margin-top:30px!important;margin-bottom:30px!important}.margin-vertical-35{margin-top:35px!important;margin-bottom:35px!important}.margin-vertical-40{margin-top:40px!important;margin-bottom:40px!important}.margin-vertical-45{margin-top:45px!important;margin-bottom:45px!important}.margin-vertical-50{margin-top:50px!important;margin-bottom:50px!important}.margin-vertical-60{margin-top:60px!important;margin-bottom:60px!important}.margin-vertical-70{margin-top:70px!important;margin-bottom:70px!important}.margin-vertical-80{margin-top:80px!important;margin-bottom:80px!important}.margin-horizontal-0{margin-right:0!important;margin-left:0!important}.margin-horizontal-3{margin-right:3px!important;margin-left:3px!important}.margin-horizontal-5{margin-right:5px!important;margin-left:5px!important}.margin-horizontal-10{margin-right:10px!important;margin-left:10px!important}.margin-horizontal-15{margin-right:15px!important;margin-left:15px!important}.margin-horizontal-20{margin-right:20px!important;margin-left:20px!important}.margin-horizontal-25{margin-right:25px!important;margin-left:25px!important}.margin-horizontal-30{margin-right:30px!important;margin-left:30px!important}.margin-horizontal-35{margin-right:35px!important;margin-left:35px!important}.margin-horizontal-40{margin-right:40px!important;margin-left:40px!important}.margin-horizontal-45{margin-right:45px!important;margin-left:45px!important}.margin-horizontal-50{margin-right:50px!important;margin-left:50px!important}.margin-horizontal-60{margin-right:60px!important;margin-left:60px!important}.margin-horizontal-70{margin-right:70px!important;margin-left:70px!important}.margin-horizontal-80{margin-right:80px!important;margin-left:80px!important}.margin-top-0{margin-top:0!important}.margin-top-3{margin-top:3px!important}.margin-top-5{margin-top:5px!important}.margin-top-10{margin-top:10px!important}.margin-top-15{margin-top:15px!important}.margin-top-20{margin-top:20px!important}.margin-top-25{margin-top:25px!important}.margin-top-30{margin-top:30px!important}.margin-top-35{margin-top:35px!important}.margin-top-40{margin-top:40px!important}.margin-top-45{margin-top:45px!important}.margin-top-50{margin-top:50px!important}.margin-top-60{margin-top:60px!important}.margin-top-70{margin-top:70px!important}.margin-top-80{margin-top:80px!important}.margin-bottom-0{margin-bottom:0!important}.margin-bottom-3{margin-bottom:3px!important}.margin-bottom-5{margin-bottom:5px!important}.margin-bottom-10{margin-bottom:10px!important}.margin-bottom-15{margin-bottom:15px!important}.margin-bottom-20{margin-bottom:20px!important}.margin-bottom-25{margin-bottom:25px!important}.margin-bottom-30{margin-bottom:30px!important}.margin-bottom-35{margin-bottom:35px!important}.margin-bottom-40{margin-bottom:40px!important}.margin-bottom-45{margin-bottom:45px!important}.margin-bottom-50{margin-bottom:50px!important}.margin-bottom-60{margin-bottom:60px!important}.margin-bottom-70{margin-bottom:70px!important}.margin-bottom-80{margin-bottom:80px!important}.margin-left-0{margin-left:0!important}.margin-left-3{margin-left:3px!important}.margin-left-5{margin-left:5px!important}.margin-left-10{margin-left:10px!important}.margin-left-15{margin-left:15px!important}.margin-left-20{margin-left:20px!important}.margin-left-25{margin-left:25px!important}.margin-left-30{margin-left:30px!important}.margin-left-35{margin-left:35px!important}.margin-left-40{margin-left:40px!important}.margin-left-45{margin-left:45px!important}.margin-left-50{margin-left:50px!important}.margin-left-60{margin-left:60px!important}.margin-left-70{margin-left:70px!important}.margin-left-80{margin-left:80px!important}.margin-right-0{margin-right:0!important}.margin-right-3{margin-right:3px!important}.margin-right-5{margin-right:5px!important}.margin-right-10{margin-right:10px!important}.margin-right-15{margin-right:15px!important}.margin-right-20{margin-right:20px!important}.margin-right-25{margin-right:25px!important}.margin-right-30{margin-right:30px!important}.margin-right-35{margin-right:35px!important}.margin-right-40{margin-right:40px!important}.margin-right-45{margin-right:45px!important}.margin-right-50{margin-right:50px!important}.margin-right-60{margin-right:60px!important}.margin-right-70{margin-right:70px!important}.margin-right-80{margin-right:80px!important}.padding-0{padding:0!important}.padding-3{padding:3px!important}.padding-5{padding:5px!important}.padding-10{padding:10px!important}.padding-15{padding:15px!important}.padding-20{padding:20px!important}.padding-25{padding:25px!important}.padding-30{padding:30px!important}.padding-35{padding:35px!important}.padding-40{padding:40px!important}.padding-45{padding:45px!important}.padding-50{padding:50px!important}.padding-60{padding:60px!important}.padding-70{padding:70px!important}.padding-80{padding:80px!important}.padding-vertical-0{padding-top:0!important;padding-bottom:0!important}.padding-vertical-3{padding-top:3px!important;padding-bottom:3px!important}.padding-vertical-5{padding-top:5px!important;padding-bottom:5px!important}.padding-vertical-10{padding-top:10px!important;padding-bottom:10px!important}.padding-vertical-15{padding-top:15px!important;padding-bottom:15px!important}.padding-vertical-20{padding-top:20px!important;padding-bottom:20px!important}.padding-vertical-25{padding-top:25px!important;padding-bottom:25px!important}.padding-vertical-30{padding-top:30px!important;padding-bottom:30px!important}.padding-vertical-35{padding-top:35px!important;padding-bottom:35px!important}.padding-vertical-40{padding-top:40px!important;padding-bottom:40px!important}.padding-vertical-45{padding-top:45px!important;padding-bottom:45px!important}.padding-vertical-50{padding-top:50px!important;padding-bottom:50px!important}.padding-vertical-60{padding-top:60px!important;padding-bottom:60px!important}.padding-vertical-70{padding-top:70px!important;padding-bottom:70px!important}.padding-vertical-80{padding-top:80px!important;padding-bottom:80px!important}.padding-horizontal-0{padding-right:0!important;padding-left:0!important}.padding-horizontal-3{padding-right:3px!important;padding-left:3px!important}.padding-horizontal-5{padding-right:5px!important;padding-left:5px!important}.padding-horizontal-10{padding-right:10px!important;padding-left:10px!important}.padding-horizontal-15{padding-right:15px!important;padding-left:15px!important}.padding-horizontal-20{padding-right:20px!important;padding-left:20px!important}.padding-horizontal-25{padding-right:25px!important;padding-left:25px!important}.padding-horizontal-30{padding-right:30px!important;padding-left:30px!important}.padding-horizontal-35{padding-right:35px!important;padding-left:35px!important}.padding-horizontal-40{padding-right:40px!important;padding-left:40px!important}.padding-horizontal-45{padding-right:45px!important;padding-left:45px!important}.padding-horizontal-50{padding-right:50px!important;padding-left:50px!important}.padding-horizontal-60{padding-right:60px!important;padding-left:60px!important}.padding-horizontal-70{padding-right:70px!important;padding-left:70px!important}.padding-horizontal-80{padding-right:80px!important;padding-left:80px!important}.padding-top-0{padding-top:0!important}.padding-top-3{padding-top:3px!important}.padding-top-5{padding-top:5px!important}.padding-top-10{padding-top:10px!important}.padding-top-15{padding-top:15px!important}.padding-top-20{padding-top:20px!important}.padding-top-25{padding-top:25px!important}.padding-top-30{padding-top:30px!important}.padding-top-35{padding-top:35px!important}.padding-top-40{padding-top:40px!important}.padding-top-45{padding-top:45px!important}.padding-top-50{padding-top:50px!important}.padding-top-60{padding-top:60px!important}.padding-top-70{padding-top:70px!important}.padding-top-80{padding-top:80px!important}.padding-bottom-0{padding-bottom:0!important}.padding-bottom-3{padding-bottom:3px!important}.padding-bottom-5{padding-bottom:5px!important}.padding-bottom-10{padding-bottom:10px!important}.padding-bottom-15{padding-bottom:15px!important}.padding-bottom-20{padding-bottom:20px!important}.padding-bottom-25{padding-bottom:25px!important}.padding-bottom-30{padding-bottom:30px!important}.padding-bottom-35{padding-bottom:35px!important}.padding-bottom-40{padding-bottom:40px!important}.padding-bottom-45{padding-bottom:45px!important}.padding-bottom-50{padding-bottom:50px!important}.padding-bottom-60{padding-bottom:60px!important}.padding-bottom-70{padding-bottom:70px!important}.padding-bottom-80{padding-bottom:80px!important}.padding-left-0{padding-left:0!important}.padding-left-3{padding-left:3px!important}.padding-left-5{padding-left:5px!important}.padding-left-10{padding-left:10px!important}.padding-left-15{padding-left:15px!important}.padding-left-20{padding-left:20px!important}.padding-left-25{padding-left:25px!important}.padding-left-30{padding-left:30px!important}.padding-left-35{padding-left:35px!important}.padding-left-40{padding-left:40px!important}.padding-left-45{padding-left:45px!important}.padding-left-50{padding-left:50px!important}.padding-left-60{padding-left:60px!important}.padding-left-70{padding-left:70px!important}.padding-left-80{padding-left:80px!important}.padding-right-0{padding-right:0!important}.padding-right-3{padding-right:3px!important}.padding-right-5{padding-right:5px!important}.padding-right-10{padding-right:10px!important}.padding-right-15{padding-right:15px!important}.padding-right-20{padding-right:20px!important}.padding-right-25{padding-right:25px!important}.padding-right-30{padding-right:30px!important}.padding-right-35{padding-right:35px!important}.padding-right-40{padding-right:40px!important}.padding-right-45{padding-right:45px!important}.padding-right-50{padding-right:50px!important}.padding-right-60{padding-right:60px!important}.padding-right-70{padding-right:70px!important}.padding-right-80{padding-right:80px!important}@media (max-width:767px){.margin-xs-0{margin:0!important}.padding-xs-0{padding:0!important}}@media (min-width:768px){.margin-sm-0{margin:0!important}.padding-sm-0{padding:0!important}}@media (min-width:992px){.margin-md-0{margin:0!important}.padding-md-0{padding:0!important}}@media (min-width:1200px){.margin-lg-0{margin:0!important}.padding-lg-0{padding:0!important}}</value>
+    <comment>Arquivo de CSS para Shorthands = shorthands.min.css</comment>
+  </data>
+  <data name="CssStyle" xml:space="preserve">
+    <value>body {
+    overflow-x: hidden;
+}
+
+.menu .logo {
+    max-width: 100%;
+    max-height: 66px
+}
+
+.menu {
+    /* Ajustar Cor Menu */
+    background-color: gray;
+}
+
+.menu .navigation {
+    margin: 0 !important;
+}
+
+.menu .navigation li {
+    list-style: none;
+    display: inline-block !important;
+}
+
+.menu .navigation li a {
+    margin: 23px 0 23px 30px;
+    font-weight: bold;
+    text-decoration: none;
+    text-transform: uppercase;
+    display: block;
+    color: #396488;
+}
+
+.menu .navigation li a:hover {
+    color: #819db4;
+}
+
+.desktop-menu button {
+    background-color: #e3e5eb;
+}
+
+.desktop-menu button:hover {
+    background-color: #7c99b1;
+}
+
+.menu .desktop-menu {
+    margin: 25px 0;
+}
+
+.menu .mobile-menu {
+    background-color: #fff;
+}
+
+.menu .mobile-menu&gt;div {
+    padding: 15px 0;
+    border-bottom: 1px solid #fff;
+}
+
+.menu .menu-item-mobile {
+    font-weight: bold;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+.menu .menu-toggle {
+    padding: 9px 10px;
+    margin-top: 15px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    height: 35px;
+}
+
+@media screen and (max-width: 321px) {
+    .menu .menu-toggle {
+        margin-top: 5px;
+    }
+}
+
+.menu .menu-toggle .icon-bar {
+    display: block;
+    width: 22px;
+    height: 2px;
+    border-radius: 1px;
+    background: black;
+    margin-bottom: 5px;
+}</value>
+    <comment>Arquivo CSS site = style.css</comment>
+  </data>
+  <data name="JsCycle2" xml:space="preserve">
+    <value>(function(e){"use strict";function t(e){return(e||"").toLowerCase()}var i="2.1.6";e.fn.cycle=function(i){var n;return 0!==this.length||e.isReady?this.each(function(){var n,s,o,c,l=e(this),r=e.fn.cycle.log;if(!l.data("cycle.opts")){(l.data("cycle-log")===!1||i&amp;&amp;i.log===!1||s&amp;&amp;s.log===!1)&amp;&amp;(r=e.noop),r("--c2 init--"),n=l.data();for(var a in n)n.hasOwnProperty(a)&amp;&amp;/^cycle[A-Z]+/.test(a)&amp;&amp;(c=n[a],o=a.match(/^cycle(.*)/)[1].replace(/^[A-Z]/,t),r(o+":",c,"("+typeof c+")"),n[o]=c);s=e.extend({},e.fn.cycle.defaults,n,i||{}),s.timeoutId=0,s.paused=s.paused||!1,s.container=l,s._maxZ=s.maxZ,s.API=e.extend({_container:l},e.fn.cycle.API),s.API.log=r,s.API.trigger=function(e,t){return s.container.trigger(e,t),s.API},l.data("cycle.opts",s),l.data("cycle.API",s.API),s.API.trigger("cycle-bootstrap",[s,s.API]),s.API.addInitialSlides(),s.API.preInitSlideshow(),s.slides.length&amp;&amp;s.API.initSlideshow()}}):(n={s:this.selector,c:this.context},e.fn.cycle.log("requeuing slideshow (dom not ready)"),e(function(){e(n.s,n.c).cycle(i)}),this)},e.fn.cycle.API={opts:function(){return this._container.data("cycle.opts")},addInitialSlides:function(){var t=this.opts(),i=t.slides;t.slideCount=0,t.slides=e(),i=i.jquery?i:t.container.find(i),t.random&amp;&amp;i.sort(function(){return Math.random()-.5}),t.API.add(i)},preInitSlideshow:function(){var t=this.opts();t.API.trigger("cycle-pre-initialize",[t]);var i=e.fn.cycle.transitions[t.fx];i&amp;&amp;e.isFunction(i.preInit)&amp;&amp;i.preInit(t),t._preInitialized=!0},postInitSlideshow:function(){var t=this.opts();t.API.trigger("cycle-post-initialize",[t]);var i=e.fn.cycle.transitions[t.fx];i&amp;&amp;e.isFunction(i.postInit)&amp;&amp;i.postInit(t)},initSlideshow:function(){var t,i=this.opts(),n=i.container;i.API.calcFirstSlide(),"static"==i.container.css("position")&amp;&amp;i.container.css("position","relative"),e(i.slides[i.currSlide]).css({opacity:1,display:"block",visibility:"visible"}),i.API.stackSlides(i.slides[i.currSlide],i.slides[i.nextSlide],!i.reverse),i.pauseOnHover&amp;&amp;(i.pauseOnHover!==!0&amp;&amp;(n=e(i.pauseOnHover)),n.hover(function(){i.API.pause(!0)},function(){i.API.resume(!0)})),i.timeout&amp;&amp;(t=i.API.getSlideOpts(i.currSlide),i.API.queueTransition(t,t.timeout+i.delay)),i._initialized=!0,i.API.updateView(!0),i.API.trigger("cycle-initialized",[i]),i.API.postInitSlideshow()},pause:function(t){var i=this.opts(),n=i.API.getSlideOpts(),s=i.hoverPaused||i.paused;t?i.hoverPaused=!0:i.paused=!0,s||(i.container.addClass("cycle-paused"),i.API.trigger("cycle-paused",[i]).log("cycle-paused"),n.timeout&amp;&amp;(clearTimeout(i.timeoutId),i.timeoutId=0,i._remainingTimeout-=e.now()-i._lastQueue,(i._remainingTimeout&lt;0||isNaN(i._remainingTimeout))&amp;&amp;(i._remainingTimeout=void 0)))},resume:function(e){var t=this.opts(),i=!t.hoverPaused&amp;&amp;!t.paused;e?t.hoverPaused=!1:t.paused=!1,i||(t.container.removeClass("cycle-paused"),0===t.slides.filter(":animated").length&amp;&amp;t.API.queueTransition(t.API.getSlideOpts(),t._remainingTimeout),t.API.trigger("cycle-resumed",[t,t._remainingTimeout]).log("cycle-resumed"))},add:function(t,i){var n,s=this.opts(),o=s.slideCount,c=!1;"string"==e.type(t)&amp;&amp;(t=e.trim(t)),e(t).each(function(t){var n,o=e(this);i?s.container.prepend(o):s.container.append(o),s.slideCount++,n=s.API.buildSlideOpts(o),i?s.slides=e(o).add(s.slides):s.slides=s.slides.add(o),s.API.initSlide(n,o,--s._maxZ),o.data("cycle.opts",n),s.API.trigger("cycle-slide-added",[s,n,o])}),s.API.updateView(!0),c=s._preInitialized&amp;&amp;o&lt;2&amp;&amp;s.slideCount&gt;=1,c&amp;&amp;(s._initialized?s.timeout&amp;&amp;(n=s.slides.length,s.nextSlide=s.reverse?n-1:1,s.timeoutId||s.API.queueTransition(s)):s.API.initSlideshow())},calcFirstSlide:function(){var e,t=this.opts();e=parseInt(t.startingSlide||0,10),(e&gt;=t.slides.length||e&lt;0)&amp;&amp;(e=0),t.currSlide=e,t.reverse?(t.nextSlide=e-1,t.nextSlide&lt;0&amp;&amp;(t.nextSlide=t.slides.length-1)):(t.nextSlide=e+1,t.nextSlide==t.slides.length&amp;&amp;(t.nextSlide=0))},calcNextSlide:function(){var e,t=this.opts();t.reverse?(e=t.nextSlide-1&lt;0,t.nextSlide=e?t.slideCount-1:t.nextSlide-1,t.currSlide=e?0:t.nextSlide+1):(e=t.nextSlide+1==t.slides.length,t.nextSlide=e?0:t.nextSlide+1,t.currSlide=e?t.slides.length-1:t.nextSlide-1)},calcTx:function(t,i){var n,s=t;return s._tempFx?n=e.fn.cycle.transitions[s._tempFx]:i&amp;&amp;s.manualFx&amp;&amp;(n=e.fn.cycle.transitions[s.manualFx]),n||(n=e.fn.cycle.transitions[s.fx]),s._tempFx=null,this.opts()._tempFx=null,n||(n=e.fn.cycle.transitions.fade,s.API.log('Transition "'+s.fx+'" not found.  Using fade.')),n},prepareTx:function(e,t){var i,n,s,o,c,l=this.opts();return l.slideCount&lt;2?void(l.timeoutId=0):(!e||l.busy&amp;&amp;!l.manualTrump||(l.API.stopTransition(),l.busy=!1,clearTimeout(l.timeoutId),l.timeoutId=0),void(l.busy||(0!==l.timeoutId||e)&amp;&amp;(n=l.slides[l.currSlide],s=l.slides[l.nextSlide],o=l.API.getSlideOpts(l.nextSlide),c=l.API.calcTx(o,e),l._tx=c,e&amp;&amp;void 0!==o.manualSpeed&amp;&amp;(o.speed=o.manualSpeed),l.nextSlide!=l.currSlide&amp;&amp;(e||!l.paused&amp;&amp;!l.hoverPaused&amp;&amp;l.timeout)?(l.API.trigger("cycle-before",[o,n,s,t]),c.before&amp;&amp;c.before(o,n,s,t),i=function(){l.busy=!1,l.container.data("cycle.opts")&amp;&amp;(c.after&amp;&amp;c.after(o,n,s,t),l.API.trigger("cycle-after",[o,n,s,t]),l.API.queueTransition(o),l.API.updateView(!0))},l.busy=!0,c.transition?c.transition(o,n,s,t,i):l.API.doTransition(o,n,s,t,i),l.API.calcNextSlide(),l.API.updateView()):l.API.queueTransition(o))))},doTransition:function(t,i,n,s,o){var c=t,l=e(i),r=e(n),a=function(){r.animate(c.animIn||{opacity:1},c.speed,c.easeIn||c.easing,o)};r.css(c.cssBefore||{}),l.animate(c.animOut||{},c.speed,c.easeOut||c.easing,function(){l.css(c.cssAfter||{}),c.sync||a()}),c.sync&amp;&amp;a()},queueTransition:function(t,i){var n=this.opts(),s=void 0!==i?i:t.timeout;return 0===n.nextSlide&amp;&amp;0===--n.loop?(n.API.log("terminating; loop=0"),n.timeout=0,s?setTimeout(function(){n.API.trigger("cycle-finished",[n])},s):n.API.trigger("cycle-finished",[n]),void(n.nextSlide=n.currSlide)):void 0!==n.continueAuto&amp;&amp;(n.continueAuto===!1||e.isFunction(n.continueAuto)&amp;&amp;n.continueAuto()===!1)?(n.API.log("terminating automatic transitions"),n.timeout=0,void(n.timeoutId&amp;&amp;clearTimeout(n.timeoutId))):void(s&amp;&amp;(n._lastQueue=e.now(),void 0===i&amp;&amp;(n._remainingTimeout=t.timeout),n.paused||n.hoverPaused||(n.timeoutId=setTimeout(function(){n.API.prepareTx(!1,!n.reverse)},s))))},stopTransition:function(){var e=this.opts();e.slides.filter(":animated").length&amp;&amp;(e.slides.stop(!1,!0),e.API.trigger("cycle-transition-stopped",[e])),e._tx&amp;&amp;e._tx.stopTransition&amp;&amp;e._tx.stopTransition(e)},advanceSlide:function(e){var t=this.opts();return clearTimeout(t.timeoutId),t.timeoutId=0,t.nextSlide=t.currSlide+e,t.nextSlide&lt;0?t.nextSlide=t.slides.length-1:t.nextSlide&gt;=t.slides.length&amp;&amp;(t.nextSlide=0),t.API.prepareTx(!0,e&gt;=0),!1},buildSlideOpts:function(i){var n,s,o=this.opts(),c=i.data()||{};for(var l in c)c.hasOwnProperty(l)&amp;&amp;/^cycle[A-Z]+/.test(l)&amp;&amp;(n=c[l],s=l.match(/^cycle(.*)/)[1].replace(/^[A-Z]/,t),o.API.log("["+(o.slideCount-1)+"]",s+":",n,"("+typeof n+")"),c[s]=n);c=e.extend({},e.fn.cycle.defaults,o,c),c.slideNum=o.slideCount;try{delete c.API,delete c.slideCount,delete c.currSlide,delete c.nextSlide,delete c.slides}catch(e){}return c},getSlideOpts:function(t){var i=this.opts();void 0===t&amp;&amp;(t=i.currSlide);var n=i.slides[t],s=e(n).data("cycle.opts");return e.extend({},i,s)},initSlide:function(t,i,n){var s=this.opts();i.css(t.slideCss||{}),n&gt;0&amp;&amp;i.css("zIndex",n),isNaN(t.speed)&amp;&amp;(t.speed=e.fx.speeds[t.speed]||e.fx.speeds._default),t.sync||(t.speed=t.speed/2),i.addClass(s.slideClass)},updateView:function(e,t,i){var n=this.opts();if(n._initialized){var s=n.API.getSlideOpts(),o=n.slides[n.currSlide];!e&amp;&amp;t!==!0&amp;&amp;(n.API.trigger("cycle-update-view-before",[n,s,o]),n.updateView&lt;0)||(n.slideActiveClass&amp;&amp;n.slides.removeClass(n.slideActiveClass).eq(n.currSlide).addClass(n.slideActiveClass),e&amp;&amp;n.hideNonActive&amp;&amp;n.slides.filter(":not(."+n.slideActiveClass+")").css("visibility","hidden"),0===n.updateView&amp;&amp;setTimeout(function(){n.API.trigger("cycle-update-view",[n,s,o,e])},s.speed/(n.sync?2:1)),0!==n.updateView&amp;&amp;n.API.trigger("cycle-update-view",[n,s,o,e]),e&amp;&amp;n.API.trigger("cycle-update-view-after",[n,s,o]))}},getComponent:function(t){var i=this.opts(),n=i[t];return"string"==typeof n?/^\s*[\&gt;|\+|~]/.test(n)?i.container.find(n):e(n):n.jquery?n:e(n)},stackSlides:function(t,i,n){var s=this.opts();t||(t=s.slides[s.currSlide],i=s.slides[s.nextSlide],n=!s.reverse),e(t).css("zIndex",s.maxZ);var o,c=s.maxZ-2,l=s.slideCount;if(n){for(o=s.currSlide+1;o&lt;l;o++)e(s.slides[o]).css("zIndex",c--);for(o=0;o&lt;s.currSlide;o++)e(s.slides[o]).css("zIndex",c--)}else{for(o=s.currSlide-1;o&gt;=0;o--)e(s.slides[o]).css("zIndex",c--);for(o=l-1;o&gt;s.currSlide;o--)e(s.slides[o]).css("zIndex",c--)}e(i).css("zIndex",s.maxZ-1)},getSlideIndex:function(e){return this.opts().slides.index(e)}},e.fn.cycle.log=function(){window.console&amp;&amp;console.log&amp;&amp;console.log("[cycle2] "+Array.prototype.join.call(arguments," "))},e.fn.cycle.version=function(){return"Cycle2: "+i},e.fn.cycle.transitions={custom:{},none:{before:function(e,t,i,n){e.API.stackSlides(i,t,n),e.cssBefore={opacity:1,visibility:"visible",display:"block"}}},fade:{before:function(t,i,n,s){var o=t.API.getSlideOpts(t.nextSlide).slideCss||{};t.API.stackSlides(i,n,s),t.cssBefore=e.extend(o,{opacity:0,visibility:"visible",display:"block"}),t.animIn={opacity:1},t.animOut={opacity:0}}},fadeout:{before:function(t,i,n,s){var o=t.API.getSlideOpts(t.nextSlide).slideCss||{};t.API.stackSlides(i,n,s),t.cssBefore=e.extend(o,{opacity:1,visibility:"visible",display:"block"}),t.animOut={opacity:0}}},scrollHorz:{before:function(e,t,i,n){e.API.stackSlides(t,i,n);var s=e.container.css("overflow","hidden").width();e.cssBefore={left:n?s:-s,top:0,opacity:1,visibility:"visible",display:"block"},e.cssAfter={zIndex:e._maxZ-2,left:0},e.animIn={left:0},e.animOut={left:n?-s:s}}}},e.fn.cycle.defaults={allowWrap:!0,autoSelector:".cycle-slideshow[data-cycle-auto-init!=false]",delay:0,easing:null,fx:"fade",hideNonActive:!0,loop:0,manualFx:void 0,manualSpeed:void 0,manualTrump:!0,maxZ:100,pauseOnHover:!1,reverse:!1,slideActiveClass:"cycle-slide-active",slideClass:"cycle-slide",slideCss:{position:"absolute",top:0,left:0},slides:"&gt; img",speed:500,startingSlide:0,sync:!0,timeout:4e3,updateView:0},e(document).ready(function(){e(e.fn.cycle.defaults.autoSelector).cycle()})})(jQuery),function(e){"use strict";function t(t,n){var s,o,c,l=n.autoHeight;if("container"==l)o=e(n.slides[n.currSlide]).outerHeight(),n.container.height(o);else if(n._autoHeightRatio)n.container.height(n.container.width()/n._autoHeightRatio);else if("calc"===l||"number"==e.type(l)&amp;&amp;l&gt;=0){if(c="calc"===l?i(t,n):l&gt;=n.slides.length?0:l,c==n._sentinelIndex)return;n._sentinelIndex=c,n._sentinel&amp;&amp;n._sentinel.remove(),s=e(n.slides[c].cloneNode(!0)),s.removeAttr("id name rel").find("[id],[name],[rel]").removeAttr("id name rel"),s.css({position:"static",visibility:"hidden",display:"block"}).prependTo(n.container).addClass("cycle-sentinel cycle-slide").removeClass("cycle-slide-active"),s.find("*").css("visibility","hidden"),n._sentinel=s}}function i(t,i){var n=0,s=-1;return i.slides.each(function(t){var i=e(this).height();i&gt;s&amp;&amp;(s=i,n=t)}),n}function n(t,i,n,s,o){var c=e(s).outerHeight();i.container.animate({height:c},i.autoHeightSpeed,i.autoHeightEasing)}function s(i,o){o._autoHeightOnResize&amp;&amp;(e(window).off("resize orientationchange",o._autoHeightOnResize),o._autoHeightOnResize=null),o.container.off("cycle-slide-added cycle-slide-removed",t),o.container.off("cycle-destroyed",s),o.container.off("cycle-before",n),o._sentinel&amp;&amp;(o._sentinel.remove(),o._sentinel=null)}e.extend(e.fn.cycle.defaults,{autoHeight:0,autoHeightSpeed:250,autoHeightEasing:null}),e(document).on("cycle-initialized",function(i,o){function c(){t(i,o)}var l,r=o.autoHeight,a=e.type(r),d=null;"string"!==a&amp;&amp;"number"!==a||(o.container.on("cycle-slide-added cycle-slide-removed",t),o.container.on("cycle-destroyed",s),"container"==r?o.container.on("cycle-before",n):"string"===a&amp;&amp;/\d+\:\d+/.test(r)&amp;&amp;(l=r.match(/(\d+)\:(\d+)/),l=l[1]/l[2],o._autoHeightRatio=l),"number"!==a&amp;&amp;(o._autoHeightOnResize=function(){clearTimeout(d),d=setTimeout(c,50)},e(window).on("resize orientationchange",o._autoHeightOnResize)),setTimeout(c,30))})}(jQuery),function(e){"use strict";e.extend(e.fn.cycle.defaults,{caption:"&gt; .cycle-caption",captionTemplate:"{{slideNum}} / {{slideCount}}",overlay:"&gt; .cycle-overlay",overlayTemplate:"&lt;div&gt;{{title}}&lt;/div&gt;&lt;div&gt;{{desc}}&lt;/div&gt;",captionModule:"caption"}),e(document).on("cycle-update-view",function(t,i,n,s){if("caption"===i.captionModule){e.each(["caption","overlay"],function(){var e=this,t=n[e+"Template"],o=i.API.getComponent(e);o.length&amp;&amp;t?(o.html(i.API.tmpl(t,n,i,s)),o.show()):o.hide()})}}),e(document).on("cycle-destroyed",function(t,i){var n;e.each(["caption","overlay"],function(){var e=this,t=i[e+"Template"];i[e]&amp;&amp;t&amp;&amp;(n=i.API.getComponent("caption"),n.empty())})})}(jQuery),function(e){"use strict";var t=e.fn.cycle;e.fn.cycle=function(i){var n,s,o,c=e.makeArray(arguments);return"number"==e.type(i)?this.cycle("goto",i):"string"==e.type(i)?this.each(function(){var l;return n=i,o=e(this).data("cycle.opts"),void 0===o?void t.log('slideshow must be initialized before sending commands; "'+n+'" ignored'):(n="goto"==n?"jump":n,s=o.API[n],e.isFunction(s)?(l=e.makeArray(c),l.shift(),s.apply(o.API,l)):void t.log("unknown command: ",n))}):t.apply(this,arguments)},e.extend(e.fn.cycle,t),e.extend(t.API,{next:function(){var e=this.opts();if(!e.busy||e.manualTrump){var t=e.reverse?-1:1;e.allowWrap===!1&amp;&amp;e.currSlide+t&gt;=e.slideCount||(e.API.advanceSlide(t),e.API.trigger("cycle-next",[e]).log("cycle-next"))}},prev:function(){var e=this.opts();if(!e.busy||e.manualTrump){var t=e.reverse?1:-1;e.allowWrap===!1&amp;&amp;e.currSlide+t&lt;0||(e.API.advanceSlide(t),e.API.trigger("cycle-prev",[e]).log("cycle-prev"))}},destroy:function(){this.stop();var t=this.opts(),i=e.isFunction(e._data)?e._data:e.noop;clearTimeout(t.timeoutId),t.timeoutId=0,t.API.stop(),t.API.trigger("cycle-destroyed",[t]).log("cycle-destroyed"),t.container.removeData(),i(t.container[0],"parsedAttrs",!1),t.retainStylesOnDestroy||(t.container.removeAttr("style"),t.slides.removeAttr("style"),t.slides.removeClass(t.slideActiveClass)),t.slides.each(function(){var n=e(this);n.removeData(),n.removeClass(t.slideClass),i(this,"parsedAttrs",!1)})},jump:function(e,t){var i,n=this.opts();if(!n.busy||n.manualTrump){var s=parseInt(e,10);if(isNaN(s)||s&lt;0||s&gt;=n.slides.length)return void n.API.log("goto: invalid slide index: "+s);if(s==n.currSlide)return void n.API.log("goto: skipping, already on slide",s);n.nextSlide=s,clearTimeout(n.timeoutId),n.timeoutId=0,n.API.log("goto: ",s," (zero-index)"),i=n.currSlide&lt;n.nextSlide,n._tempFx=t,n.API.prepareTx(!0,i)}},stop:function(){var t=this.opts(),i=t.container;clearTimeout(t.timeoutId),t.timeoutId=0,t.API.stopTransition(),t.pauseOnHover&amp;&amp;(t.pauseOnHover!==!0&amp;&amp;(i=e(t.pauseOnHover)),i.off("mouseenter mouseleave")),t.API.trigger("cycle-stopped",[t]).log("cycle-stopped")},reinit:function(){var e=this.opts();e.API.destroy(),e.container.cycle()},remove:function(t){for(var i,n,s=this.opts(),o=[],c=1,l=0;l&lt;s.slides.length;l++)i=s.slides[l],l==t?n=i:(o.push(i),e(i).data("cycle.opts").slideNum=c,c++);n&amp;&amp;(s.slides=e(o),s.slideCount--,e(n).remove(),t==s.currSlide?s.API.advanceSlide(1):t&lt;s.currSlide?s.currSlide--:s.currSlide++,s.API.trigger("cycle-slide-removed",[s,t,n]).log("cycle-slide-removed"),s.API.updateView())}}),e(document).on("click.cycle","[data-cycle-cmd]",function(t){t.preventDefault();var i=e(this),n=i.data("cycle-cmd"),s=i.data("cycle-context")||".cycle-slideshow";e(s).cycle(n,i.data("cycle-arg"))})}(jQuery),function(e){"use strict";function t(t,i){var n;return t._hashFence?void(t._hashFence=!1):(n=window.location.hash.substring(1),void t.slides.each(function(s){if(e(this).data("cycle-hash")==n){if(i===!0)t.startingSlide=s;else{var o=t.currSlide&lt;s;t.nextSlide=s,t.API.prepareTx(!0,o)}return!1}}))}e(document).on("cycle-pre-initialize",function(i,n){t(n,!0),n._onHashChange=function(){t(n,!1)},e(window).on("hashchange",n._onHashChange)}),e(document).on("cycle-update-view",function(e,t,i){i.hash&amp;&amp;"#"+i.hash!=window.location.hash&amp;&amp;(t._hashFence=!0,window.location.hash=i.hash)}),e(document).on("cycle-destroyed",function(t,i){i._onHashChange&amp;&amp;e(window).off("hashchange",i._onHashChange)})}(jQuery),function(e){"use strict";e.extend(e.fn.cycle.defaults,{loader:!1}),e(document).on("cycle-bootstrap",function(t,i){function n(t,n){function o(t){var o;"wait"==i.loader?(l.push(t),0===a&amp;&amp;(l.sort(c),s.apply(i.API,[l,n]),i.container.removeClass("cycle-loading"))):(o=e(i.slides[i.currSlide]),s.apply(i.API,[t,n]),o.show(),i.container.removeClass("cycle-loading"))}function c(e,t){return e.data("index")-t.data("index")}var l=[];if("string"==e.type(t))t=e.trim(t);else if("array"===e.type(t))for(var r=0;r&lt;t.length;r++)t[r]=e(t[r])[0];t=e(t);var a=t.length;a&amp;&amp;(t.css("visibility","hidden").appendTo("body").each(function(t){function c(){0===--r&amp;&amp;(--a,o(d))}var r=0,d=e(this),u=d.is("img")?d:d.find("img");return d.data("index",t),u=u.filter(":not(.cycle-loader-ignore)").filter(':not([src=""])'),u.length?(r=u.length,void u.each(function(){this.complete?c():e(this).load(function(){c()}).on("error",function(){0===--r&amp;&amp;(i.API.log("slide skipped; img not loaded:",this.src),0===--a&amp;&amp;"wait"==i.loader&amp;&amp;s.apply(i.API,[l,n]))})})):(--a,void l.push(d))}),a&amp;&amp;i.container.addClass("cycle-loading"))}var s;i.loader&amp;&amp;(s=i.API.add,i.API.add=n)})}(jQuery),function(e){"use strict";function t(t,i,n){var s,o=t.API.getComponent("pager");o.each(function(){var o=e(this);if(i.pagerTemplate){var c=t.API.tmpl(i.pagerTemplate,i,t,n[0]);s=e(c).appendTo(o)}else s=o.children().eq(t.slideCount-1);s.on(t.pagerEvent,function(e){t.pagerEventBubble||e.preventDefault(),t.API.page(o,e.currentTarget)})})}function i(e,t){var i=this.opts();if(!i.busy||i.manualTrump){var n=e.children().index(t),s=n,o=i.currSlide&lt;s;i.currSlide!=s&amp;&amp;(i.nextSlide=s,i._tempFx=i.pagerFx,i.API.prepareTx(!0,o),i.API.trigger("cycle-pager-activated",[i,e,t]))}}e.extend(e.fn.cycle.defaults,{pager:"&gt; .cycle-pager",pagerActiveClass:"cycle-pager-active",pagerEvent:"click.cycle",pagerEventBubble:void 0,pagerTemplate:"&lt;span&gt;&amp;bull;&lt;/span&gt;"}),e(document).on("cycle-bootstrap",function(e,i,n){n.buildPagerLink=t}),e(document).on("cycle-slide-added",function(e,t,n,s){t.pager&amp;&amp;(t.API.buildPagerLink(t,n,s),t.API.page=i)}),e(document).on("cycle-slide-removed",function(t,i,n,s){if(i.pager){var o=i.API.getComponent("pager");o.each(function(){var t=e(this);e(t.children()[n]).remove()})}}),e(document).on("cycle-update-view",function(t,i,n){var s;i.pager&amp;&amp;(s=i.API.getComponent("pager"),s.each(function(){e(this).children().removeClass(i.pagerActiveClass).eq(i.currSlide).addClass(i.pagerActiveClass)}))}),e(document).on("cycle-destroyed",function(e,t){var i=t.API.getComponent("pager");i&amp;&amp;(i.children().off(t.pagerEvent),t.pagerTemplate&amp;&amp;i.empty())})}(jQuery),function(e){"use strict";e.extend(e.fn.cycle.defaults,{next:"&gt; .cycle-next",nextEvent:"click.cycle",disabledClass:"disabled",prev:"&gt; .cycle-prev",prevEvent:"click.cycle",swipe:!1}),e(document).on("cycle-initialized",function(e,t){if(t.API.getComponent("next").on(t.nextEvent,function(e){e.preventDefault(),t.API.next()}),t.API.getComponent("prev").on(t.prevEvent,function(e){e.preventDefault(),t.API.prev()}),t.swipe){var i=t.swipeVert?"swipeUp.cycle":"swipeLeft.cycle swipeleft.cycle",n=t.swipeVert?"swipeDown.cycle":"swipeRight.cycle swiperight.cycle";t.container.on(i,function(e){t._tempFx=t.swipeFx,t.API.next()}),t.container.on(n,function(){t._tempFx=t.swipeFx,t.API.prev()})}}),e(document).on("cycle-update-view",function(e,t,i,n){if(!t.allowWrap){var s=t.disabledClass,o=t.API.getComponent("next"),c=t.API.getComponent("prev"),l=t._prevBoundry||0,r=void 0!==t._nextBoundry?t._nextBoundry:t.slideCount-1;t.currSlide==r?o.addClass(s).prop("disabled",!0):o.removeClass(s).prop("disabled",!1),t.currSlide===l?c.addClass(s).prop("disabled",!0):c.removeClass(s).prop("disabled",!1)}}),e(document).on("cycle-destroyed",function(e,t){t.API.getComponent("prev").off(t.nextEvent),t.API.getComponent("next").off(t.prevEvent),t.container.off("swipeleft.cycle swiperight.cycle swipeLeft.cycle swipeRight.cycle swipeUp.cycle swipeDown.cycle")})}(jQuery),function(e){"use strict";e.extend(e.fn.cycle.defaults,{progressive:!1}),e(document).on("cycle-pre-initialize",function(t,i){if(i.progressive){var n,s,o=i.API,c=o.next,l=o.prev,r=o.prepareTx,a=e.type(i.progressive);if("array"==a)n=i.progressive;else if(e.isFunction(i.progressive))n=i.progressive(i);else if("string"==a){if(s=e(i.progressive),n=e.trim(s.html()),!n)return;if(/^(\[)/.test(n))try{n=e.parseJSON(n)}catch(e){return void o.log("error parsing progressive slides",e)}else n=n.split(new RegExp(s.data("cycle-split")||"\n")),n[n.length-1]||n.pop()}r&amp;&amp;(o.prepareTx=function(e,t){var s,o;return e||0===n.length?void r.apply(i.API,[e,t]):void(t&amp;&amp;i.currSlide==i.slideCount-1?(o=n[0],n=n.slice(1),i.container.one("cycle-slide-added",function(e,t){setTimeout(function(){t.API.advanceSlide(1)},50)}),i.API.add(o)):t||0!==i.currSlide?r.apply(i.API,[e,t]):(s=n.length-1,o=n[s],n=n.slice(0,s),i.container.one("cycle-slide-added",function(e,t){setTimeout(function(){t.currSlide=1,t.API.advanceSlide(-1)},50)}),i.API.add(o,!0)))}),c&amp;&amp;(o.next=function(){var e=this.opts();if(n.length&amp;&amp;e.currSlide==e.slideCount-1){var t=n[0];n=n.slice(1),e.container.one("cycle-slide-added",function(e,t){c.apply(t.API),t.container.removeClass("cycle-loading")}),e.container.addClass("cycle-loading"),e.API.add(t)}else c.apply(e.API)}),l&amp;&amp;(o.prev=function(){var e=this.opts();if(n.length&amp;&amp;0===e.currSlide){var t=n.length-1,i=n[t];n=n.slice(0,t),e.container.one("cycle-slide-added",function(e,t){t.currSlide=1,t.API.advanceSlide(-1),t.container.removeClass("cycle-loading")}),e.container.addClass("cycle-loading"),e.API.add(i,!0)}else l.apply(e.API)})}})}(jQuery),function(e){"use strict";e.extend(e.fn.cycle.defaults,{tmplRegex:"{{((.)?.*?)}}"}),e.extend(e.fn.cycle.API,{tmpl:function(t,i){var n=new RegExp(i.tmplRegex||e.fn.cycle.defaults.tmplRegex,"g"),s=e.makeArray(arguments);return s.shift(),t.replace(n,function(t,i){var n,o,c,l,r=i.split(".");for(n=0;n&lt;s.length;n++)if(c=s[n]){if(r.length&gt;1)for(l=c,o=0;o&lt;r.length;o++)c=l,l=l[r[o]]||i;else l=c[i];if(e.isFunction(l))return l.apply(c,s);if(void 0!==l&amp;&amp;null!==l&amp;&amp;l!=i)return l}return i})}})}(jQuery);</value>
+    <comment>Js Cycle2 = jquery.cycle2.min.js</comment>
+  </data>
+  <data name="JsCycle2Carousel" xml:space="preserve">
+    <value>/* Plugin for Cycle2; Copyright (c) 2012 M. Alsup; v20141007 */ ! function(a) { "use strict";
+    a(document).on("cycle-bootstrap", function(a, b, c) { "carousel" === b.fx &amp;&amp; (c.getSlideIndex = function(a) { var b = this.opts()._carouselWrap.children(),
+                c = b.index(a); return c % b.length }, c.next = function() { var a = b.reverse ? -1 : 1;
+            b.allowWrap === !1 &amp;&amp; b.currSlide + a &gt; b.slideCount - b.carouselVisible || (b.API.advanceSlide(a), b.API.trigger("cycle-next", [b]).log("cycle-next")) }) }), a.fn.cycle.transitions.carousel = { preInit: function(b) { b.hideNonActive = !1, b.container.on("cycle-destroyed", a.proxy(this.onDestroy, b.API)), b.API.stopTransition = this.stopTransition; for (var c = 0; c &lt; b.startingSlide; c++) b.container.append(b.slides[0]) }, postInit: function(b) { var c, d, e, f, g = b.carouselVertical;
+            b.carouselVisible &amp;&amp; b.carouselVisible &gt; b.slideCount &amp;&amp; (b.carouselVisible = b.slideCount - 1); var h = b.carouselVisible || b.slides.length,
+                i = { display: g ? "block" : "inline-block", position: "static" }; if (b.container.css({ position: "relative", overflow: "hidden" }), b.slides.css(i), b._currSlide = b.currSlide, f = a('&lt;div class="cycle-carousel-wrap"&gt;&lt;/div&gt;').prependTo(b.container).css({ margin: 0, padding: 0, top: 0, left: 0, position: "absolute" }).append(b.slides), b._carouselWrap = f, g || f.css("white-space", "nowrap"), b.allowWrap !== !1) { for (d = 0; d &lt; (void 0 === b.carouselVisible ? 2 : 1); d++) { for (c = 0; c &lt; b.slideCount; c++) f.append(b.slides[c].cloneNode(!0)); for (c = b.slideCount; c--;) f.prepend(b.slides[c].cloneNode(!0)) }
+                f.find(".cycle-slide-active").removeClass("cycle-slide-active"), b.slides.eq(b.startingSlide).addClass("cycle-slide-active") }
+            b.pager &amp;&amp; b.allowWrap === !1 &amp;&amp; (e = b.slideCount - h, a(b.pager).children().filter(":gt(" + e + ")").hide()), b._nextBoundry = b.slideCount - b.carouselVisible, this.prepareDimensions(b) }, prepareDimensions: function(b) { var c, d, e, f, g = b.carouselVertical,
+                h = b.carouselVisible || b.slides.length; if (b.carouselFluid &amp;&amp; b.carouselVisible ? b._carouselResizeThrottle || this.fluidSlides(b) : b.carouselVisible &amp;&amp; b.carouselSlideDimension ? (c = h * b.carouselSlideDimension, b.container[g ? "height" : "width"](c)) : b.carouselVisible &amp;&amp; (c = h * a(b.slides[0])[g ? "outerHeight" : "outerWidth"](!0), b.container[g ? "height" : "width"](c)), d = b.carouselOffset || 0, b.allowWrap !== !1)
+                if (b.carouselSlideDimension) d -= (b.slideCount + b.currSlide) * b.carouselSlideDimension;
+                else
+                    for (e = b._carouselWrap.children(), f = 0; f &lt; b.slideCount + b.currSlide; f++) d -= a(e[f])[g ? "outerHeight" : "outerWidth"](!0);
+            b._carouselWrap.css(g ? "top" : "left", d) }, fluidSlides: function(b) {
+            function c() { clearTimeout(e), e = setTimeout(d, 20) }
+
+            function d() { b._carouselWrap.stop(!1, !0); var a = b.container.width() / b.carouselVisible;
+                a = Math.ceil(a - g), b._carouselWrap.children().width(a), b._sentinel &amp;&amp; b._sentinel.width(a), h(b) } var e, f = b.slides.eq(0),
+                g = f.outerWidth() - f.width(),
+                h = this.prepareDimensions;
+            a(window).on("resize", c), b._carouselResizeThrottle = c, d() }, transition: function(b, c, d, e, f) { var g, h = {},
+                i = b.nextSlide - b.currSlide,
+                j = b.carouselVertical,
+                k = b.speed; if (b.allowWrap === !1) { e = i &gt; 0; var l = b._currSlide,
+                    m = b.slideCount - b.carouselVisible;
+                i &gt; 0 &amp;&amp; b.nextSlide &gt; m &amp;&amp; l == m ? i = 0 : i &gt; 0 &amp;&amp; b.nextSlide &gt; m ? i = b.nextSlide - l - (b.nextSlide - m) : 0 &gt; i &amp;&amp; b.currSlide &gt; m &amp;&amp; b.nextSlide &gt; m ? i = 0 : 0 &gt; i &amp;&amp; b.currSlide &gt; m ? i += b.currSlide - m : l = b.currSlide, g = this.getScroll(b, j, l, i), b.API.opts()._currSlide = b.nextSlide &gt; m ? m : b.nextSlide } else e &amp;&amp; 0 === b.nextSlide ? (g = this.getDim(b, b.currSlide, j), f = this.genCallback(b, e, j, f)) : e || b.nextSlide != b.slideCount - 1 ? g = this.getScroll(b, j, b.currSlide, i) : (g = this.getDim(b, b.currSlide, j), f = this.genCallback(b, e, j, f));
+            h[j ? "top" : "left"] = e ? "-=" + g : "+=" + g, b.throttleSpeed &amp;&amp; (k = g / a(b.slides[0])[j ? "height" : "width"]() * b.speed), b._carouselWrap.animate(h, k, b.easing, f) }, getDim: function(b, c, d) { var e = a(b.slides[c]); return e[d ? "outerHeight" : "outerWidth"](!0) }, getScroll: function(a, b, c, d) { var e, f = 0; if (d &gt; 0)
+                for (e = c; c + d &gt; e; e++) f += this.getDim(a, e, b);
+            else
+                for (e = c; e &gt; c + d; e--) f += this.getDim(a, e, b); return f }, genCallback: function(b, c, d, e) { return function() { var c = a(b.slides[b.nextSlide]).position(),
+                    f = 0 - c[d ? "top" : "left"] + (b.carouselOffset || 0);
+                b._carouselWrap.css(b.carouselVertical ? "top" : "left", f), e() } }, stopTransition: function() { var a = this.opts();
+            a.slides.stop(!1, !0), a._carouselWrap.stop(!1, !0) }, onDestroy: function() { var b = this.opts();
+            b._carouselResizeThrottle &amp;&amp; a(window).off("resize", b._carouselResizeThrottle), b.slides.prependTo(b.container), b._carouselWrap.remove() } } }(jQuery);</value>
+    <comment>Js Cycle 2 Carousel = jquery.cycle2.carousel.min.js</comment>
+  </data>
+  <data name="JsSite" xml:space="preserve">
+    <value>/* Arquivo JS */</value>
+    <comment>Js Site = site.js</comment>
+  </data>
+  <data name="Layout" xml:space="preserve">
+    <value>&lt;!DOCTYPE html&gt;
+&lt;html lang="pt-br"&gt;
+&lt;head&gt;
+    &lt;meta charset="utf-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;meta name="author" content="PromoAcao"&gt;
+	
+	&lt;!-- SEO --&gt;
+	&lt;meta name="description" content=""/&gt;
+	&lt;meta name="keywords" content=""/&gt;
+	&lt;meta name="copyright" content="@CMS.Configuration.SiteName"/&gt;
+	&lt;meta name="application-name" content="@CMS.Configuration.SiteName"/&gt;
+	
+	&lt;meta property="og:title" content="@CMS.Configuration.SiteName"/&gt;
+	&lt;meta property="og:image" content="@(CMS.Library.Object("logo.png"))"/&gt;
+	&lt;meta property="og:url" content=""/&gt;
+	&lt;meta property="og:description" content=""&gt;
+		
+    &lt;title&gt;@CMS.Page.Current.Description | @CMS.Configuration.SiteName&lt;/title&gt;
+
+    &lt;!-- Css Libs--&gt;
+	&lt;link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" /&gt;
+	&lt;link rel="stylesheet" href="@CMS.Functions.ContentDirectory("Stylesheet", "style.css")" /&gt;
+    &lt;link rel="stylesheet" href="@CMS.Functions.ContentDirectory("Stylesheet", "shorthands.min.css")" /&gt;
+
+&lt;/head&gt;&lt;!--/head--&gt;
+&lt;body&gt;
+	
+    &lt;nav class="menu"&gt;
+        &lt;div class="container"&gt;
+
+            &lt;div class="row desktop-menu"&gt;
+                &lt;div class="col-lg-3 col-md-3 col-sm-5 col-xs-9"&gt;
+                    &lt;a href="#"&gt;&lt;img class="img-responsive" src="https://via.placeholder.com/260x66" alt="logo"&gt; &lt;/a&gt;
+                &lt;/div&gt;
+                &lt;div class="col-lg-9 col-md-8 col-sm-6 hidden-xs text-right"&gt;
+                    &lt;ul class="navigation"&gt;
+                        &lt;li&gt;&lt;a href="#" class="menu-item"&gt;Menu 1&lt;/a&gt;&lt;/li&gt;
+                        &lt;li&gt;&lt;a href="#" class="menu-item"&gt;Menu 2&lt;/a&gt;&lt;/li&gt;
+                        &lt;li&gt;&lt;a href="#" class="menu-item visible-lg visible-md"&gt;Menu 3&lt;/a&gt;&lt;/li&gt;
+                        &lt;li&gt;&lt;a href="#" class="menu-item visible-lg visible-md"&gt;Menu 4&lt;/a&gt;&lt;/li&gt;
+                        &lt;li&gt;&lt;a href="#" class="menu-item visible-lg"&gt;Menu 5&lt;/a&gt;&lt;/li&gt;
+                    &lt;/ul&gt;
+                &lt;/div&gt;
+                &lt;div class="col-sm-1 col-xs-3 hidden-lg text-center"&gt;
+                    &lt;button type="button" class="menu-toggle" onclick="$('.mobile-menu').slideToggle('fast');"&gt;
+                        &lt;span class="icon-bar"&gt;&lt;/span&gt;
+                        &lt;span class="icon-bar"&gt;&lt;/span&gt;
+                        &lt;span class="icon-bar"&gt;&lt;/span&gt;                        
+                    &lt;/button&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;div class="row mobile-menu" style="display:none;"&gt;
+                &lt;div class="col-xs-12 text-center visible-xs"&gt;&lt;a href="#" class="menu-item-mobile"&gt;Menu 1&lt;/a&gt;&lt;/div&gt;
+                &lt;div class="col-xs-12 text-center visible-xs"&gt;&lt;a href="#" class="menu-item-mobile"&gt;Menu 2&lt;/a&gt;&lt;/div&gt;
+                &lt;div class="col-xs-12 text-center visible-xs visible-sm"&gt;&lt;a href="#" class="menu-item-mobile"&gt;Menu 3&lt;/a&gt;&lt;/div&gt;
+                &lt;div class="col-xs-12 text-center visible-xs visible-sm"&gt;&lt;a href="#" class="menu-item-mobile"&gt;Menu 4&lt;/a&gt;&lt;/div&gt;
+                &lt;div class="col-xs-12 text-center hidden-lg"&gt;&lt;a href="#" class="menu-item-mobile"&gt;Menu 5&lt;/a&gt;&lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/nav&gt;
+	
+    @RenderBody()
+    
+	&lt;footer class="text-center"&gt;
+        @DateTime.Now.Year.ToString()
+	&lt;/footer&gt;
+
+	&lt;script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"&gt;&lt;/script&gt;
+	&lt;script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"&gt;&lt;/script&gt;
+	
+    &lt;script type="text/javascript" src="@(CMS.Functions.ContentDirectory("Javascript","jquery.cycle2.min.js"))"&gt;&lt;/script&gt;
+	&lt;script type="text/javascript" src="@(CMS.Functions.ContentDirectory("Javascript","jquery.cycle2.carousel.min.js"))"&gt;&lt;/script&gt;
+	&lt;script type="text/javascript" src="@(CMS.Functions.ContentDirectory("Javascript","site.js"))"&gt;&lt;/script&gt;
+	
+&lt;/body&gt;
+&lt;/html&gt;</value>
+    <comment>Arquivo de Layout principal do Site = _Layout.cshtml</comment>
+  </data>
+  <data name="PageHome" xml:space="preserve">
+    <value>&lt;div class="margin-top-30 margin-bottom-30 text-center"&gt;
+    &lt;h1&gt;Home&lt;/h1&gt;
+&lt;/div&gt;</value>
+    <comment>Página Home = Home.cshtml</comment>
+  </data>
+  <data name="PageNotFound" xml:space="preserve">
+    <value>&lt;div class="margin-top-30 margin-bottom-30 text-center"&gt;
+    &lt;h1&gt;404 - Not Found&lt;/h1&gt;
+&lt;/div&gt;</value>
+    <comment>Página 404 = 404.cshtml</comment>
+  </data>
+</root>

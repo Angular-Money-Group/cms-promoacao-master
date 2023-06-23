@@ -1,0 +1,168 @@
+﻿@inherits System.Web.Mvc.WebViewPage
+@using Bitzar.CMS.Core.Functions;
+
+@{
+    var PLUGIN_NAME = "Bitzar.Products.dll";
+    ViewBag.Title = "Cadastro dos Tipos de Atributos";
+    var Plugin = CMS.Plugins.Get(PLUGIN_NAME).Plugin;
+    var Parameters = (Dictionary<string, string>)ViewBag.Parameters;
+    var lang = Parameters.ContainsKey("Lang") ? Convert.ToInt32(Parameters["Lang"]) : CMS.I18N.DefaultLanguage.Id;
+
+    if (Parameters == null || Parameters.Count == 0 || !Parameters.ContainsKey("Lang"))
+    {
+        Parameters.Add("Lang", lang.ToString());
+    }
+
+
+    var id = Parameters.ContainsKey("Id") ? Convert.ToInt32(Parameters["Id"]) : 0;
+
+    var Model = Plugin?.Execute("ListAttributeType", null, Parameters, null);
+
+
+    @* Error Handling *@
+    var Result = ((int?)TempData["ExecuteModel"] ?? 0);
+    var Exception = (Exception)TempData["ExecuteException"];
+    var Culture = CMS.I18N.AvailableLanguages.FirstOrDefault(f => f.Id == lang);
+}
+
+@if (Exception != null)
+{
+    <div class="alert alert-danger alert-dismissable">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <strong>Erro!</strong> @Exception.Message
+    </div>
+}
+
+@section PageHeaderActions {
+    <div class="page-header-actions">
+        <div class="btn-group" data-toggle="buttons">
+            @foreach (var language in CMS.I18N.AvailableLanguages)
+            {
+                <label class="btn btn-primary btn-outline @(lang == language.Id ? "active" : "")">
+                    <input type="radio" name="options" id="option1" autocomplete="off"
+                           onchange="window.location.href='@Url.Action("Action", "Plugin", new { area = "admin", source = PLUGIN_NAME, function = "AttributeType", Lang = language.Id })';"
+                           @(lang == language.Id ? "checked" : "")> @language.Culture
+                    </label>
+                }
+        </div>
+    </div>
+}
+
+@helper RenderChild(dynamic entity, string plugin, int lang, string culture)
+{
+    <tr>
+        <td>
+            <span style="padding-left: 20px;">
+                @(string.IsNullOrWhiteSpace(entity.Value) ? $"Sem descrição para o Idioma: {culture}" : entity.Value)
+            </span>
+        </td>
+        <td></td>
+
+        <td class="text-center">
+            <a href="@Url.Action("Action", "Plugin", new { area = "admin", source = plugin, function = "AttributeTypeValue", Lang = lang, Id = entity.Id })">
+                <i class="icon wb-edit"></i>
+            </a>
+        </td>
+    </tr>
+
+    if (entity.ChildChildren.Count > 0)
+    {
+        foreach (var child in entity.Children)
+        {
+            @RenderChild(child, plugin, lang, culture)
+        }
+    }
+}
+
+<div class="panel panel-bordered">
+    <header class="panel-heading">
+        <h3 class="panel-title">
+            Tipos de Atributos
+        </h3>
+    </header>
+
+    <table class="table table-hover table-strip">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Descrição do Tipo do Atributo</th>
+                <th class="text-center">Editar</th>
+            </tr>
+        </thead>
+        <tbody id="products">
+            @if (Model == null || Model.Count == 0)
+            {
+                <tr>
+                    <td class="text-center" colspan="5">
+                        Não há Tipo de Atributos cadastrados
+                    </td>
+                </tr>
+            }
+            else
+            {
+                foreach (var entity in Model)
+                {
+                    @RenderChild(entity, PLUGIN_NAME, lang, Culture.Culture)
+                }
+            }
+        </tbody>
+    </table>
+
+    <div class="panel-footer">
+        <a class="btn btn-primary" href="@Url.Action("Action", "Plugin", new { area = "admin", source = PLUGIN_NAME, function = "AttributeTypeValue", Lang = lang })"
+           data-hotkey="ctrl+i" data-toggle="tooltip" data-title="Ctrl+I" data-placement="top" data-container="body">
+            <i class="icon fa-plus"></i> Novo
+        </a>
+    </div>
+
+</div>
+
+
+
+@section FooterScript {
+    @if (Result > 0)
+    {
+        <script>
+            swal('Tudo certo!!!', 'Categoria salva com sucesso', 'success').then(function () {
+                window.location.href = '@Url.Action("Action", "Plugin", new { area = "admin" })?source=@PLUGIN_NAME&function=AttributeType&Lang=@lang&Id=@Result';
+            })
+        </script>
+    }
+
+    <script>
+
+    redirectHome = function () {
+        window.location.href = '@Url.Action("Action", "Plugin", new { area = "admin" })?source=@PLUGIN_NAME&function=AttributeType';
+    }
+
+        deleteAttribute = function (id) {
+
+            var data = {
+                "source": "@PLUGIN_NAME",
+                "function": "deleteAttributetype",
+                "output": "JSON",
+                "Id": id
+            };
+
+            swal({
+                type: 'question',
+                title: 'Excluir Tipo de Atributo?',
+                html: "Deseja excluir o Tipo de Atributo selecionado?",
+                buttonsStyling: false,
+                showCancelButton: true,
+                confirmButtonClass: 'btn btn-success',
+                cancelButtonClass: 'btn btn-default margin-right-20',
+                reverseButtons: true
+            }).then(function () {
+                $.post('@(CMS.Functions.ExecuteUrl)', data, function (response) {
+                    if (response.hasOwnProperty('error'))
+                        swal('Ops!!!', response.error, 'error');
+                    else
+                        swal('Tudo certo!', 'O Tipo de Atributo foi removido com sucesso.', 'success').then(function () {
+                            redirectHome();
+                        });
+                });
+            });
+        }
+    </script>
+}

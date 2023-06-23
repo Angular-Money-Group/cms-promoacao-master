@@ -1,0 +1,142 @@
+﻿@inherits System.Web.Mvc.WebViewPage
+@using Bitzar.CMS.Core.Functions;
+
+@{
+    ViewBag.Title = "Categorias";
+
+    var PLUGIN_NAME = "Bitzar.Products.dll";
+    var Plugin = CMS.Plugins.Get(PLUGIN_NAME).Plugin;
+
+    var Parameters = (Dictionary<string, string>)ViewBag.Parameters;
+    var lang = Parameters.ContainsKey("Lang") ? Convert.ToInt32(Parameters["Lang"]) : CMS.I18N.DefaultLanguage.Id;
+
+    if (Parameters == null || Parameters.Count == 0 || !Parameters.ContainsKey("Lang"))
+    {
+        Parameters.Add("Lang", lang.ToString());
+    }
+
+    var Model = Plugin?.Execute("ListCategory", null, Parameters, null);
+    var Culture = CMS.I18N.AvailableLanguages.FirstOrDefault(f => f.Id == lang);
+}
+
+@if (CMS.Configuration.Get("ClearCache", PLUGIN_NAME).Contains("true"))
+{
+    <div class="alert alert-info alert-dismissable">
+        <form class="form-inline">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>Atenção!</strong> Após salvar todas categorias necessários faça a limpeza do cache.
+            <a href="/admin/cache">Gerenciador de Cache</a>
+        </form>
+    </div>
+}
+
+@section PageHeaderActions {
+    <div class="page-header-actions">
+        <div class="btn-group" data-toggle="buttons">
+            @foreach (var language in CMS.I18N.AvailableLanguages)
+            {
+                <label class="btn btn-primary btn-outline @(lang == language.Id ? "active" : "")">
+                    <input type="radio" name="options" id="option1" autocomplete="off"
+                           onchange="window.location.href='@Url.Action("Action", "Plugin", new { area = "admin", source = PLUGIN_NAME, function = "Category", Lang = language.Id })';"
+                           @(lang == language.Id ? "checked" : "")> @language.Culture
+                    </label>
+                }
+        </div>
+        
+    </div>
+}
+
+@helper RenderChild(dynamic entity, string plugin, int lang, string culture)
+{
+<tr>
+    <td>
+        <span style="padding-left: @(entity.Level * 20)px;">
+            @(string.IsNullOrWhiteSpace(entity.Description) ? $"Sem descrição para o Idioma: {culture}" : entity.Description)
+        </span>
+    </td>
+    <td class="text-left">
+        @if (!string.IsNullOrWhiteSpace(entity.Url))
+        {
+            <a href="/@entity.Url" target="_blank">/@entity.Url</a>
+        }
+    </td>
+    <td class="text-center">
+        @entity.Sort
+    </td>
+    <td class="text-center">
+        @entity.Level
+    </td>
+    <td class="text-center">
+        <i class="icon wb-@(entity.Disabled ? "check" : "close")"></i>
+    </td>
+    <td class="text-center">
+        <i class="icon wb-@(entity.Highlighted ? "check" : "close")"></i>
+    </td>
+    <td>
+        <a href="@Url.Action("Action", "Plugin", new { area = "admin", source = plugin, function = "CategoryEdit", Lang = lang, Id = entity.Id })">
+            <i class="icon wb-edit"></i>
+        </a>
+    </td>
+</tr>
+
+    if (entity.Children.Count > 0)
+    {
+        foreach (var child in entity.Children)
+        {
+            @RenderChild(child, plugin, lang, culture)
+        }
+    }
+}
+
+<div class="panel panel-bordered">
+    <header class="panel-heading">
+
+        <a class="btn btn-primary pull-right" style="margin:14px 15px;" href="@Url.Action("Action", "Plugin", new { area = "admin", source = PLUGIN_NAME, function = "CategoryEdit", Lang = lang })"
+           data-hotkey="ctrl+i" data-toggle="tooltip" data-title="Ctrl+I" data-placement="top" data-container="body">
+            <i class="icon fa-plus"></i> Novo
+        </a>
+
+        <h3 class="panel-title" style="display:inline-block">
+            Categoria de Produtos
+        </h3>
+    </header>
+
+    <table class="table table-hover table-strip">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Url</th>
+                <th>Sort</th>
+                <th class="column-action">Nível</th>
+                <th class="column-action">Inativo?</th>
+                <th class="column-action">Em Destaque</th>
+                <th class="column-action"></th>
+            </tr>
+        </thead>
+        <tbody id="products">
+            @if (Model == null || Model.Count == 0)
+            {
+                <tr>
+                    <td class="text-center" colspan="6">
+                        Não há Categorias cadastradas
+                    </td>
+                </tr>
+            }
+            else
+            {
+                foreach (var entity in Model)
+                {
+                    @RenderChild(entity, PLUGIN_NAME, lang, Culture.Culture)
+                }
+            }
+        </tbody>
+    </table>
+
+    <div class="panel-footer">
+        <a class="btn btn-primary" href="@Url.Action("Action", "Plugin", new { area = "admin", source = PLUGIN_NAME, function = "CategoryEdit", Lang = lang })"
+           data-hotkey="ctrl+i" data-toggle="tooltip" data-title="Ctrl+I" data-placement="top" data-container="body">
+            <i class="icon fa-plus"></i> Novo
+        </a>
+    </div>
+
+</div>

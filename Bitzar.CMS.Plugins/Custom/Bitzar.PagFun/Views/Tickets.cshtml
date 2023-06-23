@@ -1,0 +1,116 @@
+﻿@inherits System.Web.Mvc.WebViewPage
+
+@using Bitzar.CMS.Core.Functions;
+
+@{
+    var PLUGIN_NAME = "Bitzar.Tickets.dll";
+    var PLUGIN_PRODUCT = "Bitzar.Products.dll";
+    ViewBag.Title = "Produtos Vendidos";
+}
+
+
+<div id="ticketsProduto" class="row">
+    <div class="text-center">
+        <img src="/areas/admin/content/basic/imgs/loader.gif" />
+    </div>
+</div>
+
+<script>
+    loadEvents = function (page, size, search) {
+        var url = '@CMS.Functions.ExecuteUrl';
+        var param = {
+            "source": "@(PLUGIN_PRODUCT)",
+            "function": "ListProductsPagged",
+            "IdType": "[\"1\"]",
+            "output": "_TicketsProduto",
+            "token": "@CMS.Security.RequestToken"
+        }
+
+        if (page == null || page == 0 || page == '')
+            page = 1;
+
+        if (size == null || size == 0 || size == '')
+            size = 25;
+
+        param["Page"] = page;
+        param["Size"] = size;
+
+
+        if (search != null && search != undefined)
+            param["Search"] = search;
+
+
+        $.post(url, param, function (response) {
+            if (response.hasOwnProperty('error'))
+                toastr.error(response.error);
+            else {
+                $('#ticketsProduto').html(response);
+            }
+        });
+    }
+
+    loadTickets = function (idSection, page, size, status, search) {
+        var url = '@CMS.Functions.ExecuteUrl';
+        var param = {
+            "source": "@(PLUGIN_NAME)",
+            "function": "LoadTicketsBySection",
+            "output": "_TicketsSite",
+            "token": "@CMS.Security.RequestToken",
+            "Title": "Produto",
+            "Type": "Product"
+        }
+
+        if (page == null || page == 0 || page == '')
+            page = 1;
+
+        if (size == null || size == 0 || size == '')
+            size = 25;
+
+        if (page == null || page == 0 || page == '')
+            id = 1;
+
+        param["Page"] = page;
+        param["IdSection"] = idSection;
+        param["Size"] = size;
+
+        if (status != null && status != undefined)
+            param["Status"] = status;
+
+        if (search != null && search != undefined)
+            param["Search"] = search;
+
+
+        $.post(url, param, function (response) {
+            if (response.hasOwnProperty('error'))
+                toastr.error(response.error);
+            else {
+                $('#ticket-section-' + idSection).html(response);
+            }
+        });
+    }
+
+    setStatus = function (Ticket, idSection, Status, search) {
+        var url = '@CMS.Functions.ExecuteUrl';
+        var data = {
+            "source": "@(PLUGIN_NAME)",
+            "function": "SetTicketStatus",
+            "output": "JSON",
+            "token": "@CMS.Security.RequestToken"
+        };
+
+        if (Ticket != null && Ticket != undefined && Ticket != "")
+            data["Ticket"] = Ticket;
+        if (Status != null && Status != undefined && Status != "")
+            data["Status"] = Status;
+
+        $.post(url, data, function (response) {
+            if (response.hasOwnProperty('error'))
+                toastr.error(response.error);
+            else
+                reloadTicket(idSection, search);
+                toastr.success("Status alterado com sucesso");
+        });
+    }
+
+    loadEvents();
+</script>

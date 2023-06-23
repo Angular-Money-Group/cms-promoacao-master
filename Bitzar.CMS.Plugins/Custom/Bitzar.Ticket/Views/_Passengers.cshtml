@@ -1,0 +1,71 @@
+@{
+    var uuid = Request.QueryString["uuid"];
+    var PluginName = "Bitzar.Tickets.dll";
+    var Plugin = CMS.Plugins.Get(PluginName)?.Plugin;
+    var Parameters = new Dictionary<string, string>
+        {
+        { "UuidTicket", uuid }
+        };
+
+    var Ticket = (dynamic)Plugin?.Execute("GetTicketByUuid", @CMS.Security.RequestToken, Parameters);
+    var passengers = (dynamic)Plugin?.Execute("GetListPassengers", @CMS.Security.RequestToken, Parameters);
+}
+
+<div class="text-center table-responsive" id="cadastrarPassageiro" style="margin-top: 8%;">
+    <table class="table" style="margin-left: auto; margin-right: auto; width: 50%; box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px; padding: 20px 0;">
+        <thead>
+            <tr>
+                <th scope="col" style="font-size: 1.4rem; text-transform: uppercase; margin-bottom: 15px;">ID</th>
+                <th scope="col" style="font-size: 1.4rem; text-transform: uppercase; margin-bottom: 15px;">Cliente</th>
+                <th scope="col" style="font-size: 1.4rem; text-transform: uppercase; margin-bottom: 15px;">Ticket</th>
+                <th scope="col" style="font-size: 1.4rem; text-transform: uppercase; margin-bottom: 15px;">Registrar</th>
+
+            </tr>
+        </thead>
+        <tbody style="gap: 20px; height: 220px;">
+            @{
+                for (int i = 0; i < passengers.Count; i++)
+                {
+                    var idPassenger = i + 1;
+                    <tr>
+                        <td scope="row" style="font-size: 1.1rem;">@idPassenger</td>
+                        <td id="ReferenceId" style="font-size: 1.1rem;">@(passengers[i].Name != "" ? @passengers[i].Name : "Passageiro " + idPassenger) </td>
+                        <td style="font-size: 1.1rem;">@uuid</td>
+                        <td type="button" onclick="cadastrarPassageiro('@passengers[i].Uuid')" style="font-size: 1.1rem; background: #001539; color: #FFF; font-weight: 500; padding: 6px 20px; text-transform: uppercase; border-radius: 0.15rem; margin-bottom: 10px;">Cadastrar</td>
+                    </tr>
+                }
+            }
+
+        </tbody>
+    </table>
+ </div>
+
+<script type="text/javascript">
+
+    function cadastrarPassageiro(i) {
+
+        $('#modal-loader-global').modal('show');
+
+        var url = '@CMS.Functions.ExecuteUrl';
+        var param = {
+            "source": "Bitzar.Tickets.dll",
+            "function": "GETPASSENGER",
+            "token": '@CMS.Security.RequestToken',
+            "output": "_PartialPassenger",
+            "ticketUuid": "@uuid",
+            "PassengerUuid": i
+        }
+        $.post(url, param, function (response) {
+            console.log(response);
+            if (response.hasOwnProperty('error')){
+                swal('Algo deu errado!', response.error, 'error');
+            }
+            else{
+                $('#cadastrarPassageiro').html(response);
+            }
+        }).then(function(){
+            $('#modal-loader-global').modal('hide');
+        });
+    }
+
+</script>

@@ -1,0 +1,278 @@
+﻿@inherits System.Web.Mvc.WebViewPage
+@using Bitzar.CMS.Core.Functions;
+
+@{
+    var PLUGIN_NAME = "Bitzar.Products.dll";
+    var Plugin = CMS.Plugins.Get(PLUGIN_NAME).Plugin;
+    var Parameters = (Dictionary<string, string>)ViewBag.Parameters;
+
+    var id = Parameters.ContainsKey("Id") ? Convert.ToInt32(Parameters["Id"]) : 0;
+
+    var Model = (id == 0 ? (dynamic)null : Plugin.Execute("GetAttribute", null, Parameters, null));
+
+    ViewBag.Title = (id == 0 ? "Cadastrar" : "Editar") + " Atributo";
+
+    var DefaultImage = "/Areas/admin/Content/basic/imgs/img-placeholder.png";
+    var lang = Parameters.ContainsKey("Lang") ? Convert.ToInt32(Parameters["Lang"]) : CMS.I18N.DefaultLanguage.Id;
+
+    var Types = (IEnumerable<dynamic>)Plugin.Execute("ListAttributeType", null, Parameters, null);
+
+    var Parents = (IEnumerable<dynamic>)Plugin.Execute("ListAttribute", null, Parameters, null);
+
+    @* Error Handling *@
+    var Result = ((int?)TempData["ExecuteModel"] ?? 0);
+    var Exception = (Exception)TempData["ExecuteException"];
+}
+
+@if (Exception != null)
+{
+    <div class="alert alert-danger alert-dismissable">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <strong>Erro!</strong> @Exception.Message
+    </div>
+}
+
+@section PageHeaderActions {
+    <div class="page-header-actions">
+        <div class="btn-group" data-toggle="buttons">
+            @foreach (var language in CMS.I18N.AvailableLanguages)
+            {
+                <label class="btn btn-primary btn-outline @(lang == language.Id ? "active" : "")">
+                    <input type="radio" name="options" id="option1" autocomplete="off"
+                           onchange="window.location.href='@Url.Action("Action", "Plugin", new { area = "admin", source = PLUGIN_NAME, function = "AttributeValue", Lang = language.Id, Id = (Model?.Id ?? 0) })';"
+                           @(lang == language.Id ? "checked" : "")> @language.Culture
+                    </label>
+                }
+        </div>
+    </div>
+}
+
+@helper RenderTypes(IEnumerable<dynamic> Types, int? idType)
+{
+    foreach (var item in Types)
+    {
+        var space = "";
+
+        <option value="@item.Id" @(idType == item.Id ? "selected" : "")>@Html.Raw(space) @(item.Value)</option>
+
+    }
+}
+
+@helper RenderChild(IEnumerable<dynamic> Parents, int? idParent)
+{
+    foreach (var item in Parents)
+    {
+        var space = "";
+        var index = 0;
+
+        while (index < item.Level)
+        {
+            space += "&nbsp;&nbsp;";
+            index++;
+        }
+
+        <option value="@item.Id" @(idParent == item.Id ? "selected" : "") >@Html.Raw(space) @(item.Description)</option>
+
+        if (item.Children != null && item.Children.Count > 0)
+        {
+            @RenderChild(item.Children, idParent)
+        }
+    }
+}
+
+<form autocomplete="off" method="post" action="@CMS.Functions.ExecuteUrl">
+
+    <input type="hidden" name="source" value="@PLUGIN_NAME" />
+    <input type="hidden" name="function" value="SaveAttribute" />
+    <input type="hidden" name="output" value="@Url.Action()" />
+
+    <input type="hidden" name="parameters[0]" value="Id" />
+    <input type="hidden" name="values[0]" value="@id" />
+
+    <input type="hidden" name="parameters[4]" value="Lang" />
+    <input type="hidden" name="values[4]" value="@lang" />
+
+    <div class="panel panel-bordered">
+        <header class="panel-heading">
+            <h3 class="panel-title">
+                Formulário de Cadastro
+            </h3>
+        </header>
+        <div class="panel-body container-fluid">
+            <div class="row">
+                <div class="col-md-6 col-sm-8 col-xs-12">
+                    <div class="row">
+
+
+                        <div class="col-sm-12">
+                            <div class="form-group ">
+                                <input type="hidden" name="parameters[1]" value="IdType" />
+                                <label class="control-label" for="IdType">Tipo de Atributo</label>
+                                <select class="form-control" id="IdType" name="values[1]">
+                                    <option value="">- Selecione -</option>
+                                    @RenderTypes(Types, Model?.IdType)
+                                </select>
+                                <span class="help-block">
+                                    Selecione o tipo de Atributo
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12">
+                            <div class="form-group ">
+                                <input type="hidden" name="parameters[5]" value="IdParent" />
+                                <label class="control-label" for="IdParent">Nível Superior</label>
+                                <select class="form-control" id="IdParent" name="values[5]">
+                                    <option value="">- Selecione -</option>
+                                    @RenderChild(Parents, Model?.IdParent)
+                                </select>
+                                <span class="help-block">
+                                    Nível superior do Atributo selecionada
+                                </span>
+                            </div>
+                        </div>
+
+
+
+                        <div class="col-sm-12">
+                            <div class="form-group ">
+                                <input type="hidden" name="parameters[2]" value="Description" />
+                                <label class="control-label" for="Description">Descrição</label>
+                                <input type="text" class="form-control" id="Description" name="values[2]" value="@(Model?.Description)" required />
+                                <span class="help-block">
+                                    Descrição para exibição do Atributo
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-12">
+                            <input type="hidden" name="parameters[3]" value="Image" />
+                            <div class="image-wrapper">
+                                <input type="hidden" name="values[3]" value="@(Model?.Icon)" />
+                                <label class="control-label">Imagem</label>
+                                <img src="@(!string.IsNullOrWhiteSpace((Model?.Icon ?? "")) ? Model?.Icon : DefaultImage)" class="block img-content"
+                                     onclick="showImagePicker($(this),$(this).parent('.image-wrapper').find('input'), 'Image');" />
+                                <span class="help-block">
+                                    Imagem de exibição para associar ao Atributo.
+                                </span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-footer">
+            <button type="button" class="btn btn-pure" data-hotkey="ctrl+left" data-toggle="tooltip"
+                    data-title="Ctrl+Seta Esquerda" data-placement="top" data-container="body"
+                    onclick="redirectHome();">
+                <i class="icon fa-arrow-left"></i> Voltar
+            </button>
+
+            <button type="submit" class="btn btn-primary" data-hotkey="ctrl+s" data-toggle="tooltip"
+                    data-title="Ctrl+S" data-placement="top" data-container="body">
+                <i class="icon fa-floppy-o"></i> Salvar
+            </button>
+
+            <a class="btn btn-outline btn-primary" href="@Url.Action("Action", "Plugin", new { area = "admin", source = PLUGIN_NAME, function = "AttributeValue", Lang = lang })"
+               data-hotkey="ctrl+i" data-toggle="tooltip" data-title="Ctrl+I" data-placement="top" data-container="body">
+                <i class="icon fa-plus"></i> Novo
+            </a>
+
+            @if (id > 0)
+            {
+                <button type="button" class="btn btn-danger pull-right" onclick="deleteAttribute(@id);">
+                    <i class="icon fa-trash"></i> Excluir
+                </button>
+            }
+        </div>
+    </div>
+</form>
+
+<div class="modal fade modal-3d-flip-vertical" id="modal-image-picker" aria-hidden="false"
+     aria-labelledby="modal-image-picker-label" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-center modal-xlg">
+        <div class="modal-body" id="image-picker-holder">
+        </div>
+    </div>
+</div>
+
+@section FooterScript {
+    @if (Result > 0)
+    {
+        <script>
+            swal('Tudo certo!!!', 'Atributo salvo com sucesso', 'success').then(function () {
+                window.location.href = '@Url.Action("Action", "Plugin", new { area = "admin" })?source=@PLUGIN_NAME&function=AttributeValue&Lang=@lang&Id=@Result';
+            })
+        </script>
+    }
+
+    <script>
+
+    redirectHome = function () {
+        window.location.href = '@Url.Action("Action", "Plugin", new { area = "admin" })?source=@PLUGIN_NAME&function=Attribute';
+    }
+
+    var $pickerSource = null;
+        var $pickerInput = null;
+        var $pickerType = null;
+
+        showImagePicker = function ($source, $input, $type) {
+            $pickerSource = $source;
+            $pickerInput = $input;
+            $pickerType = $type
+
+            var url = '@Url.Action("List", "Library", new { area = "admin", source = "picker", tipo = "Image" })';
+            $.get(url, function (data) {
+                $('#image-picker-holder').html(data);
+                $("#modal-image-picker").modal('show');
+            });
+        }
+
+        selectImage = function ($this) {
+            var id = $this.data("item-id");
+            var url = $this.data("item-url");
+
+            // Set image and input
+            $pickerSource.attr('src', url);
+            $pickerInput.val(url);
+
+            $("#modal-image-picker").modal('hide');
+        }
+
+        $('#Description').on('keyup', function () {
+            var url = makeUrl($(this).val().toLowerCase());
+            $('#Url').val(url);
+        });
+
+        deleteAttribute = function (id) {
+
+            var data = {
+                "source": "@PLUGIN_NAME",
+                "function": "deleteAttribute",
+                "output": "JSON",
+                "Id": id
+            };
+
+            swal({
+                type: 'question',
+                title: 'Excluir atributo?',
+                html: "Deseja excluir o atributo selecionado?",
+                buttonsStyling: false,
+                showCancelButton: true,
+                confirmButtonClass: 'btn btn-success',
+                cancelButtonClass: 'btn btn-default margin-right-20',
+                reverseButtons: true
+            }).then(function () {
+                $.post('@(CMS.Functions.ExecuteUrl)', data, function (response) {
+                    if (response.hasOwnProperty('error'))
+                        swal('Ops!!!', response.error, 'error');
+                    else
+                        swal('Tudo certo!', 'O Atributo foi removido com sucesso.', 'success').then(function () {
+                            redirectHome();
+                        });
+                });
+            });
+        }
+    </script>
+}

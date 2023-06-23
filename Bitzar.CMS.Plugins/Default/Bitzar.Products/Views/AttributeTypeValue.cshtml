@@ -1,0 +1,159 @@
+﻿@inherits System.Web.Mvc.WebViewPage
+@using Bitzar.CMS.Core.Functions;
+
+@{
+    var PLUGIN_NAME = "Bitzar.Products.dll";
+    var Plugin = CMS.Plugins.Get(PLUGIN_NAME).Plugin;
+    var Parameters = (Dictionary<string, string>)ViewBag.Parameters;
+
+    var id = Parameters.ContainsKey("Id") ? Convert.ToInt32(Parameters["Id"]) : 0;
+
+    var Model = (id == 0 ? (dynamic)null : Plugin.Execute("GetAttributeType", null, Parameters, null));
+
+    ViewBag.Title = (id == 0 ? "Cadastrar" : "Editar") + " Tipos de Atributos";
+    
+    var lang = Parameters.ContainsKey("Lang") ? Convert.ToInt32(Parameters["Lang"]) : CMS.I18N.DefaultLanguage.Id;
+
+    @* Error Handling *@
+    var Result = ((int?)TempData["ExecuteModel"] ?? 0);
+    var Exception = (Exception)TempData["ExecuteException"];
+}
+
+@if (Exception != null)
+{
+    <div class="alert alert-danger alert-dismissable">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <strong>Erro!</strong> @Exception.Message
+    </div>
+}
+
+@section PageHeaderActions {
+    <div class="page-header-actions">
+        <div class="btn-group" data-toggle="buttons">
+            @foreach (var language in CMS.I18N.AvailableLanguages)
+            {
+                <label class="btn btn-primary btn-outline @(lang == language.Id ? "active" : "")">
+                    <input type="radio" name="options" id="option1" autocomplete="off"
+                           onchange="window.location.href='@Url.Action("Action", "Plugin", new { area = "admin", source = PLUGIN_NAME, function = "AttributeTypeValue", Lang = language.Id, Id = (Model?.Id ?? 0) })';"
+                           @(lang == language.Id ? "checked" : "")> @language.Culture
+                    </label>
+                }
+        </div>
+    </div>
+}
+
+    <form autocomplete="off" method="post" action="@CMS.Functions.ExecuteUrl">
+
+        <input type="hidden" name="source" value="@PLUGIN_NAME" />
+        <input type="hidden" name="function" value="SaveAttributeType" />
+        <input type="hidden" name="output" value="@Url.Action()" />
+
+        <input type="hidden" name="parameters[0]" value="Id" />
+        <input type="hidden" name="values[0]" value="@id" />
+
+        <input type="hidden" name="parameters[2]" value="Lang" />
+        <input type="hidden" name="values[2]" value="@lang" />
+
+        <div class="panel panel-bordered">
+            <header class="panel-heading">
+                <h3 class="panel-title">
+                    Formulário de Cadastro
+                </h3>
+            </header>
+            <div class="panel-body container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="row">
+
+                            <div class="col-md-6">
+                                <div class="form-group ">
+                                    <input type="hidden" name="parameters[1]" value="Value" />
+                                    <label class="control-label" for="Value">Nome do Tipo de Atributo</label>
+                                    <input type="text" class="form-control" id="Value" name="values[1]" value="@(Model?.Value)" required />
+                                    <span class="help-block">
+                                        Tipo de Atributo
+                                    </span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-footer">
+
+                <button type="submit" class="btn btn-primary" data-hotkey="ctrl+s" data-toggle="tooltip"
+                        data-title="Ctrl+S" data-placement="top" data-container="body">
+                    <i class="icon fa-floppy-o"></i> Salvar
+                </button>
+                <button type="button" class="btn btn-pure" data-hotkey="ctrl+left" data-toggle="tooltip"
+                        data-title="Ctrl+Seta Esquerda" data-placement="top" data-container="body"
+                        onclick="redirectHome();">
+                    <i class="icon fa-arrow-left"></i> Voltar
+                </button>
+
+                @if (id > 0)
+                {
+                    <button type="button" class="btn btn-danger pull-right" onclick="deleteAttribute(@id);">
+                        <i class="icon fa-trash"></i> Excluir
+                    </button>
+                }
+            </div>
+        </div>
+    </form>
+
+<div class="modal fade modal-3d-flip-vertical" id="modal-image-picker" aria-hidden="false"
+     aria-labelledby="modal-image-picker-label" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-center modal-xlg">
+        <div class="modal-body" id="image-picker-holder">
+        </div>
+    </div>
+</div>
+
+@section FooterScript {
+    @if (Result > 0)
+    {
+        <script>
+            swal('Tudo certo!!!', 'Categoria salva com sucesso', 'success').then(function () {
+                window.location.href = '@Url.Action("Action", "Plugin", new { area = "admin" })?source=@PLUGIN_NAME&function=AttributeTypeValue&Lang=@lang&Id=@Result';
+            })
+        </script>
+    }
+
+    <script>
+
+    redirectHome = function () {
+        window.location.href = '@Url.Action("Action", "Plugin", new { area = "admin" })?source=@PLUGIN_NAME&function=AttributeType';
+    }
+
+        deleteAttribute = function (id) {
+
+            var data = {
+                "source": "@PLUGIN_NAME",
+                "function": "deleteAttributetype",
+                "output": "JSON",
+                "Id": id
+            };
+
+            swal({
+                type: 'question',
+                title: 'Excluir serviço?',
+                html: "Deseja excluir o serviço selecionado?",
+                buttonsStyling: false,
+                showCancelButton: true,
+                confirmButtonClass: 'btn btn-success',
+                cancelButtonClass: 'btn btn-default margin-right-20',
+                reverseButtons: true
+            }).then(function () {
+                $.post('@(CMS.Functions.ExecuteUrl)', data, function (response) {
+                    if (response.hasOwnProperty('error'))
+                        swal('Ops!!!', response.error, 'error');
+                    else
+                        swal('Tudo certo!', 'O Serviço foi removido com sucesso.', 'success').then(function () {
+                            redirectHome();
+                        });
+                });
+            });
+        }
+    </script>
+}

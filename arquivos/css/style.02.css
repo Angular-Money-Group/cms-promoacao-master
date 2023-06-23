@@ -1,0 +1,376 @@
+.box-buttons-creditpay{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    margin-top: 35px;
+}
+
+.box-buttons-creditpay .btn-proximo-identificacao{
+    margin-right: 20px;
+}
+
+.box-buttons-creditpay .btn-proximo-identificacao a{
+    text-decoration: none !important;
+}
+
+.primeiro_stap_compra_credito{
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+
+    margin-top: 25px;
+}
+.primeiro_stap_compra_credito p{
+    margin: 0;
+}
+.primeiro_stap_compra_credito .input_compra_credito{
+    width: 100%;
+    max-width: 350px;
+}
+
+.primeiro_stap_compra_credito .btn-proximo-identificacao{
+    margin: 0;
+    
+}
+.primeiro_stap_compra_credito .input_compra_credito_btn{
+    transform: skewX(-15deg);
+}
+
+#id-valor, #valorCreditosTransferencia {
+    transform: skewX(-6deg);
+}
+
+.btn-proximo-identificacao {
+    margin: 15px 0;
+    transform: skewX(-10deg);
+}
+
+.btn-proximo-identificacao span{
+    background-image: -moz-linear-gradient(0deg,#e72323 0%,#aa251c 100%);
+    background-image: -webkit-linear-gradient(0deg,#e72323 0%,#aa251c 100%);
+    background-image: -ms-linear-gradient(0deg,#e72323 0%,#aa251c 100%);
+    box-shadow: 0 3px 0 0 rgb(255 222 234 / 0%);
+    font-size: 1rem;
+    font-weight: bold;
+    color: #fff;
+    text-transform: uppercase;
+    padding: 10px 35px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 0 15px;
+}
+
+.btn-proximo-identificacao span:hover {
+  padding: 10px 30px;
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+
+.btn-proximo-identificacao span{
+    margin: 0;
+    padding: 10px 15px;
+}
+
+/* CSS->Meus Créditos */
+#section-meus-creditos{
+    background-color: #f8f9f9;
+    margin-top: 80px;
+    margin-bottom: 80px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+#section-meus-creditos .titulo-meus-creditos{
+    color: #aa251c;
+    font-size: 2rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+#section-meus-creditos .subtitulo-meus-creditos{
+    color: #2e3d4f;
+    font-size: 1rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-bottom: 40px;
+}
+.saldo-usuario{
+    color: #2e3d4f;
+    font-size: 2rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+#toggleMeusCreditos .secao-header-toggle {
+    background-color: #eaeced;
+    padding: 15px;
+    cursor: pointer;
+}
+#toggleMeusCreditos .secao-header-toggle .header-secao{
+    display: flex;
+}
+
+/* CSS->Patial->Resumo */
+.sw-theme-default>.nav .nav-link.disabled{
+    cursor: not-allowed !important;
+}
+#toggleMeusCreditos .sw-theme-default>.nav .nav-link.done.disabled{
+        color: rgba(255, 7, 23, 0.7) !important;
+}
+#toggleMeusCreditos .sw-theme-default>.nav .nav-link.done.disabled::after{
+    background: rgba(255, 7, 23, 0.7) !important;
+}
+#smarttab .st-theme-default>.nav .nav-link.active::after{
+    background: #aa251c !important;
+}
+#toggleMeusCreditos{
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+#toggleMeusCreditos .sw-theme-default{
+    border: none;
+}
+#id-div-pagamento-step .sw-theme-default a{
+    color: #2e3d4f;
+}
+#toggleMeusCreditos .sw-theme-default a{
+    font-size: 1.1rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+#toggleMeusCreditos .sw-theme-default .active{
+    color: #2e3d4f !important;
+}
+#toggleMeusCreditos .sw-theme-default .active svg{
+    color: #aa251c !important;
+}
+#toggleMeusCreditos .sw-theme-default svg{
+    margin-right: 5px;
+}
+#toggleMeusCreditos .sw-theme-default>.nav .nav-link.active::after{
+    background: #aa251c !important;
+}
+#toggleMeusCreditos .sw-theme-default>.nav .nav-link.done{
+    color: #aa251c !important;
+}
+#toggleMeusCreditos .sw-theme-default>.nav .nav-link.done::after{
+    background: #aa251c !important;
+}
+#toggleMeusCreditos .textos-header-secao .data-hora-secao-header{
+    font-size: 1rem;
+    color: #2e3d4f;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+#toggleMeusCreditos .textos-header-secao .nome-dia-secao-header{
+    font-size: 1.3rem;
+    color: #2e3d4f;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+#toggleMeusCreditos .secao-header-toggle {
+    background-color: #eaeced;
+    padding: 15px;
+    cursor: pointer;
+}
+#toggleMeusCreditos .secao-header-toggle .header-secao{
+    display: flex;
+}
+#toggleMeusCreditos .arrow-header-secao{
+    margin: auto 0 auto auto;
+}
+#toggleMeusCreditos .arrow-header-sub-secao{
+    margin: auto 0 auto auto;
+}
+#toggleMeusCreditos .titulo-sub-secao{
+    display: flex;
+    background-color: #f4f5f6;
+    cursor: pointer;
+}
+#toggleMeusCreditos .detalhes-secao{
+    background-color: #f4f5f6;
+    padding: 15px;
+}
+#toggleMeusCreditos .detalhes-secao{
+    display: none;
+}
+#toggleMeusCreditos .tab-content{
+    height: auto !important;
+}
+#toggleMeusCreditos .titulo-sub-secao .dataHora-nome-secao-description{
+    font-size: 1rem;
+    color: #2e3d4f;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+#toggleMeusCreditos .detalhes-secao .descricaoes-secao{
+    display: none;
+}
+#toggleMeusCreditos #ingressos .descricao-detalhe-secao{
+    margin: auto 0;
+}
+#toggleMeusCreditos .descricaoes-secao .txt-secao-esgotada{
+    font-size: 1.2rem;
+    color: #999;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-style: italic;
+    letter-spacing: 0.2rem;
+}
+#toggleMeusCreditos .descricaoes-secao .txt-secao-esgotada .secao-esgotada-alerta{
+    display: none;
+}
+#toggleMeusCreditos .descricaoes-secao .img-desc-produto{
+    max-height: 55px;
+}
+#toggleMeusCreditos .descricaoes-secao .nome-secao{
+    font-size: 1.1rem;
+    color: #2e3d4f;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+#toggleMeusCreditos .descricaoes-secao .valo-taxa-secao{
+    font-size: 1rem;
+    color: #2e3d4f;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+#toggleMeusCreditos .sw-theme-default .input-group svg{
+    margin-right: 0px;
+    color: #2e3d4f;   
+}
+#toggleMeusCreditos .sw-theme-default .input-group .btn-menos-resumo{
+    border: 1px solid;
+    margin-right: 10px;
+    border-radius: 15px;
+    padding: .30rem 0.6rem;
+}
+#toggleMeusCreditos .sw-theme-default .input-group .btn-mais-resumo{
+    border: 1px solid;
+    margin-left: 10px;
+    border-radius: 15px;
+    padding: .30rem 0.6rem;
+}
+#toggleMeusCreditos .sw-theme-default .input-group .texto-numerico-contador-resumo{
+    border: none;
+    background: transparent;
+    font-size: 1rem;
+    color: #2e3d4f;
+    font-weight: bolder;
+    text-transform: uppercase;
+}
+#toggleMeusCreditos .sw-theme-default .input-group .texto-numerico-contador-resumo:focus,
+#toggleMeusCreditos .sw-theme-default .input-group .texto-numerico-contador-resumo:active{
+    border: none!important;
+    box-shadow: none!important;
+}
+#toggleMeusCreditos .btn.focus, .btn:focus{
+    box-shadow: none!important;
+}
+#toggleMeusCreditos .sw-theme-default .input-group button[type="button"]:disabled{
+    cursor: not-allowed;
+}
+
+#toggleMeusCreditos .detalhes-secao{
+    background-color: #f4f5f6;
+    padding: 15px;
+}
+#toggleMeusCreditos .detalhes-secao, .id-btn-finalizar-pagamento-credito-load, .id-btn-finalizar-pagamento-credito{
+    display: none;
+}
+
+#totalBox{
+    z-index: 99;
+    position: fixed;
+    right: 2vw;
+    bottom: 3vh;
+    background-image: -moz-linear-gradient(0deg,#aa251c 0%,#e72323 100%);
+    background-image: -webkit-linear-gradient(0deg,#aa251c 0%,#e72323 100%);
+    background-image: -ms-linear-gradient(0deg,#aa251c 0%,#e72323 100%);
+    box-shadow: 0 3px 0 0 rgb(255 222 234 / 0%);
+    padding: 5px 20px;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    font-weight: bold;
+    transform: skewX(-10deg);
+    color: #fff;
+    border-radius: 4px;
+    width: max-content;
+}
+
+.id-btn-finalizar-pagamento-credito, .id-btn-finalizar-pagamento-credito-load {
+    background-image: -moz-linear-gradient(0deg,#aa251c 0%,#e72323 100%);
+    background-image: -webkit-linear-gradient(
+0deg
+,#aa251c 0%,#e72323 100%);
+    background-image: -ms-linear-gradient(0deg,#aa251c 0%,#e72323 100%);
+    box-shadow: 0 3px 0 0 rgb(255 222 234 / 0%);
+    padding: 5px 20px;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    font-weight: bold;
+    transform: skewX(
+-10deg
+);
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+    width: max-content;
+    margin-top: 3.5vh;
+}
+
+#totalBox:hover, #valorCredito .btn-aplicar-credito:hover, .id-btn-finalizar-pagamento-credito:hover, id-btn-finalizar-pagamento-credito-load:hover{
+    padding: 5px 25px;
+    -webkit-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+    color: white;
+}
+
+#valorCredito .label-titulo {
+    color: #2e3d4f;
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+#valorCredito #id-valorCreditoInput, #valorCredito .btn-aplicar-credito{
+    transform: skewX(-6deg);
+}
+
+#valorCredito .btn-aplicar-credito {
+    background-image: -moz-linear-gradient(0deg,#aa251c 0%,#e72323 100%);
+    background-image: -webkit-linear-gradient(
+0deg
+,#aa251c 0%,#e72323 100%);
+    background-image: -ms-linear-gradient(0deg,#aa251c 0%,#e72323 100%);
+    box-shadow: 0 3px 0 0 rgb(255 222 234 / 0%);
+    padding: 5px 20px;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    font-weight: bold;
+    transform: skewX(
+-10deg
+);
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+    width: max-content;
+    margin-top: 1.5vh;
+}
+
+@media (max-width: 500px){
+    .primeiro_stap_compra_credito{
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+
+        margin-top: 30px;
+    }
+
+    .box-buttons-creditpay{
+        display: flex;
+        align-items: flex-start;
+        flex-direction: column;
+
+        margin-top: 25px;
+    }
+}

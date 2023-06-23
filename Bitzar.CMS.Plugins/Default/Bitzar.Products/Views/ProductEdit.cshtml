@@ -1,0 +1,1401 @@
+﻿@inherits System.Web.Mvc.WebViewPage
+@using Bitzar.CMS.Core.Functions;
+@using Newtonsoft.Json;
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<style>
+    .sortable .image-gallery-holder {
+        cursor: grab;
+    }
+
+    @@media screen and (max-width: 1366px) {
+        .ajust-icones {
+            margin-left: 0px !important;
+            margin-right: 0px !important;
+        }
+    }
+
+    @@media screen and (max-width: 876px) {
+        .ajust-icones {
+            margin-left: 10px !important;
+            margin-right: 10px !important;
+        }
+    }
+</style>
+
+<script>
+    function updateCheckValue(id, hiddenId) {
+        var obj = document.getElementById(id);
+
+        if (!obj.checked) {
+            var objHidden = document.createElement('input');
+            objHidden.type = 'hidden';
+            objHidden.id = hiddenId;
+            objHidden.value = 'false';
+            objHidden.name = id;
+
+            obj.parentNode.appendChild(objHidden);
+        } else {
+            var objHidden = document.getElementById(hiddenId);
+            obj.parentNode.removeChild(objHidden);
+        }
+    }
+</script>
+
+@{
+    var PLUGIN_NAME = "Bitzar.Products.dll";
+    var Plugin = CMS.Plugins.Get(PLUGIN_NAME).Plugin;
+
+    var Parameters = (Dictionary<string, string>)ViewBag.Parameters;
+    var id = Parameters.ContainsKey("Id") ? Convert.ToInt32(Parameters["Id"]) : 0;
+    var idProduct = Parameters.ContainsKey("IdProduct") ? Convert.ToInt32(Parameters["IdProduct"]) : 0;
+
+    var IdType = Parameters.ContainsKey("IdType") ? Convert.ToInt32(Parameters["IdType"]) : 1;
+
+    var Model = (id == 0 ? (dynamic)null : Plugin.Execute("GetProduct", null, Parameters, null));
+
+
+    var NameProduct = CMS.Configuration.Get("NameProduct", PLUGIN_NAME);
+    var NameCombo = CMS.Configuration.Get("NameCombo", PLUGIN_NAME);
+    var NameSubProduct = CMS.Configuration.Get("NameSubProduct", PLUGIN_NAME);
+
+    ViewBag.Title = (id == 0 ? "Cadastrar" : "Editar") + (IdType == 1 || IdType == 0 ? ' ' + NameProduct : IdType == 2 ? ' ' + NameCombo : IdType == 2 ? ' ' + NameSubProduct : "");
+
+    var NameType = (IdType == 1 || IdType == 0 ? ' ' + NameProduct : IdType == 2 ? ' ' + NameCombo : IdType == 2 ? ' ' + NameSubProduct : "");
+    var NameType2 = (IdType == 1 || IdType == 0 ? "da" : "do");
+
+    var lang = Parameters.ContainsKey("Lang") ? Convert.ToInt32(Parameters["Lang"]) : CMS.I18N.DefaultLanguage.Id;
+    var DefaultImage = "/Areas/admin/Content/basic/imgs/img-placeholder.png";
+
+    //var CustomFields = (Plugin.Execute("GetCustomFields") as IEnumerable<dynamic>);
+    var CustomFields = (IEnumerable<dynamic>)Plugin.Execute("GetCustomFields", null, Parameters, null);
+    var CustomFieldsGroups = CustomFields.GroupBy(f => f.FieldGroup, f => f);
+
+    var Categories = (IEnumerable<dynamic>)Plugin.Execute("ListCategory", null, Parameters, null);
+
+    var ProductTypes = (IEnumerable<dynamic>)Plugin.Execute("ListProductTypes", null, Parameters, null);
+    var ProductType = ProductTypes.FirstOrDefault(t => t.Id == IdType);
+
+    var Result = ((int?)TempData["ExecuteModel"] ?? 0);
+    var Exception = (Exception)TempData["ExecuteException"];
+    var user = CMS.Membership.AdminUser;
+    var Owners = (IEnumerable<dynamic>)Plugin?.Execute("LISTUSERS", null, Parameters, null);
+    var Admins = (IEnumerable<dynamic>)Plugin?.Execute("LISTUSERSEDITALL", null, Parameters, null);
+    var adminRole = Admins.FirstOrDefault(x => x.Id == user.Role.Id);
+    var OwnerType = CMS.Configuration.Get("OwnerType", PLUGIN_NAME);
+    var AutomaticallyActivateNewProducts = CMS.Configuration.Get("AutomaticallyActivateNewProducts", PLUGIN_NAME);
+    var subProductGrouped = bool.Parse(CMS.Configuration.Get("GroupedSubProducts", PLUGIN_NAME));
+    var inativate = !bool.Parse(AutomaticallyActivateNewProducts);
+
+}
+
+
+@if (Exception != null)
+{
+    <div class="alert alert-danger alert-dismissable">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <strong>Erro!</strong> @Exception.Message
+    </div>
+}
+
+@if (CMS.Configuration.Get("ClearCache", PLUGIN_NAME).Contains("true"))
+{
+    <div class="alert alert-info alert-dismissable">
+        <form class="form-inline">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>Atenção!</strong> Após salvar todos produtos necessários faça a limpeza do cache.
+            <a href="/admin/cache">Gerenciador de Cache</a>
+        </form>
+    </div>
+}
+
+@section PageHeaderActions {
+    <div class="page-header-actions">
+        <div class="btn-group" data-toggle="buttons">
+            @foreach (var language in CMS.I18N.AvailableLanguages)
+            {
+                <label class="btn btn-primary btn-outline @(lang == language.Id ? "active" : "")">
+                    <input type="radio" name="options" id="option1" autocomplete="off"
+                           onchange="window.location.href='@Url.Action("Action", "Plugin", new { area = "admin", source = PLUGIN_NAME, function = "ProductEdit", Lang = language.Id, Id = (Model?.Id ?? 0), IdType = IdType })';"
+                           @(lang == language.Id ? "checked" : "")> @language.Culture
+                    </label>
+                }
+        </div>
+    </div>
+}
+
+@helper ShowGallery(string name, string value)
+{
+    var DefaultImage = "/Areas/admin/Content/basic/imgs/img-placeholder.png";
+
+    <div class="row image-gallery sortable" data-name="@name">
+        @if (string.IsNullOrWhiteSpace(value))
+        {
+            <div class="image-gallery-holder col-md-3 col-sm-6 col-xs-12 margin-bottom-10">
+                <div class="image-gallery-wrapper">
+                    <input type="hidden" name="Gallery" value="" />
+                    <figure class="overlay overlay-hover overlay-gallery text-center vertical-align">
+                        <img class="overlay-figure image-gallery-item vertical-align-middle" src="@DefaultImage" alt="...">
+                        <figcaption class="overlay-panel overlay-background overlay-fade overlay-icon padding-0">
+                            <a class="icon fa-search" onclick="showImagePicker($(this).parents('.image-gallery-wrapper').find('img'), $(this).parents('.image-gallery-wrapper').find('input'), 'Image');"></a>
+                            <a class="icon fa-trash"></a>
+                        </figcaption>
+                    </figure>
+                </div>
+            </div>
+        }
+        else
+        {
+            foreach (var item in value.Split(','))
+            {
+                if (string.IsNullOrWhiteSpace(item))
+                {
+                    continue;
+                }
+
+                var obj = CMS.Library.Object(Convert.ToInt32(item));
+                var img = (obj?.FullPath ?? DefaultImage);
+
+                <div class="image-gallery-holder col-md-3 col-sm-6 col-xs-12 margin-bottom-10">
+                    <div class="image-gallery-wrapper">
+                        <input type="hidden" name="Gallery" value="@item" />
+                        <figure class="overlay overlay-hover overlay-gallery text-center vertical-align">
+                            <img class="overlay-figure image-gallery-item vertical-align-middle" src="@img" alt="@(obj?.Description)">
+                            <figcaption class="overlay-panel overlay-background overlay-fade overlay-icon padding-0">
+                                <a class="icon fa-search ajust-icones" onclick="showImagePicker($(this).parents('.image-gallery-wrapper').find('img'), $(this).parents('.image-gallery-wrapper').find('input'), 'Image');"></a>
+                                <a class="icon fa-trash ajust-icones" onclick="$(this).parents('.image-gallery-holder').remove();"></a>
+                            </figcaption>
+                        </figure>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+    <button type="button" class="btn btn-outline btn-sm btn-primary"
+            onclick="addNewImageToGallery($('.image-gallery[data-name=@name]'));">
+        adicionar imagem
+    </button>
+}
+
+@helper ShowJsonModal(string name, dynamic schema)
+{
+    var format = (IEnumerable<dynamic>)schema;
+    string nameFormated = name.Replace(" ", "");
+
+    <form id="form-json-@nameFormated" role="form" action="javascript:submitJson('@nameFormated');">
+        <div class="modal fade modal-3d-flip-vertical" id="modal-json-@nameFormated" aria-hidden="false"
+             aria-labelledby="modal-json-@nameFormated-label" role="dialog" tabindex="-1">
+            <div class="modal-dialog modal-center">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                        <h4 class="modal-title">@name</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <input type="hidden" name="row" />
+
+                            @foreach (var entry in format)
+                            {
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        @if (entry.Type == "text")
+                                        {
+                                            <label class="control-label" for="form-json-input-@entry.Column">@entry.Column</label>
+                                            <input type="text" class="form-control" id="form-json-input-@entry.Column" name="@entry.Column"
+                                                   value="" @(entry.Required ? "required" : "") />
+                                        }
+                                        else if (entry.Type == "checkbox")
+                                        {
+                                            <div class="checkbox-custom checkbox-primary">
+                                                <input type="checkbox" value="true" id="form-json-input-@entry.Column"
+                                                       onchange="$('[type=hidden][name=@entry.Column]').val($(this).prop('checked'));" />
+                                                <label class="control-label" for="form-json-input-@entry.Column">@entry.Column</label>
+                                            </div>
+                                            <input type="hidden" value="false" name="@entry.Column" />
+                                        }
+                                        else if (entry.Type == "library")
+                                        {
+                                            <div class="document-wrapper">
+                                                <label class="control-label">@entry.Column</label>
+                                                <input type="hidden" class="form-control" name="@entry.Column" value="" id="form-json-input-@entry.Column">
+                                                <button class="btn btn-success" type="button" onclick="showImagePicker($(this),$(this).parent('.document-wrapper').find('input'), 'Other');">
+                                                    Selecionar arquivo da Biblioteca
+                                                </button>
+                                            </div>
+                                        }
+                                        else if (entry.Type == "SelectType")
+                                        {
+                                            <label class="control-label" for="form-json-select-@entry.Column">@entry.Column</label>
+                                            <select class="form-control" name="@entry.Column" id="form-json-select-@entry.Column" required>
+                                                <option selected>Selecione</option>
+                                                <option value="Texto">Texto</option>
+                                                <option value="Numérico">Numérico</option>
+                                                <option value="Data">Data</option>
+                                            </select>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    <div class="modal-footer pull-right">
+                        <button class="btn btn-primary" type="submit">
+                            OK
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+}
+
+@helper RenderChild(IEnumerable<dynamic> categories, IEnumerable<dynamic> selected)
+{
+    var PLUGIN_NAME = "Bitzar.Products.dll";
+    var idCategory = CMS.Configuration.Get("CategoryParent", PLUGIN_NAME);
+
+    foreach (var item in categories)
+    {
+        if (item.Disabled)
+        {
+            continue;
+        }
+
+        var space = "";
+        var index = 0;
+        while (index < item.Level)
+        {
+            space += "&nbsp;&nbsp;";
+            index++;
+        }
+
+
+
+        <option value="@item.Id" @((selected?.Any(s => s.IdCategory == item.Id) ?? false) ? "selected" : "")>@Html.Raw(space) @(item.Description)</option>
+
+        if (item.Children != null && item.Children.Count > 0)
+        {
+            @RenderChild(item.Children, selected)
+        }
+    }
+}
+
+@helper RenderTypes(IEnumerable<dynamic> types, int? idType)
+{
+    foreach (var item in types)
+    {
+        <option value="@item.Id" @(Request.QueryString["IdType"] == item.Id.ToString() ? "selected" : "")>@(item.Description)</option>
+    }
+
+}
+
+@helper RenderUsers(IEnumerable<dynamic> users, IEnumerable<dynamic> Owners)
+{
+
+    var userAuth = CMS.Membership.AdminUser;
+
+    var idUser = Owners != null ? (Owners.Count() > 0 ? Owners.FirstOrDefault().IdUser : 0) : 0;
+
+    foreach (var item in users)
+    {
+        if (userAuth.Role.Id <= 3)
+        {
+            <option value="@item.Id" @(item.Id == idUser ? "selected" : "")>@item.FirstName</option>
+        }
+        else
+        {
+            if (Convert.ToInt32(userAuth.Id) == Convert.ToInt32(item.Id))
+            {
+                <option value="@item.Id" selected>@item.FirstName</option>
+                break;
+            }
+        }
+    }
+}
+
+<form autocomplete="off" method="post" action="@CMS.Functions.ExecuteUrl" name="Product">
+
+    <input type="hidden" name="source" value="@PLUGIN_NAME" />
+    <input type="hidden" name="function" value="SaveProduct" />
+    <input type="hidden" name="output" value="JSON" />
+
+    <input type="hidden" name="Id" value="@id" />
+    <input type="hidden" name="IdProduct" value="@idProduct" />
+    <input type="hidden" name="Lang" value="@lang" />
+
+    <div class="panel panel-bordered">
+        <header class="panel-heading">
+            <h3 class="panel-title">
+                Cadastro Básico
+            </h3>
+        </header>
+        <div class="panel-body container-fluid">
+            <div class="row">
+                <div class="col-md-6 col-sm-8 col-xs-12">
+                    <div class="row">
+
+                        <div class="col-sm-12" id="div-idtype">
+                            <div class="form-group">
+                                <label class="control-label" for="IdType">Tipos de Produto</label>
+                                <select class="form-control" id="IdType" name="IdType">
+                                    @RenderTypes(ProductTypes, Model?.IdType)
+                                </select>
+                                <span class="help-block">
+                                    Selecione o tipo de Produto
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12" id="div-iduser">
+                            <div class="form-group ">
+                                <label class="control-label" for="IdUser">@OwnerType</label>
+                                <select class="form-control" id="IdUser" name="IdUser">
+                                    <option value="" selected disabled>Selecione @OwnerType</option>
+                                    @RenderUsers(Owners, Model?.Owners)
+                                </select>
+                                <span class="help-block">
+                                    Selecione o Úsuario Vinculado ao Produto
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12" id="div-sku">
+                            <div class="form-group">
+                                <label class="control-label" for="SKU">SKU</label>
+                                <input type="text" class="form-control" id="SKU" name="SKU"
+                                       value="@(Model?.SKU)" required />
+                                <span class="help-block">
+                                    Código de identificação @NameType2 @NameType
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12" id="div-description">
+                            <div class="form-group ">
+                                <label class="control-label" for="Description">Descrição</label>
+                                <input type="text" class="form-control" id="Description" name="Description"
+                                       value="@(Model?.Description)" required />
+                                <span class="help-block">
+                                    Descrição principal @NameType2 @NameType
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12" id="div-url">
+                            <div class="form-group ">
+                                <label class="control-label" for="Url">Url de Acesso</label>
+                                <input type="text" class="form-control" id="Url" name="Url"
+                                       value="@(Model?.Url)" required />
+                                <span class="help-block">
+                                    Url de acesso @NameType2 @NameType. Não utilizar caracteres especiais.
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12" id="div-categories">
+                            <div class="form-group ">
+                                <label class="control-label" for="Categories">Categorias</label>
+                                <input type="hidden" name="Categories" value="none" />
+                                <select class="form-control" id="Categories" name="Categories" multiple data-plugin="select2">
+                                    @RenderChild(Categories, Model?.Categories)
+                                </select>
+                                <span class="help-block">
+                                    Nível superior da Categoria selecionada
+                                </span>
+                            </div>
+                        </div>
+
+
+                        <div class="col-sm-12" id="div-gallery">
+                            <label class="control-label" for="Url">Imagens</label>
+                            @ShowGallery("Gallery", Model?.Gallery)
+                            <span class="help-block">Galeria de imagens para o @NameType</span>
+                        </div>
+
+
+                        <div class="col-sm-12" id="div-allDescription">
+                            <div class="form-group ">
+                                <label class="control-label">Descrição completa @NameType2 @NameType</label>
+                                <textarea class="form-control html-editor" name="Text">@(HttpUtility.HtmlDecode(Model?.Text ?? ""))</textarea>
+                            </div>
+                        </div>
+
+                        @if (Model != null)
+                        {
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <div class="checkbox-custom checkbox-primary">
+                                        <input type="checkbox" value="true" id="Hide" name="Hide"
+                                               @((Model?.Hide ?? false) ? "checked" : "") />
+
+                                        <label class="control-label" for="Hide">Ocultar Produto</label>
+                                    </div>
+
+                                    <div class="checkbox-custom checkbox-primary">
+                                        @if (user.Role.Name != null || adminRole != null)
+                                        {
+                                            <input type="checkbox" value="true" id="Disabled" name="Disabled"
+                                                   @(Model?.Disabled == true ? "checked" : "") />
+                                        }
+                                        else
+                                        {
+                                            <input type="checkbox" value="true" @(Model?.Disabled == true ? "checked" : "") disabled />
+                                        }
+                                        <label class="control-label" for="Disabled">Inativo</label>
+                                    </div>
+
+                                    <span class="help-block">
+                                        Se marcado, o produto não será visualizado no sistema
+                                    </span>
+
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <input type="checkbox" style="display:none" name="Disabled" value="true" @(inativate == true ? "checked" : "") />
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @foreach (var group in CustomFieldsGroups)
+    {
+        <div class="panel panel-bordered">
+            <header class="panel-heading">
+                <h3 class="panel-title">
+                    @group.Key
+                </h3>
+            </header>
+            <div class="panel-body container-fluid">
+                <div class="row">
+                    <div class="col-md-6 col-sm-8 col-xs-12">
+                        <div class="row">
+                            @foreach (var field in group.OrderBy(x => x.Order))
+                            {
+                                <div class="col-sm-12">
+                                    <div class="form-group ">
+                                        <label class="control-label" for="@field.Name">@field.Name</label>
+
+                                        @if (field.Type == "json")
+                                        {
+                                            string variableForJson = field.Name;
+                                            variableForJson = variableForJson.Replace(" ", "");
+
+                                            <input type="hidden" id="@variableForJson" name="@field.Name"
+                                                   value="@(Model?.GetFieldValue(field.Name))" />
+                                            <div id="@variableForJson-json" data-name="@variableForJson" data-type="json" data-schema="@field.Format">
+                                            </div>
+                                            <button type="button" class="btn btn-outline btn-sm btn-primary"
+                                                    onclick="addJsonItem('@variableForJson', -1);">
+                                                adicionar item
+                                            </button>
+                                        }
+                                        else if (field.Type == "text")
+                                        {
+                                            <input type="text" id="@field.Name" class="form-control" name="@field.Name"
+                                                   value="@(Model?.GetFieldValue(field.Name))" @((user.Role.Name != "Administrador" && adminRole == null) && Model?.GetFieldReadOnly(field.Name) == true ? "disabled" : "") />
+                                        }
+                                        else if (field.Type == "checkbox")
+                                        {
+                                            var option = field.Format;
+
+                                            var key = option.Split(':')[0];
+                                            var value = option.Split(':')[1];
+
+                                            bool parsedValue = bool.TryParse((Model?.GetFieldValue(field.Name) ?? value), out bool result);
+
+                                            <div class="checkbox-custom checkbox-primary">
+                                                <input type="checkbox" value="true" id="@field.Name" name="@field.Name" onclick="updateCheckValue('@field.Name', '@field.Name+hidden')"
+                                                       @(parsedValue && result ? "checked" : "") />
+
+                                                <label for="@field.Name+@key">@key</label>
+
+                                                @if (!(parsedValue && result))
+                                                {
+                                                    <input type="hidden" id="@field.Name+hidden" value="false" name="@field.Name" />
+                                                }
+                                            </div>
+
+                                        }
+                                        else if (field.Type == "number")
+                                        {
+                                            <input type="number" class="form-control" id="@field.Name" name="@field.Name"
+                                                   value="@(Model?.GetFieldValue(field.Name))" @((user.Role.Name != "Administrador" && adminRole == null) && Model?.GetFieldReadOnly(field.Name) == true ? "disabled" : "") />
+                                        }
+                                        else if (field.Type == "image")
+                                        {
+                                            var img = (string.IsNullOrWhiteSpace(Model?.GetFieldValue(field.Name)) ? DefaultImage : CMS.Library.Object(Convert.ToInt32(Model.GetFieldValue(field.Name))));
+
+                                            <div class="image-wrapper">
+                                                <input type="hidden" id="@field.Name" name="@field.Name"
+                                                       value="@(Model?.GetFieldValue(field.Name))" @((user.Role.Name != "Administrador" && adminRole == null) && Model?.GetFieldReadOnly(field.Name) == true ? "disabled" : "") />
+                                                <img name="@field.Name" src="@(img ?? DefaultImage)" class="block img-content" onclick="showImagePicker($(this),$(this).parent('.image-wrapper').find('input'), 'Image');" />
+                                                <button type="button" class="btn btn-outline btn-sm btn-danger margin-top-10"
+                                                        onclick="deleteImage('@field.Name')">
+                                                    remover imagem
+                                                </button>
+                                            </div>
+                                        }
+                                        else if (field.Type == "midia")
+                                        {
+                                            var extension = "Upload";
+
+                                            <div class="image-wrapper">
+                                                <input type="hidden" name="@(field.Name)" value="@(Model?.GetFieldValue(field.Name))" />
+                                                <div class="overlay-figure overlay-scale vertical-align-middle text-center padding-top-30" style="height: 100%; cursor:pointer;max-width: 170px;max-height: 300px;display: block;" onclick="showMidiaPicker($(this),$(this).parent('.image-wrapper').find('input'), 'Midia');" title="@field.Name">
+                                                    <div class="icon wb-upload image-icon"></div>
+                                                    <div class="image-icon">@extension</div>
+                                                </div>
+                                            </div>
+                                        }
+                                        else if (field.Type == "options")
+                                        {
+                                            <input type="hidden" value="none" name="@field.Name" />
+                                            <div class="options-checkbox">
+                                                @foreach (var option in field.Format.Split('|'))
+                                                {
+                                                    var key = option.Split(':')[0];
+                                                    var value = option.Split(':')[1];
+
+                                                    <div class="checkbox-custom checkbox-primary inline-block margin-right-30">
+                                                        <input type="checkbox" value="@key" id="@field.Name+@key" name="@field.Name"
+                                                               @((Model?.GetFieldValue(field.Name)?.Contains(key) ?? false) ? "checked" : "") />
+                                                        <label class="control-label" for="@field.Name+@key">@value</label>
+                                                    </div>
+                                                }
+                                            </div>
+                                        }
+                                        else if (field.Type == "html")
+                                        {
+                                            <textarea class="form-control html-editor" name="@field.Name" @((user.Role.Name != "Administrador" && adminRole == null) && Model?.GetFieldReadOnly(field.Name) == true ? "disabled" : "")>@(HttpUtility.HtmlDecode(Model?.GetFieldValue(field.Name)))</textarea>
+                                        }
+                                        else
+                                        {
+                                            <input type="@field.Type" id="@field.Name" class="form-control" name="@field.Name"
+                                                   value="@(Model?.GetFieldValue(field.Name))" @((user.Role.Name != "Administrador" && adminRole == null) && Model?.GetFieldReadOnly(field.Name) == true ? "disabled" : "") />
+                                        }
+
+                                        <span class="help-block" name="help-block-@field.Name" @(field.Name == "Taxa de Juros em %" ? "id=percentualJurosHelper" : "")>
+                                            @field.Description
+                                        </span>
+                                    </div>
+                                </div>
+                            }
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <div class="panel panel-bordered" id="div-relacionados">
+        <header class="panel-heading">
+            <h3 class="panel-title">
+                Relacionados
+            </h3>
+        </header>
+        <div class="panel-body container-fluid">
+            <div class="row">
+                <div class="col-xs-12">
+
+                    @{
+                        var Related = (IEnumerable<dynamic>)(Model?.Related ?? null);
+                        var Products = (IEnumerable<dynamic>)Plugin.Execute("ListProduct", null, Parameters, null);
+                        Products = Products.Where(p => !p.Disabled && p.Id != id);
+                    }
+
+                    <label class="control-label" for="Related">Produtos Relacionados</label>
+                    <input type="hidden" name="Related" value="none" />
+                    <select class="form-control" name="Related" multiple="multiple" data-plugin="select2">
+                        @foreach (var item in Products)
+                        {
+                            <option value="@item.Id" @((Related?.Any(r => r.Id == item.Id) ?? false) ? "selected" : "")>@item.Description</option>
+                        }
+                    </select>
+                    <span class="help-block">
+                        Selecione @NameType2 @NameType relacionado dentro do Sistema
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @{
+        var Attributes = (IEnumerable<dynamic>)Plugin.Execute("ListAttribute", null, Parameters, null);
+        var AttributesType = (IEnumerable<dynamic>)Plugin.Execute("ListAttributeType", null, Parameters, null);
+    }
+
+    @helper RenderAttribute(IEnumerable<dynamic> attributes, IEnumerable<dynamic> selected)
+    {
+
+        foreach (var value in attributes)
+        {
+            var space = "";
+            var index = 0;
+
+            while (index < value.Level)
+            {
+                space += "&nbsp;&nbsp;";
+                index++;
+            }
+
+            <option value="@value.Id" @((selected?.Any(s => s.IdAttribute == value.Id) ?? false) ? "selected" : "")>@Html.Raw(space) @(value.Description)</option>
+
+            if (value.Children != null && value.Children.Count > 0)
+            {
+                @RenderAttribute(value.Children, selected)
+            }
+        }
+    }
+
+
+    <div class="panel panel-bordered" id="div-atributos">
+        <header class="panel-heading">
+            <h3 class="panel-title">
+                Atributos
+            </h3>
+        </header>
+        <div class="panel-body container-fluid">
+            <div class="row">
+                <div class="col-sm-12">
+                    @foreach (var item in AttributesType)
+                    {
+                        <div class="form-group ">
+                            <label class="control-label" for="Attributes">@item.Value</label>
+                            <input type="hidden" name="Attributes" value="none" />
+                            <select class="form-control" name="Attributes" id=@item.Value multiple data-plugin="select2">
+                                @RenderAttribute(Attributes.Where(x => x.IdType == item.Id), Model?.Attributes)
+                            </select>
+                            <span class="help-block">
+                            </span>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (Model != null && (ProductType?.EnableSubProduct ?? false))
+    {
+        foreach (var tyeItem in ProductTypes.Where(pt => pt.EnableSubProduct == false))
+        {
+            <div class="panel panel-bordered" id="div-subproduct-@tyeItem.Id">
+                <header class="panel-heading">
+                    <h3 class="panel-title">
+                        Cadastro de @tyeItem.Description
+                    </h3>
+                </header>
+                <table class="table table-hover table-strip">
+                    <thead>
+                        <tr>
+                            <th>SKU</th>
+                            <th>Descrição</th>
+                            <th>Url</th>
+                            @if (!subProductGrouped) { 
+                                <th class="column-action">Inativo?</th>
+                            }
+                            <th class="column-action"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="products" class="sortable">
+                        @if (Model.SubProduct == null || Model.SubProduct.Count == 0)
+                        {
+                            <tr>
+                                <td class="text-center" colspan="5">
+                                    Não há @NameProduct cadastrados
+                                </td>
+                            </tr>
+                        }
+                        else
+                        {
+
+                            IEnumerable<dynamic> entities = ((IEnumerable<dynamic>)Model.SubProduct).Where(sp => sp.IdType == tyeItem.Id);
+
+                            if (subProductGrouped)
+                            {
+                                var resultList = new List<dynamic>();
+
+                                entities.GroupBy(i => new { i.SKU, i.Description, i.RouteUrl, i.Url, i.IdType }).Select(i => new
+                                {
+                                    SKU = i.Key.SKU,
+                                    Description = i.Key.Description,
+                                    RouteUrl = i.Key.RouteUrl,
+                                    Url = i.Key.Url,
+                                    IdType = i.Key.IdType,
+                                    Ids = new List<int>()
+                                }).ToList().ForEach(item =>
+                                {
+                                    var result = entities
+                                        .Where(e => e.SKU == item.SKU && e.Description == item.Description && e.RouteUrl == item.RouteUrl && e.Url == item.Url && e.IdType == item.IdType);
+
+                                    item.Ids.AddRange(result.Select(e => (int)e.Id));
+                                    resultList.Add(item);
+                                });
+
+                                entities = resultList;
+                            }
+
+                            foreach (var entity in entities)
+                            {
+                                int entityId = subProductGrouped ? entity.Ids[0] : entity.Id;
+
+                                <tr data-id="@entityId">
+                                    <td>@entity.SKU</td>
+                                    <td>@entity.Description</td>
+                                    <td><a href="/@entity.RouteUrl" target="_blank">/@entity.Url</a></td>
+                                    @if (!subProductGrouped) { 
+                                        <td class="text-center"><i class="icon wb-@(entity.Disabled ? "check" : "")"></i></td>
+                                    }
+                                    <td>
+                                        <a href="@Url.Action("Action", "Plugin", new { area = "admin", source = PLUGIN_NAME, function = "ProductEdit", Lang = lang, Id = entityId, IdProduct = id, IdType = entity.IdType })">
+                                            <i class="icon wb-edit"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+
+                <div class="panel-footer">
+                    <a class="btn btn-primary" href="@Url.Action("Action", "Plugin", new { area = "admin", source = PLUGIN_NAME, function = "ProductEdit", Lang = lang, IdProduct = id ,IdType = tyeItem.Id})"
+                       data-hotkey="ctrl+i" data-toggle="tooltip" data-title="Ctrl+I" data-placement="top" data-container="body">
+                        <i class="icon fa-plus"></i> Adicionar @tyeItem.Description
+                    </a>
+                </div>
+            </div>
+        }
+    }
+
+    @if ((ProductType?.EnableCombo ?? false) && id != 0)
+    {
+        var GetProduct = Plugin?.Execute("GetProduct", null, Parameters, null);
+        var ListProduct = Plugin?.Execute("LISTPRODUCT", null, Parameters, null);
+
+        <div class="panel panel-bordered">
+            <header class="panel-heading">
+                <h3 class="panel-title">
+                    Selecionar @NameProduct do @NameCombo
+                </h3>
+            </header>
+            <div class="panel-body container-fluid">
+                <div class="row">
+
+                    <div class="col-xs-10">
+                        <label class="control-label" for="Combo">@NameProduct Cadastrados</label>
+                        <input type="hidden" name="Combo" value="none" />
+                        <select id="Select-Combo" class="form-control" name="Combo" data-plugin="select2">
+                            <option value=""> </option>
+                            @foreach (var item in ListProduct)
+                            {
+                                if (item.IdType == 1 && !item.Hide && !item.Disabled)
+                                {
+                                    <option value="@item.Id">@item.Description</option>
+                                }
+                            }
+                        </select>
+                        <span class="help-block">
+                            Selecione @NameProduct dentro do Sistema
+                        </span>
+                    </div>
+                    <div class="col-xs-2">
+                        <a class="btn btn-primary" onclick="SaveCombo(@id)"
+                           data-toggle="tooltip" data-placement="top" data-container="body" style="margin-top: 20px;">
+                            <i class="icon fa-plus"></i> Novo
+                        </a>
+                    </div>
+
+
+                    <div class="col-xs-12">
+                        <table class="table table-hover table-strip ">
+                            <thead>
+                                <tr>
+                                    <th>Descrição</th>
+                                    <th>Quantidade</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="Combo" class="sortable">
+                                @if (GetProduct.ComboProduct == null || GetProduct.ComboProduct.Count == 0)
+                                {
+                                    <tr>
+                                        <td class="text-center" colspan="5">
+                                            Não há @NameCombo cadastrados
+                                        </td>
+                                    </tr>
+
+                                }
+                                else
+                                {
+                                    foreach (var entity in GetProduct.ComboProduct)
+                                    {
+                                        <tr data-id="@entity.Id" data-sort="@entity.Sort">
+                                            <td>@entity.Description</td>
+                                            <td class="Quantidade"><input type="number" class="form-control" data-id="@entity.Id" value="@entity.Quantity" min="0" step="1" style="width: 70px;" /></td>
+                                            <td><button type="button" onclick="DeleteProductCombo(@entity.Id, @id)"><i class="icon fa-trash" style="cursor: pointer;"></i></button></td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    }
+
+    <div>
+        <button type="button" class="btn btn-pure" data-hotkey="ctrl+left" data-toggle="tooltip"
+                data-title="Ctrl+Seta Esquerda" data-placement="top" data-container="body"
+                onclick="redirectHome();">
+            <i class="icon fa-arrow-left"></i> Voltar
+        </button>
+
+        <button type="button" class="btn btn-primary" data-hotkey="ctrl+s" data-toggle="tooltip"
+                data-title="Ctrl+S" data-placement="top" data-container="body" onclick="saveProduct();" id="id-button-save-product">
+            <i class="icon fa-floppy-o"></i> Salvar
+        </button>
+
+        @if (id > 0)
+        {
+            <button type="button" class="btn btn-danger pull-right" onclick="deleteProduct(@id);">
+                <i class="icon fa-trash"></i> Excluir
+            </button>
+        }
+    </div>
+
+</form>
+
+@foreach (var field in CustomFields)
+{
+    if (field.Type != "json")
+    {
+        continue;
+    }
+
+    @ShowJsonModal(field.Name, field.FormatObject)
+}
+
+
+<div class="modal fade modal-3d-flip-vertical" id="modal-image-picker" aria-hidden="false"
+     aria-labelledby="modal-image-picker-label" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-center modal-xlg">
+        <div class="modal-body" id="image-picker-holder">
+        </div>
+    </div>
+</div>
+
+@section FooterScript
+        {
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+
+    @if (Result > 0)
+    {
+        if (id == 0 && idProduct == 0)
+        {
+            <script>
+                swal('Tudo certo!!!', '@NameType salvo com sucesso', 'success').then(function() {
+                    window.location.href = '@Url.Action("Action", "Plugin", new { area = "admin" })?source=@PLUGIN_NAME&function=ProductEdit&Lang=@lang&Id=@Result&IdType=@IdType';
+                });
+            </script>
+        }
+        else if (idProduct != 0)
+        {
+            <script>
+                swal('Tudo certo!!!', '@NameType salvo com sucesso', 'success').then(function () {
+                    redirectHome();
+                });
+            </script>
+        }
+        else
+        {
+            <script>
+                toastr.success('@NameType salvo com sucesso', 'Tudo certo!!!', { timeOut: 2500 });
+            </script>
+        }
+    }
+
+<script>
+                $(".Quantidade input").change(function () {
+                    var qtd = $(this).val();
+                    var id = $(this).data("id");
+                    var idCombo = @id;
+
+                    var data = {
+                        "source": "@PLUGIN_NAME",
+                        "function": "SaveQuantity",
+                        "output": "JSON",
+                        "IdCombo": idCombo,
+                        "IdProduct": id,
+                        "Quantidade": qtd
+                    };
+
+                    $.post('@(CMS.Functions.ExecuteUrl)', data, function (response) {
+                    });
+                });
+
+
+                SaveCombo = function (idCombo) {
+                    var id = $("#Select-Combo option:selected").val();
+                    $("button").attr("disabled", "true");
+
+                    var data = {
+                        "source": "@PLUGIN_NAME",
+                        "function": "SaveCombo",
+                        "output": "JSON",
+                        "IdCombo": idCombo,
+                        "IdProduct": id
+                    };
+
+                     $.post('@(CMS.Functions.ExecuteUrl)', data, function (response) {
+                         if (response.hasOwnProperty('error')) {
+                             $("button").removeAttr("disabled");
+                             swal('Ops!!!', response.error, 'error');
+                         }
+                         else {
+                             swal('Tudo certo!', 'O @NameProduct foi adicionado com sucesso.', 'success').then(function () {
+                                 location.reload();
+                             });
+                         }
+                     });
+
+                }
+
+                DeleteProductCombo = function (idProduct, idCombo) {
+                    var data = {
+                        "source": "@PLUGIN_NAME",
+                        "function": "DeleteCombo",
+                        "output": "JSON",
+                        "IdCombo": idCombo,
+                        "IdProduct": idProduct
+                    };
+
+                    $.post('@(CMS.Functions.ExecuteUrl)', data, function (response) {
+                        $("button").attr("disabled", "true");
+
+                        if (response.hasOwnProperty('error')) {
+                            swal('Ops!!!', response.error, 'error');
+                            $("button").removeAttr("disabled");
+                        }
+                        else {
+                            swal('Tudo certo!', 'O @NameProduct  foi deletado com sucesso.', 'success').then(function () {
+                                location.reload();
+                            });
+                        }
+                        });
+                }
+
+                $("#IdType").change(function () {
+                    var select = document.getElementById("IdType").value;
+
+                    window.location.href = "action?source=@PLUGIN_NAME&function=ProductEdit&Lang=@lang&Id=@id&IdProduct=@idProduct&IdType=" + select + "";
+                });
+
+                // Helper to keep the width of the table row
+                var fixHelper = function (e, ui) {
+                    ui.children().each(function () {
+                        $(this).width($(this).width());
+                    });
+                    return ui;
+                };
+
+                // Ajax call to update the order in the database and persist status
+                sortProducts = function (e, ui) {
+                    // Get all the objects in the current order list
+                    var order = [];
+                    $("#products tr[data-id]").each(function () { order.push($(this).data('id')); });
+
+                    // Make the call
+                    var url = "@(CMS.Functions.ExecuteUrl)";
+                    var data = {
+                        "source": "@PLUGIN_NAME",
+                        "function": "SortProducts",
+                        "output": "JSON",
+                        "Sort": order.toString()
+                    }
+                    $.post(url, data, function (response) {
+                        if (response.hasOwnProperty('error'))
+                            swal('Ops!!!', response.error, 'error');
+                    });
+                }
+
+                // Activate the rows sorter
+                $("#products").sortable({ helper: fixHelper, stop: sortProducts }).disableSelection();
+
+                var $pickerSource = null;
+                var $pickerInput = null;
+                var $pickerType = null;
+
+                showImagePicker = function ($source, $input, $type) {
+                    $pickerSource = $source;
+                    $pickerInput = $input;
+                    $pickerType = $type
+
+                    var url = '@Url.Action("List", "Library", new { area = "admin", source = "picker" })&tipo='+$type;
+                    $.get(url, function (data) {
+                        $('#image-picker-holder').html(data);
+                        $("#modal-image-picker").modal('show');
+                    });
+                }
+
+                deleteImage = function (fieldName) {
+                    $("input[name='" + fieldName + "']").val("");
+                    $("img[name='" + fieldName + "']").attr('src', '@DefaultImage');
+                }
+
+                selectImage = function ($this) {
+                    var id = $this.data("item-id");
+                    var url = $this.data("item-url");
+
+                    // Set image and input
+                    $pickerSource.attr('src', url);
+                    $pickerInput.val(id);
+
+                    $("#modal-image-picker").modal('hide');
+                }
+
+                $('#Description').on('keyup', function () {
+                    $('#Url').val(makeUrl($(this).val().toLowerCase()));
+                });
+
+                redirectHome = function () {
+                    if (document.referrer && document.referrer.includes(window.location.host)) {
+                        window.location.href = document.referrer;
+                    } else {
+                        window.location.href = '@Url.Action("Action", "Plugin", new { area = "admin" })?source=@PLUGIN_NAME&function=ProductPagged&Lang=@lang';
+                    }
+                }
+
+                addNewImageToGallery = function (gallery) {
+                    var model = gallery.find('.image-gallery-holder').first().clone();
+                    // Reset model
+                    model.find('img').attr('src', '@DefaultImage');
+                    model.appendTo(gallery);
+                }
+
+                showMidiaPicker = function ($source, $input, $type) {
+                    $pickerSource = $source;
+                    $pickerInput = $input;
+                    $pickerType = $type;
+
+                    var url = '@Url.Action("List", "Library", new { area = "admin", source = "picker", tipo = "Midia" })';
+                    $.get(url, function (data) {
+                        $('#image-picker-holder').html(data);
+                        $("#modal-image-picker").modal('show');
+                    });
+                }
+
+                setMidiaSelection = function ($source) {
+                    selectMidia($source);
+                };
+
+                selectMidia = function ($this) {
+                    var id = $this.data("item-id");
+                    var url = $this.data("item-url");
+
+
+                    var extension = url.substr((url.lastIndexOf('.') + 1));
+                    var extensionClass = getExtensionClass('.' + extension);
+
+                    var textElement = $pickerSource.children()[1];
+                    var midiaElement = $pickerSource.children()[0];
+
+
+                    textElement.innerHTML = '.' + extension;
+                    midiaElement.classList.remove("wb-upload");
+                    midiaElement.classList.add(extensionClass)
+                    $pickerInput.val(id);
+
+                    $("#modal-image-picker").modal('hide');
+                }
+
+                getExtensionClass = function (extension) {
+                    var imageExtensions = ".jpg,.jpeg,.gif,.png";
+                    var audioExtensions = ".aac,.m4a,.mp1,.mp2,.mp3,.mpg,.mpeg,.oga,.ogg,.wav";
+                    var videoExtensions = ".mp4,.m4v,.ogv,.webm";
+                    var otherExtensions = ".txt,.doc,.docx,.odt,.fodt,.xls,.xlsx,.ods,.fods,.ppt,.pptx,.pps,.ppsx,.odp,.fodp,.xml,.pdf,.xps,.zip,.rar,.7z,.jar,.gz,.psd,.ai,.cdr,.json";
+
+                    if (imageExtensions.split(',').includes(extension))
+                        return "wb-image";
+                    if (audioExtensions.split(',').includes(extension))
+                        return "wb-musical";
+                    if (videoExtensions.split(',').includes(extension))
+                        return "wb-video";
+                    if (otherExtensions.split(',').includes(extension))
+                        return "wb-attach-file";
+                    return "wb-upload";
+                }
+
+                $(".sortable").sortable().disableSelection();
+
+                addJsonItem = function (name, row) {
+                    $('#form-json-' + name).find('input').each(function () {
+                        if ($(this).attr('type') == "checkbox")
+                            $(this).prop('checked', false);
+                        else
+                            $(this).val("");
+                    });
+
+                    $('#form-json-' + name).find('[name=row]').val(row);
+                    $('#modal-json-' + name).modal('show');
+                }
+
+                editJsonItem = function (name, row) {
+                    $('tr[data-item=' + row + '] td[data-object]').each(function () {
+                        var column = $(this).data('object');
+                        var value = $(this).data('value');
+                        var type = $(this).data('type');
+
+                        if (type == "SelectType") {
+                            $('#form-json-' + name + ' #form-json-select-' + column).val(value);
+                        } else if (type == "checkbox") {
+                            $('#form-json-' + name + ' #form-json-input-' + column).prop('checked', value);
+                        }else {
+                            $('#form-json-' + name + ' #form-json-input-' + column).val(value);
+                        }
+                    });
+                    $('#form-json-' + name).find('[name=row]').val(row);
+                    $('#modal-json-' + name).modal('show');
+                }
+
+                removeJsonItem = function (name, row) {
+                    var $value = $('#'+name);
+                    var oldObj = (JSON.parse($value.val() || null) || []);
+                    var newObj = [];
+
+                    for (var i = 0; i < oldObj.length; i++)
+                        if (oldObj[i]["row"] != row)
+                            newObj.push(oldObj[i]);
+
+                    // Set obj
+                    for (var i = 0; i < newObj.length; i++) {
+                        newObj[i].row = i;
+                    }
+
+                    // Update json value in hidden
+                    $value.val(JSON.stringify(newObj));
+                    generateJsonTable(name);
+                }
+
+
+                saveProduct = function () {
+                    var $form = $('[name="Product"]');
+                    var formData = new FormData($form[0]);
+                    var url = '@CMS.Functions.ExecuteUrl';
+                    $("button").attr("disabled", "true");
+
+                    $.ajax({
+                        url: url,
+                        data: formData,
+                        type: 'POST',
+                        contentType: false,
+                        processData: false,
+                        success: function (response) {
+                            $("button").removeAttr("disabled");
+
+                            if (response.hasOwnProperty('error')) {
+                                toastr.error(response.error, 'Erro');
+                            } else if (response.hasOwnProperty('warning')) {
+                                toastr.warning(response.warning, 'Atenção');
+                            }
+                            else {
+                                toastr.success("Produto salvo com sucesso!", "Sucesso");
+                                redirectHome();
+                            }
+                        }
+                    });
+                }
+
+                submitJson = function (name) {
+                    var $form = $('#form-json-' + name);
+                    var $value = $('#'+name);
+                    var data = $form.serializeArray().reduce(function (m, o) { m[o.name] = o.value; return m; }, {});
+
+                    // var current objet and schema
+                    var obj = (JSON.parse($value.val() || null) || []);
+
+                    // if row == 0 push new object
+                    if (data["row"] == -1) {
+                        obj.push(data);
+                    }
+                    else
+                        for (var i = 0; i < obj.length; i++) {
+                            if (obj[i].row != data["row"])
+                                continue;
+
+                            for (var prop in obj[i])
+                                if (obj[i].hasOwnProperty(prop))
+                                    obj[i][prop] = data[prop];
+                        }
+
+                    // Update array
+                    for (var i = 0; i < obj.length; i++) {
+                        obj[i].row = i;
+                    }
+
+                    // Update json value in hidden
+                    $value.val(JSON.stringify(obj));
+                    $form.find('.modal').modal('hide');
+
+                    // Create table
+                    generateJsonTable(name);
+                }
+
+                /*
+                 * Function to generate the json table to the system
+                 */
+                generateJsonTable = function (name) {
+                    var value = (JSON.parse($('#'+name).val() || null) || []);
+                    var holder = $('#' + name + '-json');
+                    var schema = holder.data('schema');
+
+                    // create table header
+                    var $tb = $('<table class="table table-condensed table-striped table-bordered" />');
+                    var $head = $('<thead />');
+                    var $body = $('<tbody />');
+
+                    // Create headers
+                    var $hrow = $('<tr/>');
+                    for (var i = 0; i < schema.length; i++)
+                        $hrow.append('<th>' + schema[i].Column + '</th>');
+                    $hrow.append('<th class="column-action"></th>');
+                    $hrow.append('<th class="column-action"></th>');
+
+                    $head.append($hrow);
+
+                    // Create data rows
+                    if (value.length == 0) {
+                        $body.append('<tr><td colspan="' + (schema.length + 2) + '" class="text-center"><i>Sem itens para exibir</i></td></tr>');
+                    } else {
+                        for (var i = 0; i < value.length; i++) {
+
+                            var $tr = $('<tr data-item="'+value[i]["row"]+'"/>')
+                            for (var k = 0; k < schema.length; k++) {
+                                var objValue = (schema[k].Type == "checkbox" ? "<i class='icon wb-" + (value[i][schema[k].Column] == "true" ? "check" : "") + "'></i>" : value[i][schema[k].Column]);
+                                $tr.append('<td data-object="' + schema[k].Column + '" data-type="' + schema[k].Type + '" data-value="' + value[i][schema[k].Column] + '">' + objValue + '</td>');
+                            }
+
+                            // Create action columns
+                            $tr.append('<td><a href="javascript:void(0);" onclick="editJsonItem(\'' + name + '\', ' + value[i]["row"] + ');"><i class="icon wb-edit"></i></a></td>');
+                            $tr.append('<td><a href="javascript:void(0);" onclick="removeJsonItem(\'' + name + '\', ' + value[i]["row"] + ');"><i class="icon wb-trash text-danger"></i></a></td>');
+
+                            $body.append($tr);
+                        }
+                    }
+
+                    // aggregate rows and header to table
+                    $tb.append($head);
+                    $tb.append($body);
+
+                    // Set table
+                    holder.html($tb);
+                }
+
+                $('[data-type=json]').each(function () {
+                    generateJsonTable($(this).data('name'));
+                });
+
+                $('[data-plugin="select2"]').each(function () {
+                    $(this).select2();
+                });
+
+                deleteProduct = function (id) {
+
+                    var data1 = {
+                    "source": "@PLUGIN_NAME",
+                    "function": "GetProductRelated",
+                    "output": "JSON",
+                    "Lang":'@lang',
+                    "IdProduct": id
+                    };
+
+                    $.post('@(CMS.Functions.ExecuteUrl)', data1, function (response) {
+                        if (response == 0) {
+                            var data = {
+                                "source": "@PLUGIN_NAME",
+                                "function": "DeleteProduct",
+                                "output": "JSON",
+                                "Lang": '@lang',
+                                "Id": id
+                            };
+
+                            swal({
+                                type: 'question',
+                                title: 'Excluir @NameType?',
+                                html: "Deseja excluir @NameType selecionado?",
+                                buttonsStyling: false,
+                                showCancelButton: true,
+                                confirmButtonClass: 'btn btn-success',
+                                cancelButtonClass: 'btn btn-default margin-right-20',
+                                reverseButtons: true
+                            }).then(function () {
+                                $.post('@(CMS.Functions.ExecuteUrl)', data, function (response) {
+                                    if (response.hasOwnProperty('error'))
+                                        swal('Ops!!!', response.error, 'error');
+                                    else
+                                        swal('Tudo certo!', '@NameType foi removido com sucesso.', 'success').then(function () {
+                                            redirectHome();
+                                        });
+                                });
+                            });
+                        } else {
+                            swal({
+                                type: 'error',
+                                title: 'Oops!',
+                                html: "Você não pode excluir esse produto, pois ele possui vínculos com outros produtos.",
+                                buttonsStyling: false,
+                                showCancelButton: false,
+                                confirmButtonClass: 'btn btn-success',
+                                reverseButtons: true
+                            });
+                        }
+                    });
+
+
+                }
+
+                // Helper to keep the width of the table row
+                var fixHelper2 = function (e, ui) {
+                    ui.children().each(function () {
+                        $(this).width($(this).width());
+                    });
+                    return ui;
+                };
+
+
+                 // Ajax call to update the order in the database and persist status
+                sortProductsCombo = function (e, ui) {
+                    // Get all the objects in the current order list
+                    var order = [];
+                    $("#Combo tr[data-id]").each(function () { order.push($(this).data('id')); });
+
+                    // Make the call
+                    var url = "@(CMS.Functions.ExecuteUrl)";
+                    var data = {
+                        "source": "@PLUGIN_NAME",
+                        "function": "SortProductsCombo",
+                        "output": "JSON",
+                        "Sort": order.toString(),
+                        "IdCombo": @id
+                    }
+                    $.post(url, data, function (response) {
+                        if (response.hasOwnProperty('error'))
+                            swal('Ops!!!', response.error, 'error');
+                    });
+                }
+
+                // Activate the rows sorter
+                $("#Combo").sortable({ helper: fixHelper2, stop: sortProductsCombo }).disableSelection();
+
+
+</script>
+}

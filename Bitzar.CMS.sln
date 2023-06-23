@@ -1,0 +1,88 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32210.238
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bitzar.CMS.Core", "Bitzar.CMS.Core\Bitzar.CMS.Core.csproj", "{9B6DE43E-01B6-4FCB-B7D4-7E3FF4431213}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bitzar.CMS.Data", "Bitzar.CMS.Data\Bitzar.CMS.Data.csproj", "{53E851FA-1860-42B4-867D-AFE61AC6C56D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bitzar.CMS.Extension", "Bitzar.CMS.Extension\Bitzar.CMS.Extension.csproj", "{3E12F30D-051E-4614-896F-7B6D042B8107}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bitzar.CMS.Model", "Bitzar.CMS.Model\Bitzar.CMS.Model.csproj", "{0EFFF981-A252-44A0-9710-F0E9AF0CE529}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{F5028A90-4F54-435D-A421-C33720223DD6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bitzar.Products", "Bitzar.CMS.Plugins\Default\Bitzar.Products\Bitzar.Products.csproj", "{1C40A3C5-A9B0-49D0-9EDC-DBB2917A417F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bitzar.ECommerce", "Bitzar.CMS.Plugins\Default\Bitzar.ECommerce\Bitzar.ECommerce.csproj", "{0AC91477-29E4-4BE3-AD52-CD11AC809F6E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bitzar.Payments", "Bitzar.CMS.Plugins\Default\Bitzar.Payments\Bitzar.Payments.csproj", "{F3024B84-EDCE-4224-AC44-1D1DD98F48E1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bitzar.Tickets", "Bitzar.CMS.Plugins\Custom\Bitzar.Ticket\Bitzar.Tickets.csproj", "{D31B378D-4DB8-407A-8A59-056BF67820C7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bitzar.PagFun", "Bitzar.CMS.Plugins\Custom\Bitzar.PagFun\Bitzar.PagFun.csproj", "{F46A8929-97B0-44A2-B663-0FCEB30F461D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Custom", "Custom", "{687382A0-9BCA-4359-9EE5-3024892A4623}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Default", "Default", "{0A16B797-60AA-48E4-B4F3-CFD9B1576624}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9B6DE43E-01B6-4FCB-B7D4-7E3FF4431213}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B6DE43E-01B6-4FCB-B7D4-7E3FF4431213}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B6DE43E-01B6-4FCB-B7D4-7E3FF4431213}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B6DE43E-01B6-4FCB-B7D4-7E3FF4431213}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53E851FA-1860-42B4-867D-AFE61AC6C56D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53E851FA-1860-42B4-867D-AFE61AC6C56D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53E851FA-1860-42B4-867D-AFE61AC6C56D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53E851FA-1860-42B4-867D-AFE61AC6C56D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E12F30D-051E-4614-896F-7B6D042B8107}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E12F30D-051E-4614-896F-7B6D042B8107}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E12F30D-051E-4614-896F-7B6D042B8107}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E12F30D-051E-4614-896F-7B6D042B8107}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0EFFF981-A252-44A0-9710-F0E9AF0CE529}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0EFFF981-A252-44A0-9710-F0E9AF0CE529}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0EFFF981-A252-44A0-9710-F0E9AF0CE529}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0EFFF981-A252-44A0-9710-F0E9AF0CE529}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C40A3C5-A9B0-49D0-9EDC-DBB2917A417F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C40A3C5-A9B0-49D0-9EDC-DBB2917A417F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C40A3C5-A9B0-49D0-9EDC-DBB2917A417F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C40A3C5-A9B0-49D0-9EDC-DBB2917A417F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0AC91477-29E4-4BE3-AD52-CD11AC809F6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0AC91477-29E4-4BE3-AD52-CD11AC809F6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0AC91477-29E4-4BE3-AD52-CD11AC809F6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0AC91477-29E4-4BE3-AD52-CD11AC809F6E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3024B84-EDCE-4224-AC44-1D1DD98F48E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3024B84-EDCE-4224-AC44-1D1DD98F48E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3024B84-EDCE-4224-AC44-1D1DD98F48E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3024B84-EDCE-4224-AC44-1D1DD98F48E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D31B378D-4DB8-407A-8A59-056BF67820C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D31B378D-4DB8-407A-8A59-056BF67820C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D31B378D-4DB8-407A-8A59-056BF67820C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D31B378D-4DB8-407A-8A59-056BF67820C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F46A8929-97B0-44A2-B663-0FCEB30F461D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F46A8929-97B0-44A2-B663-0FCEB30F461D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F46A8929-97B0-44A2-B663-0FCEB30F461D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F46A8929-97B0-44A2-B663-0FCEB30F461D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1C40A3C5-A9B0-49D0-9EDC-DBB2917A417F} = {0A16B797-60AA-48E4-B4F3-CFD9B1576624}
+		{0AC91477-29E4-4BE3-AD52-CD11AC809F6E} = {0A16B797-60AA-48E4-B4F3-CFD9B1576624}
+		{F3024B84-EDCE-4224-AC44-1D1DD98F48E1} = {0A16B797-60AA-48E4-B4F3-CFD9B1576624}
+		{D31B378D-4DB8-407A-8A59-056BF67820C7} = {687382A0-9BCA-4359-9EE5-3024892A4623}
+		{F46A8929-97B0-44A2-B663-0FCEB30F461D} = {687382A0-9BCA-4359-9EE5-3024892A4623}
+		{687382A0-9BCA-4359-9EE5-3024892A4623} = {F5028A90-4F54-435D-A421-C33720223DD6}
+		{0A16B797-60AA-48E4-B4F3-CFD9B1576624} = {F5028A90-4F54-435D-A421-C33720223DD6}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A63D7D6B-06C8-4557-8974-7DBAE9D77116}
+	EndGlobalSection
+EndGlobal

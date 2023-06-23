@@ -1,0 +1,87 @@
+﻿@inherits System.Web.Mvc.WebViewPage
+
+@using Bitzar.CMS.Core.Functions;
+
+@{
+    var PLUGIN_NAME = "Bitzar.ECommerce.dll";
+    ViewBag.Title = "Pedidos";
+}
+
+
+<div id="orders">
+    <div class="text-center row">
+        <img src="/areas/admin/content/basic/imgs/loader.gif" />
+    </div>
+</div>
+
+<script>
+    //Function to load orders page
+    loadCart = function (page, size, status, customer, search, startDate, finalDate) {
+        var url = '@CMS.Functions.ExecuteUrl';
+        var param = {
+            "source": "@(PLUGIN_NAME)",
+            "function": "LoadOrders",
+            "output": "_Order",
+            "token": "@CMS.Security.RequestToken"
+        }
+
+        // Add filter properties
+        if (page == null || page == 0 || page == '')
+            page = 1;
+
+        if (size == null || size == 0 || size == '')
+            size = 25;
+
+        param["Page"] = page;
+        param["Size"] = size;
+
+        // Add custom filter products
+        if (status != null && status != undefined)
+            param["Status"] = status;
+        if (customer != null && customer != undefined)
+            param["Customer"] = customer;
+        if (search != null && search != undefined)
+            param["Search"] = search;
+        if (startDate != null && startDate != undefined)
+            param["StartDate"] = startDate;
+        if (finalDate != null && finalDate != undefined)
+            param["FinalDate"] = finalDate;
+
+        $.post(url, param, function (response) {
+            if (response.hasOwnProperty('error'))
+                toastr.error(response.error);
+            else {
+                $('#orders').html(response);
+            }
+        });
+    }
+
+    //Function to set status on the cart
+    setStatus = function (Cart, Status) {
+        var url = '@CMS.Functions.ExecuteUrl';
+        var data = {
+            "source": "@(PLUGIN_NAME)",
+            "function": "SetOrderStatus",
+            "output": "JSON",
+            "token": "@CMS.Security.RequestToken"            
+        };
+
+        //Check if exists
+        if (Cart != null && Cart != undefined && Cart != "")
+            data["Cart"] = Cart;
+        if (Status != null && Status != undefined && Status != "")
+            data["Status"] = Status;
+
+        $.post(url, data, function (response) {
+            if (response.hasOwnProperty('error'))
+                toastr.error(response.error);
+            else
+            {
+                reloadCart();
+                toastr.success("Status alterado com sucesso");
+            }
+        });
+    }
+
+    loadCart();
+</script>

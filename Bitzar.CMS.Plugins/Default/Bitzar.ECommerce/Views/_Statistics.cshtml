@@ -1,0 +1,30 @@
+﻿@inherits System.Web.Mvc.WebViewPage
+
+@using System.Linq;
+
+@{
+    var Model = (dynamic)TempData["ExecuteModel"];
+}
+
+@if (Model != null && Model.Count > 0)
+{
+    foreach (var metric in Model)
+    {
+        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+            <div class="widget" onclick="loadCart(1,25, '@(metric.Status)');" style="cursor:pointer;user-select:none;">
+                <div class="widget-content padding-20 white" style="background-color: @(metric.Color) !important">
+                    <div class="counter counter-lg">
+                        <div class="counter-label font-size-16"><b>@metric.Title</b></div>
+                        <div class="counter-number-group">
+                            <span class="counter-number white">@metric.Value</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <div class="empty"></div>
+}

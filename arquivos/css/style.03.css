@@ -1,0 +1,695 @@
+
+/* CSS->Style Card modal user */
+#modalTransfer .card-userItem-search{
+    cursor: pointer;
+    padding: 10px;
+    margin-bottom: 15px;
+    margin-right: 15px;
+    background-color: rgba(46, 61, 79, 0.05);
+    border: 1px solid transparent;
+}
+
+#modalTransfer .card-userItem-search text{
+    fill: #aa251c;
+    opacity: 0.7;
+    font-family: 'Barlow';
+}
+
+#modalTransfer .card-userItem-search:hover{
+    -webkit-transition: .5s ease-out;
+    -moz-transition: .5s ease-out;
+    -o-transition: .5s ease-out;
+    transition: .5s ease-out;
+    border: 1px solid #aa251c;
+}
+
+#modalTransfer .card-userItem-search .email{
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-bottom: 0;
+}
+
+#modalTransfer .card-userItem-search .nome{
+    font-size: 1rem;
+    font-weight: 400;
+    text-transform: uppercase;
+    margin-bottom: 0;
+}
+
+/* CSS->Style Modal Ticket Modal */
+
+#modalTransfer .btn-secondary{
+    transform: skewX(-6deg);
+    background-color: #2e3d4f !important;
+    color: #FFF !important;
+}
+
+#modalTransfer #id-texto-ticket-transfer{
+    transform: skewX(-6deg);
+}
+
+#modalTransfer #btn-search-text{
+    transform: skewX(-6deg);
+}
+
+#modalTransfer #btn-search-text button{
+    border: 1px solid #ced4da;
+    border-left: none;
+    cursor: pointer;
+}
+
+#modalTransfer #input-groupfocus{
+    outline-color:#bb2b21;
+}
+
+/* CSS->Button Meus ingressos */
+#ingressos .btn-transfer-ticket{
+    background-image: -moz-linear-gradient(0deg,#aa251c 0%,#e72323 100%);
+    background-image: -webkit-linear-gradient(0deg,#aa251c 0%,#e72323 100%);
+    background-image: -ms-linear-gradient(0deg,#aa251c 0%,#e72323 100%);
+    box-shadow: 0 3px 0 0 rgba(255,222,234,.004);
+    padding: 5px 20px;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    font-weight: bold;
+    transform: skewX(-10deg);
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+    width: max-content;
+    float: left;
+    transition: 0.5s;
+}
+
+#ingressos .btn-transfer-ticket:hover{
+    padding: 5px 25px;
+}
+
+/* CSS->Events carrousel */
+#smartwizard-events-home .box-item-eventsByCategory h4{
+    color: #2e3d4f;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-top: 5px;
+    padding-left: 3px;
+}
+
+.title-item-eventsByCategory span{
+    color: #2e3d4f;
+}
+
+#section-home-carousel-eventos .sw-theme-default>.nav .nav-link.done.disabled{
+    color: rgba(255, 7, 7, 0.7) !important;
+}
+#section-home-carousel-eventos .sw-theme-default>.nav .nav-link.done.disabled::after{
+    background: rgba(255, 7, 7, 0.7) !important;
+}
+#section-home-carousel-eventos .st-theme-default>.nav .nav-link.active::after{
+    background: #bb2b21 !important;
+}
+#section-home-carousel-eventos .sw-theme-default{
+    border: none;
+}
+#section-home-carousel-eventos .sw-theme-default a{
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-transform: uppercase;  
+}
+.sw.sw-justified>.nav .nav-link, .sw.sw-justified>.nav>li {
+    text-align: left!important;
+}
+#section-home-carousel-eventos .sw-theme-default .active{
+    color: #bb2b21 !important;
+}
+#section-home-carousel-eventos .sw-theme-default>.nav .nav-link.active::after{
+    background: #e72323 !important
+}
+#section-home-carousel-eventos .sw-theme-default>.nav .nav-link.active{
+    color: #e72323 !important
+}
+#section-home-carousel-eventos .sw-theme-default>.nav .nav-link{
+    color: #2e3d4f !important;
+}
+#section-home-carousel-eventos .sw-theme-default>.nav .nav-link.done::after{
+    background: #bb2b21 !important;
+}
+
+/* CSS->Category Common */
+.list-category .title-category-common h4{
+    color: #2e3d4f;
+    font-size: 1.8rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+.list-category .box-item-category-bestSeller img{
+    max-height: 165px;
+}
+
+/* CSS->Category Best Sellers */
+.list-category .title-item-category-bestSeller h4{
+    color: #2e3d4f;
+    font-size: 1rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+.list-category .text-button-item-category-bestSeller a{
+    color: #2e3d4f;
+    font-size: 0.8rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-decoration: none;
+    text-decoration-line: underline;
+}
+.list-category .box-item-category-bestSeller {
+    box-shadow: 0px 0px 15px 5px rgb(46 61 79 / 30%);
+    padding: 7px;
+    border-radius: 5px;
+    cursor: pointer;
+
+    transition: all 0.4s ease-out;
+}
+
+.list-category .box-item-category-bestSeller:hover{
+    background: rgba(46, 61, 79, 0.07) !important;
+    transform: scale(1.03);
+}
+
+/* CSS->Best-Sellers-Home */
+#best-sellers-home, #best-sellers-home-banner {
+    padding-right: 10px;
+    border-right: 1px solid rgba(46, 61, 79, 0.7);
+}
+#best-sellers-home .item-best-seller-card{
+    padding: 8px;
+    margin-bottom: 15px;
+    box-shadow: 0 0 20px rgb(0 0 0 / 25%);
+    cursor: pointer;
+
+    transition: all 0.4s ease-out;
+}
+#best-sellers-home .item-best-seller-card:hover{
+    background: rgba(46, 61, 79, 0.1) !important;
+    transform: scale(1.03);
+}
+#best-sellers-home .item-best-seller-card img{
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+}
+#best-sellers-home .item-best-seller-card p{
+    color: #2e3d4f;
+    font-size: 0.9rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin: 0;
+}
+#best-sellers-home .titulo-best-seller-card{
+    padding-left: 0;
+}
+#best-sellers-home .titulo-best-seller-card p{
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #2e3d4f;
+    text-transform: uppercase;
+    margin: 0;
+    margin-bottom: 10px;
+}
+
+/* CSS->All */
+.modal-style-global{
+    background-color: transparent !important;
+    border: none !important;
+    color: #fff;
+    margin-top: 50px;
+}
+#modal-loader-global,
+#modal-loader-cadastro{
+    z-index: 3000;
+}
+.modal-style-global svg{
+    align-self: center;
+}
+.swal-modal .swal-text{
+    font-weight: 600;
+    font-size: 1.2rem;
+}
+
+/* CSS->Patial->Resumo */
+.sw-theme-default>.nav .nav-link.disabled{
+    cursor: not-allowed !important;
+}
+#steps-resumo .sw-theme-default>.nav .nav-link.done.disabled{
+        color: rgba(255, 7, 7, 0.7) !important;
+}
+#steps-resumo .sw-theme-default>.nav .nav-link.done.disabled::after{
+    background: rgba(255, 7, 7, 0.7) !important;
+}
+#smarttab .st-theme-default>.nav .nav-link.active::after{
+    background: #bb2b21 !important;
+}
+#steps-resumo{
+    margin-top: 80px;
+    margin-bottom: 80px;
+}
+#steps-resumo .sw-theme-default{
+    border: none;
+}
+#id-div-pagamento-step .sw-theme-default a{
+    color: #2e3d4f;
+}
+#steps-resumo .sw-theme-default a{
+    font-size: 1rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+#steps-resumo .sw-theme-default .active{
+    color: #2e3d4f !important;
+}
+#steps-resumo .sw-theme-default .active svg{
+    color: #bb2b21 !important;
+}
+#steps-resumo .sw-theme-default svg{
+    margin-right: 5px;
+}
+#steps-resumo .sw-theme-default>.nav .nav-link.active::after{
+    background: #bb2b21 !important;
+}
+#steps-resumo .sw-theme-default>.nav .nav-link.done{
+    color: #bb2b21 !important;
+}
+#steps-resumo .sw-theme-default>.nav .nav-link.done::after{
+    background: #bb2b21 !important;
+}
+#steps-resumo .textos-header-secao .data-hora-secao-header{
+    font-size: 1rem;
+    color: #2e3d4f;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+#steps-resumo .textos-header-secao .nome-dia-secao-header{
+    font-size: 1.3rem;
+    color: #2e3d4f;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+#steps-resumo .secao-header-toggle {
+    background-color: #eaeced;
+    padding: 15px;
+    cursor: pointer;
+}
+#steps-resumo .secao-header-toggle .header-secao{
+    display: flex;
+}
+#steps-resumo .arrow-header-secao{
+    margin: auto 0 auto auto;
+}
+#steps-resumo .arrow-header-sub-secao{
+    margin: auto 0 auto auto;
+}
+#steps-resumo .titulo-sub-secao{
+    display: flex;
+    background-color: #f4f5f6;
+    cursor: pointer;
+}
+#steps-resumo .detalhes-secao{
+    background-color: #f4f5f6;
+    padding: 15px;
+}
+#steps-resumo .detalhes-secao{
+    display: none;
+}
+#steps-resumo .tab-content{
+    height: auto !important;
+}
+#steps-resumo .titulo-sub-secao .dataHora-nome-secao-description{
+    font-size: 1rem;
+    color: #2e3d4f;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+#steps-resumo .detalhes-secao .descricaoes-secao{
+    display: none;
+}
+#steps-resumo #ingressos .descricao-detalhe-secao{
+    margin: auto 0;
+}
+#steps-resumo .descricaoes-secao .txt-secao-esgotada{
+    font-size: 1.2rem;
+    color: #999;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-style: italic;
+    letter-spacing: 0.2rem;
+}
+#steps-resumo .descricaoes-secao .txt-secao-esgotada .secao-esgotada-alerta{
+    display: none;
+}
+#steps-resumo .descricaoes-secao .img-desc-produto{
+    max-height: 55px;
+}
+#steps-resumo .descricaoes-secao .nome-secao{
+    font-size: 1.1rem;
+    color: #2e3d4f;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+#steps-resumo .descricaoes-secao .valo-taxa-secao{
+    font-size: 1rem;
+    color: #2e3d4f;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+#steps-resumo .sw-theme-default .input-group svg{
+    margin-right: 0px;
+    color: #2e3d4f;   
+}
+#steps-resumo .sw-theme-default .input-group .btn-menos-resumo{
+    border: 1px solid;
+    margin-right: 10px;
+    border-radius: 15px;
+    padding: .30rem 0.6rem;
+}
+#steps-resumo .sw-theme-default .input-group .btn-mais-resumo{
+    border: 1px solid;
+    margin-left: 10px;
+    border-radius: 15px;
+    padding: .30rem 0.6rem;
+}
+#steps-resumo .sw-theme-default .input-group .texto-numerico-contador-resumo{
+    border: none;
+    background: transparent;
+    font-size: 1rem;
+    color: #2e3d4f;
+    font-weight: bolder;
+    text-transform: uppercase;
+}
+#steps-resumo .sw-theme-default .input-group .texto-numerico-contador-resumo:focus,
+#steps-resumo .sw-theme-default .input-group .texto-numerico-contador-resumo:active{
+    border: none!important;
+    box-shadow: none!important;
+}
+#steps-resumo .btn.focus, .btn:focus{
+    box-shadow: none!important;
+}
+#steps-resumo .sw-theme-default .input-group button[type="button"]:disabled{
+    cursor: not-allowed;
+}
+.section-barra-resumo-dados-compra-footer{
+    display: none;
+    background-color: #eaeced;
+    padding-top: 25px;
+    padding-bottom: 25px;
+    margin-bottom: 30px;
+    margin-top: 30px;
+    position: sticky;
+    z-index: 1000;
+    width: 100%;
+    bottom: 0;
+}
+.section-barra-resumo-dados-compra-footer .div-qnt-ingressos{
+    vertical-align: middle;
+    vertical-align: -webkit-baseline-middle;
+    font-size: 1.2rem;
+    color: #2e3d4f;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+.section-barra-resumo-dados-compra-footer .btn-avancar-next-step{
+    background-image: -moz-linear-gradient(0deg,#aa251c 0%,#e72323 100%);
+    background-image: -webkit-linear-gradient(0deg,#aa251c 0%,#e72323 100%);
+    background-image: -ms-linear-gradient(0deg,#aa251c 0%,#e72323 100%);
+    box-shadow: 0 3px 0 0 rgba(255,222,234,.004);
+    padding: 5px 20px;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    font-weight: bold;
+    transform: skewX(-10deg);
+    color: #fff;
+    margin-left: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    width: max-content;
+    float: right;
+}
+.section-barra-resumo-dados-compra-footer .btn-avancar-next-step:hover{
+    padding: 5px 25px;
+    -webkit-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+}
+.section-dados-evento-header-resumo {
+    background-color: #2e3d4f;
+    margin-top: 80px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+#steps-resumo .bg-identificacao{
+    background-color: #f8f9f9;
+    padding-top: 25px;
+    padding-bottom: 25px;
+    padding-right: 20px;
+    padding-left: 20px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+#identificacao .bg-identificacao .dados-user-logado-antes label{
+    color: #2e3d4f;
+    font-size: 1rem;
+    text-transform: uppercase;
+    font-weight: bold;
+    border-bottom: 1px solid #bb2b21;
+}
+#identificacao .bg-identificacao .dados-user-logado-antes h4{
+    color: #2e3d4f;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+#tabela-de-secoes .width-table-mobile input:focus{
+    outline-color:#bb2b21;
+}
+#tabela-de-secoes .width-table-mobile{
+    font-weight: 600 !important;
+    color: #2e3d4f !important;
+    vertical-align: middle !important;
+}
+#steps-resumo .table .thead-dark th{
+    background-color: #2e3d4f;
+    color: #fff;
+    border-color: #2e3d4f;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+#tabela-de-secoes .texto-resumo-valores-fatura{
+    margin-top: 5px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #2e3d4f;
+    text-transform: uppercase;
+}
+#tabela-de-secoes .texto-resumo-valores-fatura .valor-resumo-soma{
+    font-size: 1rem;
+    font-weight: bold;
+}
+#tabela-de-secoes .btn-avancar-next-step{
+    background-image: -moz-linear-gradient(0deg,#aa251c 0%,#e72323 100%);
+    background-image: -webkit-linear-gradient(0deg,#aa251c 0%,#e72323 100%);
+    background-image: -ms-linear-gradient(0deg,#aa251c 0%,#e72323 100%);
+    box-shadow: 0 3px 0 0 rgba(255,222,234,.004);
+    padding: 5px 20px;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    font-weight: bold;
+    transform: skewX(-10deg);
+    color: #fff;
+    margin-left: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    width: max-content;
+    float: right;
+}
+#tabela-de-secoes .btn-avancar-next-step:hover{
+    padding: 5px 25px;
+    -webkit-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+}
+
+.btn-avancar-next-step{
+    background-image: -moz-linear-gradient(0deg,#aa251c 0%,#e72323 100%);
+    background-image: -webkit-linear-gradient(0deg,#aa251c 0%,#e72323 100%);
+    background-image: -ms-linear-gradient(0deg,#aa251c 0%,#e72323 100%);
+    box-shadow: 0 3px 0 0 rgba(255,222,234,.004);
+    padding: 5px 20px;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    font-weight: bold;
+    transform: skewX(-10deg);
+    color: #fff;
+    margin-left: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    width: max-content;
+    float: right;
+}
+.btn-avancar-next-step:hover{
+    padding: 5px 25px;
+    -webkit-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+}
+
+.container-pagamento .dados-form-pagamento input,
+.container-pagamento .dados-form-pagamento select{
+    transform: skewX(-6deg);
+}
+.container-pagamento .dados-form-pagamento .btn-finalizar-pagamento{
+    background-image: -moz-linear-gradient(0deg,#aa251c 0%,#e72323 100%);
+    background-image: -webkit-linear-gradient(0deg,#aa251c 0%,#e72323 100%);
+    background-image: -ms-linear-gradient(0deg,#aa251c 0%,#e72323 100%);
+    box-shadow: 0 3px 0 0 rgba(255,222,234,.004);
+    padding: 5px 20px;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    font-weight: bold;
+    transform: skewX(-10deg);
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+    width: max-content;
+    float: right;
+}
+.container-pagamento .dados-form-pagamento .btn-finalizar-pagamento:hover{
+    padding: 5px 25px;
+    -webkit-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+}
+.id-btn-finalizar-pagamento-load{
+    display: none;
+}
+.dados-form-pagamento .dados-endereco-cartao,
+.dados-form-pagamento .dados-endereco-Boleto{
+    display: none;
+}
+.dados-form-pagamento .label-titulo{
+    color: #2e3d4f;
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+#id-div-pagamento-step .header-card-pagamento{
+    color: #2e3d4f;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+#div-partial-login-2 .btn{
+    border: none !important;
+}
+#div-partial-login-2 .btn-login-partial{
+    transform: skewX(-6deg);
+}
+#identificacao #modal-loader-cadastro .modal-style{
+    color: rgba(255, 7, 130,0.8) !important;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-top: 75px;
+}
+
+/* CSS->Login */
+#modalCadastrar .modal-content{
+    background-color: #f8f9f9;
+}
+#identificacao #section-cadastrar{
+    margin: 0;
+}
+#id-menu-user{
+    font-size: 0.9rem;
+    color: #2e3d4f;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+/* CSS->Menu */
+.dropdown-menu-usuario .dropdown-item{
+    color: #2e3d4f;
+    text-transform: uppercase;
+}
+.dropdown-item.active, .dropdown-item:active{
+    background-color: unset !important;
+}
+
+/* CSS->Meus Dados */
+#section-meus-dados{
+    background-color: #f8f9f9;
+    margin-top: 80px;
+    margin-bottom: 80px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+#section-meus-dados .titulo-meus-dados{
+    color: #bb2b21;
+    font-size: 2rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+#section-meus-dados .subtitulo-meus-dados{
+    color: #2e3d4f;
+    font-size: 1rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-bottom: 40px;
+}
+#id-btn-finalizar-atualizacao-cadastro-load{
+    display: none;
+}
+@media screen and (max-width: 1280px) {
+    #tabela-de-secoes .width-table-mobile{
+        font-size: 14px;
+    }
+}
+
+@media screen and (max-width: 768px) {  
+    .section-dados-evento-header-resumo{
+        margin-top:13px
+    }  
+    #section-produto-selecionado {
+        margin-top: 27px;
+    }
+    #steps-resumo #ingressos .descricao-detalhe-secao{
+        margin-top: 10px;
+    }
+    #steps-resumo .descricaoes-secao .txt-secao-esgotada{
+        font-size: 1rem;
+        letter-spacing: unset;
+    }
+    #steps-resumo #ingressos .contador-detalhe-secao{
+        margin-top: 25px;
+    }
+    #identificacao .bg-identificacao .dados-user-logado-antes h4{
+        font-size: 0.8rem;
+    }
+    #tabela-de-secoes .width-table-mobile input,
+    #tabela-de-secoes .width-table-mobile div{
+        width: 180px;
+    }
+    #eventos-selecionado .card-evento{
+        margin-top: 23px;
+        margin-bottom: 23px;
+
+    }
+    #eventos-selecionado .titulo-busca-partial{
+        font-size: 1.5rem;
+    }
+    #section-produto-selecionado-2 .icone-calendarario-produto{
+        margin-right: 15px;
+    }
+    #section-produto-selecionado .btn-compra-produto {
+        margin-top: 15%;
+    }
+    #section-produto-selecionado .img-produto-selecionado{
+        margin-bottom: 20px;
+    }
+    #lista-eventos .card-evento{
+        margin-top: 23px;
+        margin-bottom: 23px;
+    }
+}

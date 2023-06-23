@@ -1,0 +1,229 @@
+﻿@inherits System.Web.Mvc.WebViewPage
+
+@using Bitzar.CMS.Core.Functions;
+
+@{
+    var PLUGIN_NAME = "Bitzar.Tickets.dll";
+    var NameProduct = CMS.Configuration.Get("NameProduct", PLUGIN_NAME);
+    var Model = (dynamic)TempData["ExecuteModel"];
+    var Parameters = (Dictionary<string, string>)TempData["ExecuteParameters"];
+    var Records = ((IEnumerable<dynamic>)Model.Result.Records);
+    int idSection = Model.IdSection;
+    var searchValue = Parameters.ContainsKey("Search") ? Parameters["Search"] : null;
+    var statusValue = Parameters.ContainsKey("Status") ? Parameters["Status"] : null;
+    var typeValue = Parameters.ContainsKey("Type") ? Parameters["Type"] : null;
+    var typeTitle = Parameters.ContainsKey("Title") ? Parameters["Title"] : null;
+}
+
+@functions {
+    string TranslateStatus(string status)
+    {
+        if (string.IsNullOrWhiteSpace(status))
+            return "sem status";
+
+        switch (status.ToString())
+        {
+
+            case "Created":
+                return "Criado";
+            case "Emitted":
+                return "Emitido";
+            case "Blocked":
+                return "Bloqueado";
+            case "Cancelled":
+                return "Cancelado";
+            case "Consumed":
+                return "Comsumido";
+            case "Deleted":
+                return "Deletado";
+            default:
+                return "Sem Status";
+        }
+    }
+}
+
+@functions {
+    string TranslateLabel(string status)
+    {
+        if (string.IsNullOrWhiteSpace(status))
+            return "default";
+
+        switch (status.ToString())
+        {
+            case "Created":
+                return "warning";
+            case "Emitted":
+                return "success";
+            case "Blocked":
+                return "primary";
+            case "Cancelled":
+                return "danger";
+            case "Deleted":
+                return "dark";
+            case "Consumed":
+                return "info";
+            default:
+                return "default";
+        }
+    }
+}
+
+<div>
+    <footer class="panel-footer">
+        <div class="row">
+            <div class="pagination margin-0" style="float:left;">
+                <input type="hidden" id="CurrencyPage-@idSection" value="@(Model.Result.Page)" />
+                <button type="button" class="btn btn-pager btn-primary" value="1" onclick="$('#modal-ticket-@idSection').modal('show');"> <i class="icon fa-plus"></i> Novo(a) @typeTitle</button>
+            </div>
+            <div class="pagination margin-0" style="float: right;">
+                <input type="hidden" id="CurrencyPage" value="@(Model.Result.Page)" />
+                <button type="button" class="btn btn-pager btn-primary" value="1" onclick="loadTickets(@idSection, 1, 25, '@statusValue', null, '@searchValue')"><span aria-hidden="true">Primeira</span></button>
+                @if (Model.Result.Page >= 2)
+                {
+                    <button type="button" class="btn btn-pager btn-primary" onclick="loadTickets(@idSection, @Model.Result.Page - 1, 25, '@statusValue', null, '@searchValue')"><span aria-hidden="true">@(Model.Result.Page - 1)</span></button>
+                }
+                <button type="button" class="btn btn-pager btn-primary" style="background-color:#a7a2a2;border:1px solid #a7a2a2" onclick="loadTickets(@idSection, @Model.Result.Page, 25, '@statusValue', null, '@searchValue')"><span aria-hidden="true">@(Model.Result.Page)</span></button>
+                @if (Model.Result.Page < Model.Result.CountPage)
+                {
+                    <button type="button" class="btn btn-pager btn-primary" onclick="loadTickets(@idSection, @Model.Result.Page + 1, 25, '@statusValue', null, '@searchValue')"><span aria-hidden="true">@(Model.Result.Page + 1)</span></button>
+                }
+                <button type="button" class="btn btn-pager btn-primary" onclick="loadTickets(@idSection, @Model.Result.CountPage, 25, '@statusValue', null, '@searchValue')"><span aria-hidden="true">Última</span></button>
+            </div>
+        </div>
+    </footer>
+    <header class="panel-heading">
+        <h3 class="panel-title">
+            Lista de @typeTitle
+        </h3>
+        <div class="panel-actions">
+            <div class="input-search input-group-sm">
+                <button type="submit" class="input-search-btn" id="SearchInputBtn" onclick="loadSearchSection(@idSection);">
+                    <i class="icon wb-search" aria-hidden="true"></i>
+                </button>
+                <input id="SearchInput-@idSection" type="text" class="form-control" value="" placeholder="Pesquisar">
+            </div>
+        </div>
+
+    </header>
+
+    <table class="table table-strip margin-0">
+        <thead>
+            <tr>
+                <th class="column-action"></th>
+                <th class="column-action">Id</th>
+                <th class="text-left">Cliente</th>
+                <th class="text-left">Identificador</th>
+                <th class="text-left">Criado Em</th>
+                <th class="text-left">Status</th>
+                <th class="column-action"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model == null || Model.Result.Records.Count == 0)
+            {
+                <tr>
+                    <td colspan="6" class="text-center">
+                        <i>Não há @typeTitle para exibição</i>
+                    </td>
+                </tr>
+            }
+            else
+            {
+                foreach (var entity in Model.Result.Records)
+                {
+        <tr>
+            <td></td>
+            <td>@entity.Id</td>
+            <td class="text-left">@entity.OwnerName.ToString()</td>
+            <td class="text-left">@entity.Uuid.ToString()</td>
+            <td class="text-left">@entity.CreationDate.ToString("g")</td>
+            <td class="text-left"><span class="label label-@(TranslateLabel(entity.Status.ToString()))">@TranslateStatus(entity.Status.ToString())</span></td>
+            <td>
+                <div class="btn-group">
+                    <a class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="icon fa-cogs"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                        <li><a class="dropdown-item" style="font-size:15px;" href="javascript:void(0);" onclick="setStatus('@entity.Uuid', @idSection, 'Created', '@searchValue');"><i class="icon fa-shopping-cart text-warning" style="margin-left:10px;"></i>Criado</a></li>
+                        <li><a class="dropdown-item" style="font-size:15px;" href="javascript:void(0);" onclick="setStatus('@entity.Uuid', @idSection, 'Emitted', '@searchValue');"><i class="icon fa-shopping-basket text-info" style="margin-left:10px;"></i>Emitido</a></li>
+                        <li><a class="dropdown-item" style="font-size:15px;" href="javascript:void(0);" onclick="setStatus('@entity.Uuid', @idSection, 'Consumed', '@searchValue');"><i class="icon fa-ticket text-info" style="margin-left:10px;"></i>Consumido</a></li>
+                        <li><a class="dropdown-item" style="font-size:15px;" href="javascript:void(0);" onclick="setStatus('@entity.Uuid', @idSection, 'Blocked', '@searchValue');"><i class="icon fa-clock-o text-primary" style="margin-left:10px;"></i>Bloqueado</a></li>
+                        <li><a class="dropdown-item" style="font-size:15px;" href="javascript:void(0);" onclick="setStatus('@entity.Uuid', @idSection, 'Cancelled', '@searchValue');"><i class="icon fa-times text-danger" style="margin-left:10px;"></i>Cancelado</a></li>
+                        <li><a class="dropdown-item" style="font-size:15px;" href="javascript:void(0);" onclick="setStatus('@entity.Uuid', @idSection, 'Deleted', '@searchValue');"><i class="icon fa-user-times text-danger" style="margin-left:10px;"></i>Deletado</a></li>
+                    </ul>
+                </div>
+            </td>
+        </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+    <div class="row" style="padding-bottom: 15px">
+        <footer class="panel-footer">
+            <div class="pagination margin-0" style="float:left;">
+                <input type="hidden" id="CurrencyPage-@idSection" value="@(Model.Result.Page)" />
+                <button type="button" class="btn btn-pager btn-primary" value="1" onclick="$('#modal-ticket-@idSection').modal('show');"><i class="icon fa-plus"></i> Novo(a) @typeTitle</button>
+            </div>
+            <div class="pagination margin-0" style="float:right;">
+                <input type="hidden" id="CurrencyPage-@idSection" value="@(Model.Result.Page)" />
+                <button type="button" class="btn btn-pager btn-primary" value="1" onclick="loadTickets(@idSection, 1, 25, '@statusValue', null, '@searchValue')"><span aria-hidden="true">Primeira</span></button>
+                @if (Model.Result.Page >= 2)
+                {
+                    <button type="button" class="btn btn-pager btn-primary" onclick="loadTickets(@idSection, @Model.Result.Page - 1, 25, '@statusValue', null, '@searchValue')"><span aria-hidden="true">@(Model.Result.Page - 1)</span></button>
+                }
+                <button type="button" class="btn btn-pager btn-primary" style="background-color:#a7a2a2;border:1px solid #a7a2a2" onclick="loadTickets(@idSection, @Model.Result.Page, 25, '@statusValue', null, '@searchValue')"><span aria-hidden="true">@(Model.Result.Page)</span></button>
+                @if (Model.Result.Page < Model.Result.CountPage)
+                {
+                    <button type="button" class="btn btn-pager btn-primary" onclick="loadTickets(@idSection, @Model.Result.Page + 1, 25, '@statusValue', null, '@searchValue')"><span aria-hidden="true">@(Model.Result.Page + 1)</span></button>
+                }
+                <button type="button" class="btn btn-pager btn-primary" onclick="loadTickets(@idSection, @Model.Result.CountPage, 25, '@statusValue', null, '@searchValue')"><span aria-hidden="true">Última</span></button>
+            </div>
+        </footer>
+    </div>
+</div>
+
+<div id="modal-ticket-@idSection" class="modal fade modal-3d-flip-vertical" role="dialog">
+    <div class="modal-dialog modal-center modal-xlg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Cadastrar novo(a) @typeTitle</h4>
+            </div>
+            <div class="modal-body">
+                <form autocomplete="off" onsubmit="saveTicket(@idSection);" method="post" action="@CMS.Functions.ExecuteUrl" name="Ticket-@idSection">
+                    <input type="hidden" name="source" value="@PLUGIN_NAME" />
+                    <input type="hidden" name="function" value="AddTicket" />
+                    <input type="hidden" name="output" value="JSON" />
+                    <input type="hidden" name="IdSection" value="@idSection" />
+                    <input type="hidden" name="Type" value="@typeValue" />
+
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="row">
+                                <div class="col-sm-12" id="div-sku">
+                                    <div class="form-group">
+                                        <label class="control-label" for="Nome">Nome ou Atribuição</label>
+                                        <input type="text" class="form-control" id="Nome" name="Nome"
+                                               value="" required />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <button type="button" class="btn btn-primary" data-container="body" onclick="saveTicket(@idSection);">
+                            <i class="icon fa-floppy-o"></i> Salvar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    tr.detail {
+        display: none;
+    }
+</style>
